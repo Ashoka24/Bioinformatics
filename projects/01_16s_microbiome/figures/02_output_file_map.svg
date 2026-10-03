@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="620" viewBox="0 0 1400 620">
+<rect width="1400" height="620" fill="#fff"/>
+<text x="700" y="45" text-anchor="middle" font-family="Arial,sans-serif" font-size="28" font-weight="700">Project 01 — Output / File Map</text>
+<g font-family="monospace" font-size="16">
+<rect x="80" y="90" width="1240" height="470" rx="16" fill="#f7f7f7" stroke="#222" stroke-width="2"/>
+<text x="115" y="130" font-weight="700">16s_ncbi_gut/</text>
+<text x="145" y="170">├── RawData/SRR26534086/</text>
+<text x="180" y="200">│   ├── sra/</text>
+<text x="180" y="230">│   ├── fastq/ → *_1.fastq.gz, *_2.fastq.gz</text>
+<text x="180" y="260">│   ├── checksums/ → sha256sums.txt</text>
+<text x="180" y="290">│   └── input/ → analysis-ready symlinks</text>
+<text x="145" y="330">├── QC/</text>
+<text x="180" y="360">│   ├── fastqc/ → HTML + ZIP reports</text>
+<text x="180" y="390">│   └── multiqc/ → multiqc_report.html</text>
+<text x="145" y="430">├── Analysis/ampliseq/ → QIIME 2 / pipeline outputs</text>
+<text x="145" y="460">├── Logs/ → execution logs</text>
+<text x="145" y="490">└── metadata/ → BioProject run metadata</text>
+<text x="870" y="535" font-family="Arial,sans-serif" font-size="14">Raw/generated data stay outside Git.</text>
+</g>
+</svg>
