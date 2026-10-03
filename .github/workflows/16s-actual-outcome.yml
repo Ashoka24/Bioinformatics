@@ -187,3 +187,5 @@ EOF
             git commit -m "results: add actual SRR26534086 16S outcomes"
             git push
           fi
+
+# execution trigger
