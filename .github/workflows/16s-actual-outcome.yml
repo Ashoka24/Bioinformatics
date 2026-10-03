@@ -9,11 +9,41 @@ on:
 jobs:
   analyze:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
-      - name: Download FASTQ metadata
+      - name: Download FASTQ from ENA
+        shell: bash
         run: |
           set -euo pipefail
           mkdir -p work/raw
           curl -fsSL --retry 3 "https://www.ebi.ac.uk/ena/portal/api/filereport?accession=SRR26534086&result=read_run&fields=run_accession,fastq_ftp,fastq_md5,fastq_bytes&format=tsv" > work/ena.tsv
           cat work/ena.tsv
+          awk -F'\t' 'NR==2 {print $2}' work/ena.tsv | tr ';' '\n' | while read -r url; do
+            f=$(basename "$url")
+            curl -fL --retry 3 "https://${url#ftp://}" -o "work/raw/$f"
+          done
+          ls -lh work/raw
+      - name: Pull QIIME 2
+        run: docker pull quay.io/qiime2/amplicon:2024.10
+      - name: Import paired reads
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p work/q2
+          cat > work/manifest.tsv <<'EOF'
+sample-id	forward-absolute-filepath	reverse-absolute-filepath
+SRR26534086	/data/work/raw/SRR26534086_1.fastq.gz	/data/work/raw/SRR26534086_2.fastq.gz
+EOF
+          docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' --input-path /data/work/manifest.tsv --input-format PairedEndFastqManifestPhred33V2 --output-path /data/work/q2/demux.qza
+      - name: Primer trimming
+        run: docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 qiime cutadapt trim-paired --i-demultiplexed-sequences /data/work/q2/demux.qza --p-front-f CCTACGGGNGGCWGCAG --p-front-r GACTACHVGGGTATCTAATCC --p-error-rate 0.1 --p-discard-untrimmed --o-trimmed-sequences /data/work/q2/trimmed.qza
+      - name: DADA2 denoising
+        run: docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 qiime dada2 denoise-paired --i-demultiplexed-seqs /data/work/q2/trimmed.qza --p-trunc-len-f 280 --p-trunc-len-r 260 --p-max-ee-f 2 --p-max-ee-r 2 --p-trunc-q 2 --p-n-threads 2 --o-table /data/work/q2/table.qza --o-representative-sequences /data/work/q2/rep-seqs.qza --o-denoising-stats /data/work/q2/denoising-stats.qza
+      - name: SILVA taxonomy
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 3 https://data.qiime2.org/classifiers/sklearn-1.4.2/silva/silva-138-99-nb-classifier.qza -o work/silva.qza
+          echo 'c08a1aa4d56b449b511f7215543a43249ae9c54b57491428a7e5548a62613616  work/silva.qza' | sha256sum -c -
+          docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 qiime feature-classifier classify-sklearn --i-classifier /data/work/silva.qza --i-reads /data/work/q2/rep-seqs.qza --p-n-jobs 2 --o-classification /data/work/q2/taxonomy.qza
