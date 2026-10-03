@@ -53,6 +53,14 @@ README.md
 
 Raw FASTQ/SRA files, QIIME 2 artifacts, Nextflow work directories and generated logs stay outside Git.
 
+## Figures
+
+![16S workflow](figures/01_workflow.svg)
+
+![Output file map](figures/02_output_file_map.svg)
+
+See [Outcomes and Deliverables](docs/OUTCOMES.md) for the expected outputs and the rules for adding real biological results.
+
 ## Documentation
 
 - [Quickstart](docs/QUICKSTART.md) — execute the workflow step by step
