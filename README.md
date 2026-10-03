@@ -62,7 +62,7 @@ The first project uses a public NCBI SRA human stool 16S dataset rather than pri
 - Use public accession numbers whenever possible.
 - Record the exact dataset and metadata before analysis.
 - Keep raw data outside Git.
-- Validate downloads, before analysis.
+- Validate downloads before analysis.
 - Run QC before choosing trimming parameters.
 - Record software versions and resource limits.
 - Keep pipeline parameters in a separate file.
