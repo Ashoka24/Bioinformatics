@@ -1,0 +1,189 @@
+name: Project 01 - actual 16S outcome
+
+on:
+  push:
+    paths:
+      - ".github/workflows/16s-actual-outcome.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download public NCBI run from ENA
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p work/fastq work/qc work/qiime work/export results_public figures/results
+          curl -fsSL "https://www.ebi.ac.uk/ena/portal/api/filereport?accession=SRR26534086&result=read_run&fields=run_accession,fastq_ftp,fastq_md5&format=tsv" > work/runinfo.tsv
+          cat work/runinfo.tsv
+          awk -F '\t' 'NR==2 {n=split($2,a,";"); for(i=1;i<=n;i++){url=a[i]; gsub(/^ftp:/,"https:",url); system("curl -fL --retry 3 -o work/fastq/" gensub(".*/","",1,url) " " url)}}' work/runinfo.tsv
+          ls -lh work/fastq
+
+      - name: Pull QIIME 2
+        run: docker pull quay.io/qiime2/amplicon:2024.10
+
+      - name: Import and denoise
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > work/manifest.tsv <<'EOF'
+sample-id	forward-absolute-filepath	reverse-absolute-filepath
+SRR26534086	/data/work/fastq/SRR26534086_1.fastq.gz	/data/work/fastq/SRR26534086_2.fastq.gz
+EOF
+
+          docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' --input-path /data/work/manifest.tsv --input-format PairedEndFastqManifestPhred33V2 --output-path /data/work/qiime/demux.qza
+
+          docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 qiime demux summarize --i-data /data/work/qiime/demux.qza --o-visualization /data/work/qc/demux.qzv
+
+          # NCBI reports about 225 bp per read for this run. The historical 280/260 truncation values are not valid here.
+          # Use the forward read after removing the documented 319F primer for an executable single-end DADA2 analysis.
+          docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 qiime cutadapt trim-single --i-demultiplexed-sequences /data/work/qiime/demux.qza --p-front CCTACGGGNGGCWGCAG --o-trimmed-sequences /data/work/qiime/trimmed.qza
+
+          docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 qiime dada2 denoise-single --i-demultiplexed-seqs /data/work/qiime/trimmed.qza --p-trunc-len 0 --p-trim-left 0 --o-table /data/work/qiime/table.qza --o-representative-sequences /data/work/qiime/rep-seqs.qza --o-denoising-stats /data/work/qiime/denoising-stats.qza
+
+      - name: Taxonomy and diversity
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fL --retry 3 -o work/qiime/silva-138-99-nb-classifier.qza "https://data.qiime2.org/classifiers/sklearn-1.4.2/silva/silva-138-99-nb-classifier.qza"
+
+          docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 qiime feature-classifier classify-sklearn --i-classifier /data/work/qiime/silva-138-99-nb-classifier.qza --i-reads /data/work/qiime/rep-seqs.qza --o-classification /data/work/qiime/taxonomy.qza
+
+          docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 qiime feature-table summarize --i-table /data/work/qiime/table.qza --o-visualization /data/work/qc/table.qzv --m-sample-metadata-file /data/projects/01_16s_microbiome/metadata/sample-metadata.tsv
+
+          docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 qiime feature-table tabulate-seqs --i-data /data/work/qiime/rep-seqs.qza --o-visualization /data/work/qc/rep-seqs.qzv
+
+          docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 qiime taxa barplot --i-table /data/work/qiime/table.qza --i-taxonomy /data/work/qiime/taxonomy.qza --m-metadata-file /data/projects/01_16s_microbiome/metadata/sample-metadata.tsv --o-visualization /data/work/qc/taxa-barplot.qzv
+
+          for metric in shannon observed_features pielou_e; do
+            docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 qiime diversity alpha --i-table /data/work/qiime/table.qza --p-metric "$metric" --o-alpha-diversity "/data/work/qiime/$metric.qza"
+          done
+
+      - name: Export actual results
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf work/export/*
+          docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 qiime tools export --input-path /data/work/qiime/table.qza --output-path /data/work/export/table
+          docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 qiime tools export --input-path /data/work/qiime/taxonomy.qza --output-path /data/work/export/taxonomy
+          docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 qiime tools export --input-path /data/work/qiime/denoising-stats.qza --output-path /data/work/export/denoising
+          for metric in shannon observed_features pielou_e; do
+            docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 qiime tools export --input-path "/data/work/qiime/$metric.qza" --output-path "/data/work/export/$metric"
+          done
+
+          cp work/export/taxonomy/taxonomy.tsv results_public/taxonomy.tsv
+          cp work/export/denoising/denoising-stats.tsv results_public/denoising-stats.tsv
+          cp work/export/shannon/alpha-diversity.tsv results_public/shannon.tsv
+          cp work/export/observed_features/alpha-diversity.tsv results_public/observed_features.tsv
+          cp work/export/pielou_e/alpha-diversity.tsv results_public/pielou_evenness.tsv
+
+          docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 biom convert -i /data/work/export/table/feature-table.biom -o /data/results_public/feature-table.tsv --to-tsv
+
+          docker run --rm -v "$PWD:/data" quay.io/qiime2/amplicon:2024.10 qiime tools export --input-path /data/work/qiime/rep-seqs.qza --output-path /data/work/export/rep-seqs
+          cp work/export/rep-seqs/dna-sequences.fasta results_public/rep-seqs.fasta
+
+      - name: Build taxonomy abundance tables and figures
+        shell: bash
+        run: |
+          python - <<'PY'
+          import csv, collections, pathlib, re
+          import matplotlib.pyplot as plt
+
+          root = pathlib.Path("results_public")
+          table = list(csv.reader(open(root/"feature-table.tsv"), delimiter="\t"))
+          header = table[1]
+          sample_idx = header.index("SRR26534086")
+          tax = {}
+          with open(root/"taxonomy.tsv", newline="") as f:
+              for r in csv.DictReader(f, delimiter="\t"):
+                  tax[r["Feature ID"]] = r["Taxon"]
+
+          records = []
+          for r in table[2:]:
+              try: count=float(r[sample_idx])
+              except: continue
+              if count > 0:
+                  records.append((r[0], count, tax.get(r[0], "Unassigned")))
+
+          total = sum(x[1] for x in records)
+          for rank_num, rank_name in enumerate(["Kingdom","Phylum","Class","Order","Family","Genus","Species"]):
+              agg = collections.defaultdict(float)
+              for _, count, t in records:
+                  parts = [p.strip() for p in t.split(";")]
+                  label = parts[rank_num] if rank_num < len(parts) else "Unassigned"
+                  label = re.sub(r"^[a-z]__", "", label) or "Unassigned"
+                  agg[label] += count
+              rows = sorted(((k,v,v/total*100 if total else 0) for k,v in agg.items()), key=lambda x:x[1], reverse=True)
+              with open(root/(rank_name.lower()+"_abundance.tsv"), "w", newline="") as f:
+                  w = csv.writer(f, delimiter="\t")
+                  w.writerow([rank_name,"Count","Relative_abundance_percent"])
+                  w.writerows(rows)
+              top = rows[:15]
+              if top:
+                  plt.figure(figsize=(10,6))
+                  plt.barh([x[0] for x in top][::-1], [x[2] for x in top][::-1])
+                  plt.xlabel("Relative abundance (%)")
+                  plt.title("SRR26534086 - top "+rank_name+" taxa")
+                  plt.tight_layout()
+                  plt.savefig(pathlib.Path("figures/results")/("SRR26534086_"+rank_name.lower()+"_top15.png"), dpi=180)
+                  plt.close()
+
+          with open(root/"run_summary.tsv","w",newline="") as f:
+              w=csv.writer(f,delimiter="\t")
+              w.writerow(["Metric","Value"])
+              w.writerow(["SRA run","SRR26534086"])
+              w.writerow(["Retained ASVs",len(records)])
+              w.writerow(["Total denoised reads",total])
+              w.writerow(["Unique ASVs",len(records)])
+          print("Features:",len(records),"Denoised reads:",total)
+          PY
+
+      - name: Write actual results report
+        shell: bash
+        run: |
+          cat > results_public/ACTUAL_RESULTS.md <<'EOF'
+          # Actual outcome - SRR26534086
+
+          These files are generated from the public NCBI SRA run by this workflow.
+
+          ## Processing
+          - Public run: SRR26534086
+          - BioSample: SAMN37943185
+          - BioProject: PRJNA1031545
+          - Amplicon: 16S V3-V4
+          - Primer removed: CCTACGGGNGGCWGCAG
+          - Denoising: QIIME 2 DADA2 single-end on forward reads
+          - Taxonomy: SILVA 138 99% OTU Naive Bayes classifier
+          - Diversity: Shannon, observed features, Pielou evenness
+
+          ## Important parameter decision
+          NCBI reports 22.5M bases across 49,964 spots, corresponding to approximately 225 bases per read in this paired-end run. Therefore the historical 280/260 truncation values cannot be applied literally to this public run. The actual analysis uses the forward read after primer removal so that the sample can be processed without inventing R1/R2 overlap.
+
+          ## Results
+          See the TSV files in this directory for the measured denoising, feature, taxonomy and diversity outputs. PNG files under figures/results contain top-taxa plots generated from the measured table.
+
+          ## Interpretation boundary
+          These are measurements from one sequencing run. They describe this sample only and do not establish STEMI-vs-control differences, differential abundance, disease association, or cohort-level signatures.
+          EOF
+
+      - name: Commit actual outcomes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add results_public figures/results
+          if git diff --cached --quiet; then
+            echo "No new results to commit."
+          else
+            git commit -m "results: add actual SRR26534086 16S outcomes"
+            git push
+          fi
