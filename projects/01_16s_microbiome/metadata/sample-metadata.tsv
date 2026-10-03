@@ -1,0 +1,2 @@
+sample-id	sra_accession	biosample	bioproject	experiment	body_site	material	assay	region	instrument	layout
+SRR26534086	SRR26534086	SAMN37943185	PRJNA1031545	SRX22237515	human stool	stool	16S rRNA amplicon	V3-V4	Illumina MiSeq	PAIRED

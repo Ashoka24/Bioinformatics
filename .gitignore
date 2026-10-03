@@ -1,5 +1,27 @@
-__pycache__/
-*.pyc
-.venv/
-.ipynb_checkpoints/
-.DS_Store
+# Sequencing data
+*.fastq
+*.fastq.gz
+*.fq
+*.fq.gz
+*.sra
+
+# QIIME 2 / pipeline artifacts
+*.qza
+*.qzv
+*.bam
+*.sam
+
+# Large / generated directories
+data/
+work/
+work_dir/
+raw/
+results/
+output/
+outputs/
+logs/*.log
+.nextflow/
+.nextflow.log*
+multiqc_report/
+fastqc/
+Analysis/

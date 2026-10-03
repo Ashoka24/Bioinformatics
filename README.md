@@ -1,57 +1,75 @@
 # Bioinformatics Portfolio
 
-This repository contains reproducible bioinformatics projects covering NGS, metagenomics, microbiome analysis, Python/R, Linux, Nextflow, Docker and biological data interpretation.
+A practical, reproducible bioinformatics portfolio built around **public biological datasets**.
 
-## Projects
+The repository is organized as independent projects. Each project is written so that another reader can understand:
 
-### 1. NCBI Human Gut 16S — End-to-End Pipeline
+**biological question → public data → file organization → quality control → analysis → results → interpretation → limitations**
 
-A human-stool 16S rRNA experiment using an openly available NCBI SRA run, built to mirror the operational IOM workflow and extend it through reproducible public-data retrieval, QC, nf-core/ampliseq, QIIME 2 downstream analysis and biological interpretation.
+## Portfolio roadmap
 
-- NCBI SRA run: SRR26534086
-- BioSample: SAMN37943185
-- BioProject: PRJNA1031545
-- Illumina MiSeq paired-end V3–V4 16S
-- FastQC + MultiQC
-- SRA Toolkit
-- nf-core/ampliseq 2.11.0
-- Docker
-- DADA2
-- SILVA taxonomy
-- QIIME 2
-- Shannon / observed ASVs
-- Bray–Curtis / PCoA for multi-sample expansion
-- reproducible VM/storage paths
-- checksums and execution logs
+| # | Project | Main skills | Status |
+|---|---|---|---|
+| 01 | [16S Microbiome Analysis](projects/01_16s_microbiome/) | NCBI SRA, FASTQ, FastQC, MultiQC, nf-core/ampliseq, QIIME 2 | 🟢 Active |
+| 02 | IBS Microbiome Analysis | microbiome statistics, differential abundance, biological interpretation | Planned |
+| 03 | Shotgun Metagenomics | Kraken2/Centrifuge, taxonomic profiling, functional profiling | Planned |
+| 04 | Nextflow / nf-core Pipeline | workflow engineering, containers, reproducibility | Planned |
+| 05 | Bioinformatics + Machine Learning | Python, feature engineering, model evaluation | Planned |
+| 06 | RNA-seq / Transcriptomics | QC, alignment/quantification, differential expression | Planned |
 
-See: `projects/ncbi_gut_16s/`
+> Projects will be added one at a time. The repository will not contain fabricated results: generated results are added only after the corresponding workflow has actually been run.
 
-### 2. 16S Microbiome Analysis — Moving Pictures
+## Project design
 
-A smaller inspectable public-data example demonstrating downstream microbiome calculations, diversity and ordination.
-
-## Working principle
+Every project follows the same structure:
 
 ```text
-Biological question
-      ↓
-Public/traceable data
-      ↓
-Raw-data provenance
-      ↓
-QC
-      ↓
-Reproducible pipeline
-      ↓
-Post-QC
-      ↓
-Statistics
-      ↓
-Visualization
-      ↓
-Biological interpretation
-      ↓
-Limitations
+project/
+├── README.md
+├── docs/
+├── metadata/
+├── params/
+├── scripts/
+└── logs/
 ```
 
-The objective is to show not only which tools were used, but why each step was performed and what was learned from the data.
+Large sequencing files, credentials, temporary pipeline work directories, and generated QIIME 2 artifacts are intentionally kept out of Git.
+
+## Local data convention
+
+The examples use a local Windows data folder:
+
+```text
+C:\Users\ashok\OneDrive\Desktop\Ashoka\data
+```
+
+When running the Bash scripts from WSL, the same folder is:
+
+```text
+/mnt/c/Users/ashok/OneDrive/Desktop/Ashoka/data
+```
+
+You can override the path in every script with `DATA_ROOT`.
+
+## Start here
+
+Go to **[Project 01 — 16S Microbiome Analysis](projects/01_16s_microbiome/)**.
+
+The first project uses a public NCBI SRA human stool 16S dataset rather than private/company data. The selected run is `SRR26534086`, linked to BioProject `PRJNA1031545`. NCBI describes it as paired-end Illumina MiSeq 16S V3–V4 amplicon data and provides the primer sequences used for the experiment.
+
+## Reproducibility principles
+
+- Use public accession numbers whenever possible.
+- Record the exact dataset and metadata before analysis.
+- Keep raw data outside Git.
+- Validate downloads, before analysis.
+- Run QC before choosing trimming parameters.
+- Record software versions and resource limits.
+- Keep pipeline parameters in a separate file.
+- Do not report biological conclusions from a single sample as if they were cohort-level findings.
+- Separate observed results from interpretation.
+
+## Author
+
+**Ashoka B**  
+Bioinformatics • Computational Biology • Data Analysis • Machine Learning
