@@ -1,3 +1,0 @@
-# Add only verified accessions from PRJNA1031545 metadata.
-# Example:
-# SRR26534086
