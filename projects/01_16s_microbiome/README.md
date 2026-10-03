@@ -53,8 +53,14 @@ README.md
 
 Raw FASTQ/SRA files, QIIME 2 artifacts, Nextflow work directories and generated logs stay outside Git.
 
+## Documentation
+
+- [Quickstart](docs/QUICKSTART.md) — execute the workflow step by step
+- [Workflow](docs/WORKFLOW.md) — computational design and provenance
+- [Data provenance](docs/DATA_PROVENANCE.md) — accession and sequencing context
+- [Troubleshooting](docs/TROUBLESHOOTING.md) — common SRA, Java, Docker, Nextflow and memory failures
+- [Interpretation](docs/INTERPRETATION.md) — what can and cannot be concluded
+
 ## Interpretation
 
 One sample can demonstrate read quality, feature generation, taxonomy and descriptive diversity. It cannot establish differential abundance, disease association or cohort-level biological conclusions.
-
-See docs/WORKFLOW.md and docs/INTERPRETATION.md for the detailed reasoning and reproducibility rules.
