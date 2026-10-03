@@ -19,9 +19,12 @@ raw/
 results/
 output/
 outputs/
-logs/*.log
+Analysis/
 .nextflow/
 .nextflow.log*
 multiqc_report/
 fastqc/
-Analysis/
+
+# Generated logs and runtime parameter files
+logs/*.log
+logs/*.runtime.json
