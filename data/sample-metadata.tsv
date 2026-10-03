@@ -1,0 +1,6 @@
+sample-id	barcode-sequence	body-site	year	month	day	subject	reported-antibiotic-usage	days-since-experiment-start
+L1S105	AGTGCGATGCGT	gut	2009	3	17	subject-1	No	140
+L1S140	ATGGCAGCTCTA	gut	2008	10	28	subject-2	Yes	0
+L1S208	CTGAGATACGCG	gut	2009	1	20	subject-2	No	84
+L1S257	CCGACTGAGATG	gut	2009	3	17	subject-2	No	140
+L1S281	CCTCTCGTGATC	gut	2009	4	14	subject-2	No	168
