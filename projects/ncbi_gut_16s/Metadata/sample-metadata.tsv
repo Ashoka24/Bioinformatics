@@ -1,0 +1,2 @@
+sample-id	SRA_accession	BioSample	BioProject	body-site	material	assay	region	platform	layout
+SRR26534086	SRR26534086	SAMN37943185	PRJNA1031545	gut	stool	16S_amplicon	V3-V4	Illumina_MiSeq	paired
