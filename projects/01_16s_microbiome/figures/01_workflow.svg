@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="420" viewBox="0 0 1400 420">
+<rect width="1400" height="420" fill="#ffffff"/>
+<text x="700" y="42" text-anchor="middle" font-family="Arial,sans-serif" font-size="28" font-weight="700">Project 01 — Public 16S Microbiome Workflow</text>
+<text x="700" y="72" text-anchor="middle" font-family="Arial,sans-serif" font-size="15">SRR26534086 • Illumina MiSeq • V3–V4 • paired-end</text>
+<g font-family="Arial,sans-serif" font-size="15">
+<g stroke="#222" stroke-width="2" fill="#f7f7f7">
+<rect x="35" y="125" width="175" height="75" rx="12"/><rect x="245" y="125" width="175" height="75" rx="12"/>
+<rect x="455" y="125" width="175" height="75" rx="12"/><rect x="665" y="125" width="175" height="75" rx="12"/>
+<rect x="875" y="125" width="175" height="75" rx="12"/><rect x="1085" y="125" width="175" height="75" rx="12"/>
+</g>
+<g text-anchor="middle" fill="#111">
+<text x="122" y="155" font-weight="700">1. NCBI SRA</text><text x="122" y="180">prefetch + validate</text>
+<text x="332" y="155" font-weight="700">2. FASTQ</text><text x="332" y="180">fasterq-dump</text>
+<text x="542" y="155" font-weight="700">3. QC</text><text x="542" y="180">FastQC + MultiQC</text>
+<text x="752" y="155" font-weight="700">4. Validate</text><text x="752" y="180">pairs + checksums</text>
+<text x="962" y="155" font-weight="700">5. Amplicon</text><text x="962" y="180">nf-core/ampliseq</text>
+<text x="1172" y="155" font-weight="700">6. Analysis</text><text x="1172" y="180">QIIME 2 + SILVA</text>
+</g>
+<g stroke="#222" stroke-width="2" fill="none">
+<path d="M210 162 H245 M420 162 H455 M630 162 H665 M840 162 H875 M1050 162 H1085"/>
+<path d="M1260 162 C1320 162 1320 250 1170 250 H960" />
+</g>
+<text x="700" y="290" text-anchor="middle" font-size="18" font-weight="700">Outputs</text>
+<g stroke="#222" stroke-width="2" fill="#f7f7f7">
+<rect x="330" y="315" width="210" height="62" rx="10"/><rect x="595" y="315" width="210" height="62" rx="10"/><rect x="860" y="315" width="210" height="62" rx="10"/>
+</g>
+<g text-anchor="middle">
+<text x="435" y="342" font-weight="700">QC reports</text><text x="435" y="363">FastQC / MultiQC</text>
+<text x="700" y="342" font-weight="700">Feature + taxonomy</text><text x="700" y="363">QIIME 2 artifacts</text>
+<text x="965" y="342" font-weight="700">Figures + interpretation</text><text x="965" y="363">only after real execution</text>
+</g>
+</g></svg>
