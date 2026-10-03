@@ -1,6 +1,0 @@
-sample_id,PCoA1,PCoA2,subject,reported-antibiotic-usage
-L1S105,0.620109,-0.014482,subject-1,No
-L1S140,-0.103820,0.093313,subject-2,Yes
-L1S208,-0.133546,-0.007890,subject-2,No
-L1S257,-0.126307,-0.004438,subject-2,No
-L1S281,-0.256437,-0.066504,subject-2,No
