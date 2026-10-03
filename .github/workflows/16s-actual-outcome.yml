@@ -4,18 +4,30 @@ on:
   push:
     paths:
       - '.github/workflows/16s-actual-outcome.yml'
+      - 'projects/01_16s_microbiome/scripts/**'
   workflow_dispatch: {}
+
+permissions:
+  contents: write
 
 jobs:
   analyze:
     runs-on: ubuntu-latest
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
-      - name: Download FASTQ metadata
-        run: |
-          set -euo pipefail
-          mkdir -p work/raw
-          curl -fsSL --retry 3 "https://www.ebi.ac.uk/ena/portal/api/filereport?accession=SRR26534086&result=read_run&fields=run_accession,fastq_ftp,fastq_md5,fastq_bytes&format=tsv" > work/ena.tsv
-          cat work/ena.tsv
       - name: Pull QIIME 2
         run: docker pull quay.io/qiime2/amplicon:2024.10
+      - name: Run actual public sample
+        run: bash projects/01_16s_microbiome/scripts/07_actual_public_run.sh
+      - name: Commit verified results
+        run: |
+          set -euo pipefail
+          mkdir -p projects/01_16s_microbiome/results
+          cp -R results_actual/. projects/01_16s_microbiome/results/
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add projects/01_16s_microbiome/results
+          git diff --cached --quiet && exit 0
+          git commit -m 'results: add actual SRR26534086 16S outcomes'
+          git push
