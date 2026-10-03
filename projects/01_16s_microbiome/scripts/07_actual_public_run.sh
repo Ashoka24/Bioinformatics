@@ -11,7 +11,7 @@ SRR26534086	/data/work/raw/SRR26534086_1.fastq.gz	/data/work/raw/SRR26534086_2.f
 EOF
 docker run --rm -v "$PWD:/data" "$IMAGE" qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]' --input-path /data/work/manifest.tsv --input-format PairedEndFastqManifestPhred33V2 --output-path /data/work/q2/demux.qza
 docker run --rm -v "$PWD:/data" "$IMAGE" qiime cutadapt trim-paired --i-demultiplexed-sequences /data/work/q2/demux.qza --p-front-f CCTACGGGNGGCWGCAG --p-front-r GACTACHVGGGTATCTAATCC --p-error-rate 0.1 --p-no-discard-untrimmed --o-trimmed-sequences /data/work/q2/trimmed.qza
-docker run --rm -v "$PWD:/data" "$IMAGE" qiime dada2 denoise-single --i-demultiplexed-seqs /data/work/q2/trimmed.qza --p-trunc-len 0 --p-max-ee 2 --p-trunc-q 2 --p-pooling-method pseudo --p-n-threads 2 --o-table /data/work/q2/table.qza --o-representative-sequences /data/work/q2/rep-seqs.qza --o-denoising-stats /data/work/q2/denoising-stats.qza
+docker run --rm -v "$PWD:/data" "$IMAGE" qiime dada2 denoise-single --i-demultiplexed-seqs /data/work/q2/trimmed.qza --p-trunc-len 0 --p-max-ee 5 --p-trunc-q 0 --p-pooling-method independent --p-n-reads-learn 50000 --p-n-threads 2 --verbose --o-table /data/work/q2/table.qza --o-representative-sequences /data/work/q2/rep-seqs.qza --o-denoising-stats /data/work/q2/denoising-stats.qza
 curl -fL --retry 3 https://data.qiime2.org/classifiers/sklearn-1.4.2/silva/silva-138-99-nb-classifier.qza -o work/silva.qza
 echo 'c08a1aa4d56b449b511f7215543a43249ae9c54b57491428a7e5548a62613616  work/silva.qza' | sha256sum -c -
 docker run --rm -v "$PWD:/data" "$IMAGE" qiime feature-classifier classify-sklearn --i-classifier /data/work/silva.qza --i-reads /data/work/q2/rep-seqs.qza --p-n-jobs 2 --o-classification /data/work/q2/taxonomy.qza
