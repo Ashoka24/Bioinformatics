@@ -1,6 +1,6 @@
 from pathlib import Path
 from collections import defaultdict
-import numpy as np, pandas as pd
+import pandas as pd
 import matplotlib.pyplot as plt
 
 ROOT=Path("results_actual"); T=ROOT/"tables"; F=ROOT/"figures"; ML=ROOT/"ml"
@@ -31,18 +31,20 @@ def genus(t):
     return x.split("__",1)[-1] if "__" in x else (x or "Unassigned")
 
 rel=counts.div(counts.sum(axis=0),axis=1)
-g=defaultdict(lambda:np.zeros(len(samples)))
-for feat in rel.index: g[genus(taxmap.get(feat,""))]+=rel.loc[feat].values
+g=defaultdict(lambda:[0.0]*len(samples))
+for feat in rel.index:
+    vals=rel.loc[feat].tolist()
+    for i,v in enumerate(vals): g[genus(taxmap.get(feat,""))][i]+=v
 X=pd.DataFrame(g,index=samples).T
 X=X.loc[(X>0).mean(axis=1)>0.10]
 X=X.loc[X.mean(axis=1)>0]
-X=np.log(X+1e-6)
+X=(X+1e-6).applymap(__import__("math").log)
 X=X.sub(X.mean(axis=0),axis=1).T
 
 alpha=[]
 for s in samples:
     x=counts[s].values; x=x[x>0]; p=x/x.sum()
-    alpha.append([s,meta.loc[s,"group"],int((counts[s]>0).sum()),-np.sum(p*np.log(p)),1-np.sum(p*p)])
+    alpha.append([s,meta.loc[s,"group"],int((counts[s]>0).sum()),-sum(v*__import__("math").log(v) for v in p),1-sum(v*v for v in p)])
 ad=pd.DataFrame(alpha,columns=["sample","group","observed_features","shannon","simpson"])
 ad.to_csv(T/"alpha_diversity.tsv",sep="\t",index=False)
 
@@ -62,17 +64,17 @@ out=[]
 for name,m in models.items():
     prob=cross_val_predict(m,X.values,labels,cv=cv,method="predict_proba")[:,1]
     pred=(prob>=0.5).astype(int)
-    out.append([name,roc_auc_score(labels,prob),accuracy_score(labels,pred),precision_score(labels,pred),recall_score(labels,pred)])
+    out.append([name,roc_auc_score(labels,prob),accuracy_score(labels,pred),precision_score(labels,pred,zero_division=0),recall_score(labels,pred,zero_division=0)])
 pd.DataFrame(out,columns=["model","roc_auc","accuracy","precision","sensitivity"]).to_csv(ML/"cross_validation_metrics.tsv",sep="\t",index=False)
 
 m=models["l1_logistic"].fit(X.values,labels)
 coef=m.named_steps["model"].coef_[0]
-pd.DataFrame({"genus":X.columns,"coefficient":coef,"abs_coefficient":np.abs(coef)}).query("abs_coefficient>0").sort_values("abs_coefficient",ascending=False).to_csv(ML/"l1_selected_genera.tsv",sep="\t",index=False)
+pd.DataFrame({"genus":X.columns,"coefficient":coef,"abs_coefficient":[abs(v) for v in coef]}).query("abs_coefficient>0").sort_values("abs_coefficient",ascending=False).to_csv(ML/"l1_selected_genera.tsv",sep="\t",index=False)
 
-mean_genus=rel.copy()
-for feat in mean_genus.index: mean_genus.loc[feat]=mean_genus.loc[feat]
-G=defaultdict(lambda:np.zeros(len(samples)))
-for feat in rel.index: G[genus(taxmap.get(feat,""))]+=rel.loc[feat].values
+G=defaultdict(lambda:[0.0]*len(samples))
+for feat in rel.index:
+    vals=rel.loc[feat].tolist()
+    for i,v in enumerate(vals): G[genus(taxmap.get(feat,""))][i]+=v
 gd=pd.DataFrame(G,index=samples).T
 top=gd.mean(axis=1).sort_values(ascending=False).head(15).index
 gd.loc[top].T.plot(kind="bar",stacked=True,figsize=(12,6))
