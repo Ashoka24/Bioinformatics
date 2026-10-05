@@ -10,8 +10,8 @@ The repository is organized as independent projects. Each project is written so 
 
 | # | Project | Main skills | Status |
 |---|---|---|---|
-| 01 | [16S Microbiome Analysis](projects/01_16s_microbiome/) | NCBI SRA, FASTQ, FastQC, MultiQC, nf-core/ampliseq, QIIME 2 | 🟢 Active |
-| 02 | IBS Microbiome Analysis | microbiome statistics, differential abundance, biological interpretation | Planned |
+| 01 | [16S Microbiome Analysis](projects/01_16s_microbiome/) | NCBI SRA, FASTQ, FastQC, MultiQC, nf-core/ampliseq, QIIME 2 | 🟢 Completed |
+| 02 | [IBS Microbiome Analysis](projects/02_ibs_microbiome/) | 16S microbiome analysis, QIIME 2, Deblur, SILVA, alpha diversity, machine learning | 🟢 Completed |
 | 03 | Shotgun Metagenomics | Kraken2/Centrifuge, taxonomic profiling, functional profiling | Planned |
 | 04 | Nextflow / nf-core Pipeline | workflow engineering, containers, reproducibility | Planned |
 | 05 | Bioinformatics + Machine Learning | Python, feature engineering, model evaluation | Planned |
@@ -56,6 +56,25 @@ You can override the path in every script with `DATA_ROOT`.
 Go to **[Project 01 — 16S Microbiome Analysis](projects/01_16s_microbiome/)**.
 
 The first project uses a public NCBI SRA human stool 16S dataset rather than private/company data. The selected run is `SRR26534086`, linked to BioProject `PRJNA1031545`. NCBI describes it as paired-end Illumina MiSeq 16S V3–V4 amplicon data and provides the primer sequences used for the experiment.
+
+### Project 02 — IBS Microbiome Analysis
+
+The second project is a public-data re-analysis of BioProject `PRJNA637763`.
+
+**Verified cohort results:**
+- **111 samples** analyzed
+- **85 IBS** samples
+- **26 healthy controls**
+- **131 genus-level features** after prevalence filtering
+- Mean observed features: **275.38 IBS vs 301.96 HC**
+- Mean Shannon diversity: **3.9586 IBS vs 4.2491 HC**
+- L1 Logistic Regression: **ROC-AUC 0.9186**
+- Random Forest: **ROC-AUC 0.8604**
+- Machine-learning evaluation: **5-fold stratified cross-validation**
+
+These are independent re-analysis metrics and are **not clinical diagnostic-validation results**.
+
+See the complete [Project 02 documentation and verified results](projects/02_ibs_microbiome/).
 
 ## Reproducibility principles
 
