@@ -13,7 +13,8 @@ for r in rows:
     run=r.get("Run","").strip()
     sample=r.get("SampleName","").strip()
     if not run or not sample: continue
-    s=sample.upper()
+    text=" ".join(str(v) for v in r.values()).upper()
+    s=(sample+" "+text).upper()
     if "IBS" in s: label="IBS"
     elif re.search(r"(^|[-_ ])HC($|[-_ ])",s) or "HEALTHY" in s or "CONTROL" in s: label="HC"
     else: continue
