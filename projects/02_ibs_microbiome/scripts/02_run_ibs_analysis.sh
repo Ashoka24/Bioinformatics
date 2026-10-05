@@ -75,4 +75,4 @@ for metric in observed_features shannon simpson; do
   docker run --rm -v "$PWD:/data" "$IMAGE" qiime tools export --input-path "/data/work/q2/$metric.qza" --output-path "/data/results_actual/tables/$metric"
 done
 
-python3 projects/02_ibs_microbiome/scripts/03_build_results.py
+docker run --rm -v "$PWD:/data" "$IMAGE" python /data/projects/02_ibs_microbiome/scripts/03_build_results.py
