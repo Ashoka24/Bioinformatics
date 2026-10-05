@@ -2,7 +2,8 @@
 set -euo pipefail
 
 IMAGE=quay.io/qiime2/amplicon:2024.10
-mkdir -p work/raw work/q2 results_actual/qc results_actual/tables results_actual/ml\nrm -rf results_actual/qc/* results_actual/tables/* results_actual/ml/*
+mkdir -p work/raw work/q2 results_actual/qc results_actual/tables results_actual/ml
+rm -rf results_actual/qc/* results_actual/tables/* results_actual/ml/*
 
 bash projects/02_ibs_microbiome/scripts/01_prepare_metadata.sh
 
