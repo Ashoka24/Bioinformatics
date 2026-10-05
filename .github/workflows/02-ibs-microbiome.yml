@@ -5,7 +5,7 @@ on:
     paths:
       - '.github/workflows/02-ibs-microbiome.yml'
       - 'projects/02_ibs_microbiome/**'
-  workflow_dispatch: {}
+  workflow_dispatch: {}\n  pull_request:\n    paths:\n      - '.github/workflows/02-ibs-microbiome.yml'\n      - 'projects/02_ibs_microbiome/**'
 
 permissions:
   contents: write
