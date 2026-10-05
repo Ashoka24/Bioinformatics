@@ -2,7 +2,7 @@
 set -euo pipefail
 
 IMAGE=quay.io/qiime2/amplicon:2024.10
-mkdir -p work/raw work/q2 results_actual/qc results_actual/tables results_actual/ml
+mkdir -p work/raw work/q2 results_actual/qc results_actual/tables results_actual/ml\nrm -rf results_actual/qc/* results_actual/tables/* results_actual/ml/*
 
 bash projects/02_ibs_microbiome/scripts/01_prepare_metadata.sh
 
@@ -18,10 +18,11 @@ for i,r in enumerate(meta,1):
     lines=txt.strip().splitlines()
     if len(lines)<2: raise SystemExit(f"No ENA FASTQ record for {run}")
     for ftp in lines[1].split("\t")[1].split(";"):
-        name=Path(ftp).name; dest=raw/name
+        name=Path(ftp).name
+        dest=raw/name
         if not dest.exists():
-            subprocess.run(["curl","-fL","--retry","3","https://"+ftp.removeprefix("ftp://"),"-o",str(dest)],check=True)
-    if i%10==0: print(f"Downloaded {i}/{len(meta)}")
+            subprocess.run(["curl","-fL","--retry","5","--retry-delay","2","--connect-timeout","30","--max-time","600","https://"+ftp.removeprefix("ftp://"),"-o",str(dest)],check=True)
+    if i%10==0: print(f"Resolved {i}/{len(meta)}")
 PY
 
 python3 - <<'PY'
