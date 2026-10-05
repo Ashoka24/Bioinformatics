@@ -7,10 +7,11 @@ ROOT=Path("results_actual"); T=ROOT/"tables"; F=ROOT/"figures"; ML=ROOT/"ml"
 F.mkdir(parents=True,exist_ok=True); ML.mkdir(parents=True,exist_ok=True)
 
 with open(T/"feature-table.tsv") as f:
-    lines=[x.rstrip("\n") for x in f if not x.startswith("#")]
-parts=lines[0].split("\t")
-samples=parts[1:]
+    raw=[x.rstrip("\n") for x in f]
+header=next(x for x in raw if x.startswith("#OTU ID"))
+samples=header.split("\t")[1:]
 if samples and samples[-1]=="": samples=samples[:-1]
+lines=[x for x in raw if x and not x.startswith("#")]
 rows=[]
 for line in lines[1:]:
     p=line.split("\t")
