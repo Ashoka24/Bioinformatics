@@ -42,7 +42,8 @@ docker run --rm -v "$PWD:/data" "$IMAGE" qiime tools import --type 'SampleData[S
 
 docker run --rm -v "$PWD:/data" "$IMAGE" qiime demux summarize --i-data /data/work/q2/forward.qza --o-visualization /data/work/q2/demux.qzv
 
-docker run --rm -v "$PWD:/data" "$IMAGE" qiime deblur denoise-16S --i-demultiplexed-seqs /data/work/q2/forward.qza --p-trim-length 120 --p-sample-stats --p-jobs-to-start 2 --o-table /data/work/q2/table.qza --o-representative-sequences /data/work/q2/rep-seqs.qza --o-stats /data/work/q2/deblur-stats.qza
+docker run --rm -v "$PWD:/data" "$IMAGE" qiime cutadapt trim-single --i-demultiplexed-sequences /data/work/q2/forward.qza --p-front "AGRGTTTGATYMTGGCTCAG" --p-error-rate 0.15 --p-discard-untrimmed --o-trimmed-sequences /data/work/q2/trimmed-forward.qza
+docker run --rm -v "$PWD:/data" "$IMAGE" qiime deblur denoise-16S --i-demultiplexed-seqs /data/work/q2/trimmed-forward.qza --p-trim-length 200 --p-sample-stats --p-jobs-to-start 2 --o-table /data/work/q2/table.qza --o-representative-sequences /data/work/q2/rep-seqs.qza --o-stats /data/work/q2/deblur-stats.qza
 
 curl -fL --retry 3 https://data.qiime2.org/classifiers/sklearn-1.4.2/silva/silva-138-99-nb-classifier.qza -o work/silva.qza
 echo 'c08a1aa4d56b449b511f7215543a43249ae9c54b57491428a7e5548a62613616  work/silva.qza' | sha256sum -c -
