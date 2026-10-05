@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="368"><text x="20" y="30" font-size="20">SRR26534086 — relative abundance by Phylum</text>
+<text x="20" y="70" font-size="12">p__Firmicutes</text>
+<rect x="450" y="55" width="480.0" height="20" fill="currentColor"/><text x="950" y="70" font-size="12">49.36%</text>
+<text x="20" y="102" font-size="12">p__Bacteroidota</text>
+<rect x="450" y="87" width="235.1" height="20" fill="currentColor"/><text x="950" y="102" font-size="12">24.18%</text>
+<text x="20" y="134" font-size="12">p__Proteobacteria</text>
+<rect x="450" y="119" width="201.8" height="20" fill="currentColor"/><text x="950" y="134" font-size="12">20.75%</text>
+<text x="20" y="166" font-size="12">p__Actinobacteriota</text>
+<rect x="450" y="151" width="51.1" height="20" fill="currentColor"/><text x="950" y="166" font-size="12">5.25%</text>
+<text x="20" y="198" font-size="12">p__Cyanobacteria</text>
+<rect x="450" y="183" width="1.5" height="20" fill="currentColor"/><text x="950" y="198" font-size="12">0.15%</text>
+<text x="20" y="230" font-size="12">p__Chloroflexi</text>
+<rect x="450" y="215" width="1.4" height="20" fill="currentColor"/><text x="950" y="230" font-size="12">0.15%</text>
+<text x="20" y="262" font-size="12">p__Caldatribacteriota</text>
+<rect x="450" y="247" width="0.6" height="20" fill="currentColor"/><text x="950" y="262" font-size="12">0.06%</text>
+<text x="20" y="294" font-size="12">p__Synergistota</text>
+<rect x="450" y="279" width="0.5" height="20" fill="currentColor"/><text x="950" y="294" font-size="12">0.05%</text>
+<text x="20" y="326" font-size="12">p__Desulfobacterota</text>
+<rect x="450" y="311" width="0.5" height="20" fill="currentColor"/><text x="950" y="326" font-size="12">0.05%</text>
+</svg>

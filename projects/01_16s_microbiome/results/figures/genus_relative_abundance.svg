@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="560"><text x="20" y="30" font-size="20">SRR26534086 — relative abundance by Genus</text>
+<text x="20" y="70" font-size="12">Unclassified</text>
+<rect x="450" y="55" width="480.0" height="20" fill="currentColor"/><text x="950" y="70" font-size="12">27.74%</text>
+<text x="20" y="102" font-size="12">g__Bacteroides</text>
+<rect x="450" y="87" width="373.8" height="20" fill="currentColor"/><text x="950" y="102" font-size="12">21.60%</text>
+<text x="20" y="134" font-size="12">g__Solibacillus</text>
+<rect x="450" y="119" width="149.0" height="20" fill="currentColor"/><text x="950" y="134" font-size="12">8.61%</text>
+<text x="20" y="166" font-size="12">g__Stenotrophomonas</text>
+<rect x="450" y="151" width="104.4" height="20" fill="currentColor"/><text x="950" y="166" font-size="12">6.03%</text>
+<text x="20" y="198" font-size="12">g__Bifidobacterium</text>
+<rect x="450" y="183" width="81.7" height="20" fill="currentColor"/><text x="950" y="198" font-size="12">4.72%</text>
+<text x="20" y="230" font-size="12">g__Delftia</text>
+<rect x="450" y="215" width="51.4" height="20" fill="currentColor"/><text x="950" y="230" font-size="12">2.97%</text>
+<text x="20" y="262" font-size="12">g__Faecalibacterium</text>
+<rect x="450" y="247" width="51.0" height="20" fill="currentColor"/><text x="950" y="262" font-size="12">2.95%</text>
+<text x="20" y="294" font-size="12">g__Erysipelatoclostridium</text>
+<rect x="450" y="279" width="49.8" height="20" fill="currentColor"/><text x="950" y="294" font-size="12">2.88%</text>
+<text x="20" y="326" font-size="12">g__Escherichia-Shigella</text>
+<rect x="450" y="311" width="40.9" height="20" fill="currentColor"/><text x="950" y="326" font-size="12">2.36%</text>
+<text x="20" y="358" font-size="12">g__Mitsuokella</text>
+<rect x="450" y="343" width="40.4" height="20" fill="currentColor"/><text x="950" y="358" font-size="12">2.33%</text>
+<text x="20" y="390" font-size="12">g__Subdoligranulum</text>
+<rect x="450" y="375" width="30.2" height="20" fill="currentColor"/><text x="950" y="390" font-size="12">1.75%</text>
+<text x="20" y="422" font-size="12">g__Lysinibacillus</text>
+<rect x="450" y="407" width="25.2" height="20" fill="currentColor"/><text x="950" y="422" font-size="12">1.45%</text>
+<text x="20" y="454" font-size="12">g__Dialister</text>
+<rect x="450" y="439" width="20.1" height="20" fill="currentColor"/><text x="950" y="454" font-size="12">1.16%</text>
+<text x="20" y="486" font-size="12">g__Christensenellaceae_R-7_group</text>
+<rect x="450" y="471" width="19.2" height="20" fill="currentColor"/><text x="950" y="486" font-size="12">1.11%</text>
+<text x="20" y="518" font-size="12">g__Acidaminococcus</text>
+<rect x="450" y="503" width="18.7" height="20" fill="currentColor"/><text x="950" y="518" font-size="12">1.08%</text>
+</svg>
