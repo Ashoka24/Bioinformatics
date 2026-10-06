@@ -47,7 +47,7 @@ raw_names <- colnames(raw)
 system2("python3", "scripts/resolve_library_map.py")
 
 map <- read.delim("results/library_mapping.tsv", check.names = FALSE, stringsAsFactors = FALSE)
-sample_idx <- match(meta$sample, map$experiment_geo_accession)
+sample_idx <- match(meta$sample, map$gsm)
 
 if (anyNA(sample_idx)) {
   stop(sprintf("Could not resolve SRA libraries for: %s",
