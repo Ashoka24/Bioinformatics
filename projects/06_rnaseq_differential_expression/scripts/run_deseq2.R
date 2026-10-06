@@ -32,54 +32,32 @@ rownames(meta) <- meta$sample
 raw <- read.delim(gzfile(input), check.names = FALSE, comment.char = "", stringsAsFactors = FALSE)
 raw_names <- colnames(raw)
 
-# NCBI SRA RunInfo CGI for the study. The processed GEO matrix uses library IDs.
-runinfo_url <- "https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?save=efetch&db=sra&rettype=runinfo&term=SRP151065"
-runinfo_file <- file.path(tempdir(), "SRP151065_runinfo.csv")
-download.file(runinfo_url, runinfo_file, mode = "wb", quiet = TRUE)
-runinfo <- read.csv(runinfo_file, check.names = FALSE, stringsAsFactors = FALSE)
+# GEO family SOFT contains the authoritative sample-to-library mapping.
+soft_url <- "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE116nnn/GSE116139/soft/GSE116139_family.soft.gz"
+soft_file <- file.path(tempdir(), "GSE116139_family.soft.gz")
+download.file(soft_url, soft_file, mode = "wb", quiet = TRUE)
+soft <- readLines(gzfile(soft_file), warn = FALSE)
 
-find_col <- function(candidates) {
-  hit <- candidates[candidates %in% colnames(runinfo)]
-  if (length(hit)) hit[1] else NA_character_
+geo_lines <- grep("^!Sample_geo_accession", soft, value = TRUE)
+lib_lines <- grep("^!Sample_library_id", soft, value = TRUE)
+
+if (length(geo_lines) != length(lib_lines) || length(geo_lines) == 0) {
+  stop("Could not extract GEO sample/library metadata from the family SOFT file")
 }
 
-lib_col <- find_col(c("Library_Name", "LibraryName", "library_name"))
-sample_col <- find_col(c("Sample_Name", "SampleName", "sample_name"))
-if (is.na(lib_col) || is.na(sample_col)) {
-  stop(sprintf("RunInfo columns did not contain library/sample fields. Columns: %s",
-              paste(colnames(runinfo), collapse = ", ")))
-}
+geo_ids <- sub("^!Sample_geo_accession\\s*=\\s*", "", geo_lines)
+library_ids <- sub("^!Sample_library_id\\s*=\\s*", "", lib_lines)
+geo_to_lib <- setNames(library_ids, geo_ids)
 
-library_name <- trimws(as.character(runinfo[[lib_col]]))
-sample_name <- trimws(as.character(runinfo[[sample_col]]))
-
-# Build the biological key from the GEO sample title, e.g. Subject34_mucosa_CD69-.
-make_key <- function(x) {
-  x <- gsub("\\s+", "_", x)
-  m <- regexec("Subject([0-9]+)_(mucosa|blood)_CD69-", x, ignore.case = TRUE)
-  z <- regmatches(x, m)
-  out <- rep(NA_character_, length(x))
-  ok <- lengths(z) == 4
-  out[ok] <- paste0(tolower(z[[which(ok)[1]][2]]), "_", tolower(z[[which(ok)[1]][3]]))
-  out
-}
-
-# Explicit key from the GEO sample accessions avoids relying on column order.
-meta$key <- paste0("subject", meta$subject, "_", as.character(meta$tissue))
-run_key <- make_key(sample_name)
-
-key_to_lib <- setNames(library_name[!duplicated(run_key)], run_key[!duplicated(run_key)])
-meta$library_id <- unname(key_to_lib[meta$key])
-
+meta$library_id <- unname(geo_to_lib[meta$sample])
 if (anyNA(meta$library_id)) {
-  print(data.frame(library_name = library_name, sample_name = sample_name))
-  stop(sprintf("Could not resolve library IDs for: %s",
+  stop(sprintf("Missing library mapping for: %s",
               paste(meta$sample[is.na(meta$library_id)], collapse = ", ")))
 }
 
 missing_libs <- setdiff(meta$library_id, raw_names)
 if (length(missing_libs) > 0) {
-  stop(sprintf("Resolved library IDs are absent from the count matrix: %s",
+  stop(sprintf("Mapped library IDs are absent from the count matrix: %s",
               paste(missing_libs, collapse = ", ")))
 }
 
