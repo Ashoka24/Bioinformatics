@@ -72,7 +72,7 @@ def load_expression(path, sample_titles):
             rows.append(parts)
 
     df = pd.DataFrame(rows, columns=header)
-    df["ID_REF"] = df["ID_REF"].astype(str)
+    df["ID_REF"] = df["ID_REF"].astype(str).str.strip('"')
     for col in header[1:]:
         df[col] = pd.to_numeric(df[col], errors="coerce")
     df = df.dropna(axis=0, how="any")
