@@ -25,6 +25,17 @@ meta <- data.frame(
       "mucosa","blood","mucosa","blood","mucosa","blood","mucosa","blood",
       "mucosa","blood"),
     levels = c("blood","mucosa")
+  ),
+  sample_title = c(
+    "Subject19_mucosa_CD69-","Subject19_blood_CD69-",
+    "Subject34_mucosa_CD69-","Subject34_blood_CD69-",
+    "Subject40_mucosa_CD69-","Subject40_blood_CD69-",
+    "Subject42_mucosa_CD69-","Subject42_blood_CD69-",
+    "Subject43_mucosa_CD69-","Subject43_blood_CD69-",
+    "Subject47_mucosa_CD69-","Subject47_blood_CD69-",
+    "Subject49_mucosa_CD69-","Subject49_blood_CD69-",
+    "Subject53_mucosa_CD69-","Subject53_blood_CD69-",
+    "Subject56_mucosa_CD69-","Subject56_blood_CD69-"
   )
 )
 rownames(meta) <- meta$sample
@@ -38,9 +49,9 @@ runinfo_file <- file.path(tempdir(), "SRP151065_runinfo.csv")
 download.file(runinfo_url, runinfo_file, mode = "wb", quiet = TRUE)
 runinfo <- read.csv(runinfo_file, check.names = FALSE, stringsAsFactors = FALSE)
 
-candidate_sample_cols <- c("GEO_Accession", "Sample_Name", "sample_name", "Sample", "BioSample")
+candidate_sample_cols <- c("SampleName", "Sample_Name", "sample_name", "Sample")
 sample_col <- candidate_sample_cols[candidate_sample_cols %in% colnames(runinfo)][1]
-library_col <- c("Library_Name", "library_name")[c("Library_Name", "library_name") %in% colnames(runinfo)][1]
+library_col <- c("LibraryName", "Library_Name", "library_name")[c("LibraryName", "Library_Name", "library_name") %in% colnames(runinfo)][1]
 
 if (is.na(sample_col) || is.na(library_col)) {
   stop(sprintf("SRA RunInfo columns available: %s", paste(colnames(runinfo), collapse = ", ")))
@@ -48,10 +59,10 @@ if (is.na(sample_col) || is.na(library_col)) {
 
 runinfo[[sample_col]] <- trimws(as.character(runinfo[[sample_col]]))
 runinfo[[library_col]] <- trimws(as.character(runinfo[[library_col]]))
-runinfo <- runinfo[runinfo[[sample_col]] %in% meta$sample, , drop = FALSE]
+runinfo <- runinfo[runinfo[[sample_col]] %in% meta$sample_title, , drop = FALSE]
 runinfo <- runinfo[!duplicated(runinfo[[sample_col]]), , drop = FALSE]
 
-sample_idx <- match(meta$sample, runinfo[[sample_col]])
+sample_idx <- match(meta$sample_title, runinfo[[sample_col]])
 if (anyNA(sample_idx)) {
   stop(sprintf("Could not resolve SRA libraries for: %s",
                paste(meta$sample[is.na(sample_idx)], collapse = ", ")))
