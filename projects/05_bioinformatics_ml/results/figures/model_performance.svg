@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+<rect width="900" height="520" fill="white"/>
+<text x="55" y="55" font-family="Arial" font-size="28" font-weight="700">Project 05 — Cross-validated model performance</text>
+<text x="55" y="84" font-family="Arial" font-size="15">GSE42568 • stratified 5-fold out-of-fold evaluation</text>
+<g font-family="Arial" font-size="15">
+<text x="190" y="150" font-weight="700">ROC-AUC</text>
+<text x="190" y="280" font-weight="700">Average Precision</text>
+<line x1="190" y1="165" x2="790" y2="165" stroke="#ccc"/>
+<line x1="190" y1="295" x2="790" y2="295" stroke="#ccc"/>
+<rect x="190" y="180" width="588" height="42" fill="#444"/><text x="795" y="207">Logistic Regression 0.9802</text>
+<rect x="190" y="230" width="584" height="42" fill="#888"/><text x="795" y="257">Random Forest 0.9740</text>
+<rect x="190" y="310" width="598" height="42" fill="#444"/><text x="795" y="337">Logistic Regression 0.9964</text>
+<rect x="190" y="360" width="597" height="42" fill="#888"/><text x="795" y="387">Random Forest 0.9953</text>
+<text x="190" y="455">Metrics are derived from out-of-fold predictions; feature selection occurs inside each training fold.</text>
+</g>
+</svg>
