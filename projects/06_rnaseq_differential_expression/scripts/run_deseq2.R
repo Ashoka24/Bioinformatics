@@ -31,17 +31,31 @@ rownames(meta) <- meta$sample
 
 raw <- read.delim(gzfile(input), check.names = FALSE, comment.char = "", stringsAsFactors = FALSE)
 
-sample_cols <- intersect(meta$sample, colnames(raw))
-if (length(sample_cols) != nrow(meta)) {
-  stop(sprintf("Expected %d sample columns, found %d", nrow(meta), length(sample_cols)))
+clean_name <- function(x) {
+  x <- trimws(gsub('"', "", x, fixed = TRUE))
+  x <- sub("^[^G]*(GSM[0-9]+).*$", "\\1", x)
+  x
 }
 
+raw_names <- colnames(raw)
+normalized_names <- clean_name(raw_names)
+wanted <- setNames(meta$sample, meta$sample)
+sample_idx <- match(names(wanted), normalized_names)
+
+if (anyNA(sample_idx)) {
+  missing <- names(wanted)[is.na(sample_idx)]
+  stop(sprintf("Could not map GEO sample accessions: %s", paste(missing, collapse = ", ")))
+}
+
+sample_cols <- raw_names[sample_idx]
+
 gene_candidates <- c("gene_id", "Geneid", "gene", "Gene")
-gene_col <- gene_candidates[gene_candidates %in% colnames(raw)][1]
-if (is.na(gene_col)) gene_col <- colnames(raw)[1]
+gene_col <- gene_candidates[gene_candidates %in% raw_names][1]
+if (is.na(gene_col)) gene_col <- raw_names[1]
 
 counts <- raw[, c(gene_col, sample_cols), drop = FALSE]
 colnames(counts)[1] <- "gene_id"
+colnames(counts)[-1] <- normalized_names[sample_idx]
 counts$gene_id <- as.character(counts$gene_id)
 counts <- counts[counts$gene_id != "" & !duplicated(counts$gene_id), , drop = FALSE]
 rownames(counts) <- counts$gene_id
