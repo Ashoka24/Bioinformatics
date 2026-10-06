@@ -76,6 +76,25 @@ These are independent re-analysis metrics and are **not clinical diagnostic-vali
 
 See the complete [Project 02 documentation and verified results](projects/02_ibs_microbiome/).
 
+
+### Project 03 — Shotgun Metagenomics Taxonomic Profiling
+
+An end-to-end public-data shotgun metagenomics workflow using **SRR1779146** from BioProject **PRJNA273761**. The project processes paired-end Illumina WGS reads through FASTP, Kraken2 and Centrifuge, then compares the independent taxonomic profiles.
+
+**Verified results:**
+- **7,954,717** sequencing fragments analyzed
+- **6,940,503 (87.25%)** classified by Kraken2
+- **1,014,214 (12.75%)** unclassified
+- Leading Kraken2 species: **Enterobacter roggenkampii — 17.06%**
+- Top-10 species overlap between Kraken2 and Centrifuge: **7/10**
+- Top-10 species Jaccard overlap: **0.5385**
+
+The workflow uses pinned public reference databases, records provenance and generates reproducible derived results. Kraken2 percentages and Centrifuge abundance estimates are treated as classifier-specific metrics rather than directly interchangeable measurements.
+
+This is a **single-sample taxonomic profile** and therefore does not establish NEC-associated biomarkers, prevalence, causality or cohort-level differences.
+
+See the complete [Project 03 documentation and verified results](projects/03_shotgun_metagenomics/).
+
 ## Reproducibility principles
 
 - Use public accession numbers whenever possible.
