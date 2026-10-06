@@ -66,10 +66,11 @@ rm -rf "$DB_ROOT" "$WORK/kraken2.output"
 
 CENT_DB_DIR="$WORK/centrifuge_db"
 CENT_TGZ="$WORK/p_compressed+h+v.tar.gz"
-CENT_URL="https://genome-idx.s3.amazonaws.com/centrifuge/p_compressed+h+v.tar.gz"
+CENT_S3="s3://genome-idx/centrifuge/p_compressed+h+v.tar.gz"
 mkdir -p "$CENT_DB_DIR"
-curl -fL --retry 8 --retry-all-errors --retry-delay 5 "$CENT_URL" -o "$CENT_TGZ"
+aws s3 cp --no-sign-request "$CENT_S3" "$CENT_TGZ"
 tar -xzf "$CENT_TGZ" -C "$CENT_DB_DIR"
+rm -f "$CENT_TGZ"
 
 CENT_INDEX="$(find "$CENT_DB_DIR" -maxdepth 1 -type f -name '*.1.cf' -print -quit | sed 's/\.1\.cf$//')"
 test -n "$CENT_INDEX"
