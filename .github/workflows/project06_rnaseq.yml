@@ -20,6 +20,7 @@ jobs:
 
       - name: Install analysis packages
         run: |
+          python -m pip install --no-cache-dir pysradb
           Rscript -e 'BiocManager::install("DESeq2", ask=FALSE, update=FALSE)'
           Rscript -e 'if (!requireNamespace("ggplot2", quietly=TRUE)) install.packages("ggplot2", repos="https://cloud.r-project.org")'
 
