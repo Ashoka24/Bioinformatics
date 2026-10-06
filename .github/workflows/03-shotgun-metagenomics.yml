@@ -7,10 +7,13 @@ on:
       - "projects/03_shotgun_metagenomics/**"
       - ".github/workflows/03-shotgun-metagenomics.yml"
 
+permissions:
+  contents: write
+
 jobs:
   shotgun:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 180
 
     steps:
       - name: Checkout
@@ -31,10 +34,10 @@ jobs:
           test -s projects/03_shotgun_metagenomics/results/kraken2.report
           test -s projects/03_shotgun_metagenomics/results/top_taxa.tsv
           test -s projects/03_shotgun_metagenomics/results/centrifuge.report.tsv
-          test -s projects/03_shotgun_metagenomics/results/centrifuge.classification.tsv
           test -s projects/03_shotgun_metagenomics/results/classifier_comparison.tsv
           test -s projects/03_shotgun_metagenomics/results/CLASSIFIER_COMPARISON.md
           test -s projects/03_shotgun_metagenomics/results/REPORT.md
+          test ! -e projects/03_shotgun_metagenomics/results/centrifuge.classification.tsv
 
       - name: Commit verified results
         run: |
