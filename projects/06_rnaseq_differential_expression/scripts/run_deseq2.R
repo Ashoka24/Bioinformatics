@@ -32,29 +32,32 @@ rownames(meta) <- meta$sample
 raw <- read.delim(gzfile(input), check.names = FALSE, comment.char = "", stringsAsFactors = FALSE)
 raw_names <- colnames(raw)
 
-# NCBI's matrix uses internal library IDs. Resolve each GSM through NCBI SRA.
-resolve_library <- function(gsm) {
-  q <- URLencode(paste0('"', gsm, '"'))
-  esearch <- paste0("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=sra&term=", q, "&retmode=json")
-  ejson <- paste(readLines(esearch, warn = FALSE), collapse = "")
-  ids <- regmatches(ejson, gregexpr('"id":"[0-9]+"', ejson))[[1]]
-  if (length(ids) == 0) return(NA_character_)
-  id <- sub('.*"id":"([0-9]+)".*', "\\1", ids[1])
+# NCBI's matrix uses internal library IDs. Resolve them from the SRA study metadata in one request.
+runinfo_url <- "https://trace.ncbi.nlm.nih.gov/Traces/sra-db-be/runinfo?acc=SRP151065"
+runinfo_file <- file.path(tempdir(), "SRP151065_runinfo.csv")
+download.file(runinfo_url, runinfo_file, mode = "wb", quiet = TRUE)
+runinfo <- read.csv(runinfo_file, check.names = FALSE, stringsAsFactors = FALSE)
 
-  efetch <- paste0("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=sra&id=", id, "&retmode=xml")
-  xml <- paste(readLines(efetch, warn = FALSE), collapse = "")
-  hit <- regexec("<LIBRARY_NAME>([^<]+)</LIBRARY_NAME>", xml)
-  m <- regmatches(xml, hit)[[1]]
-  if (length(m) < 2) NA_character_ else m[2]
+candidate_sample_cols <- c("GEO_Accession", "Sample_Name", "sample_name", "Sample", "BioSample")
+sample_col <- candidate_sample_cols[candidate_sample_cols %in% colnames(runinfo)][1]
+library_col <- c("Library_Name", "library_name")[c("Library_Name", "library_name") %in% colnames(runinfo)][1]
+
+if (is.na(sample_col) || is.na(library_col)) {
+  stop(sprintf("SRA RunInfo columns available: %s", paste(colnames(runinfo), collapse = ", ")))
 }
 
-meta$library_id <- vapply(meta$sample, resolve_library, character(1))
+runinfo[[sample_col]] <- trimws(as.character(runinfo[[sample_col]]))
+runinfo[[library_col]] <- trimws(as.character(runinfo[[library_col]]))
+runinfo <- runinfo[runinfo[[sample_col]] %in% meta$sample, , drop = FALSE]
+runinfo <- runinfo[!duplicated(runinfo[[sample_col]]), , drop = FALSE]
 
-if (anyNA(meta$library_id)) {
-  stop(sprintf("Could not resolve SRA library IDs for: %s",
-               paste(meta$sample[is.na(meta$library_id)], collapse = ", ")))
+sample_idx <- match(meta$sample, runinfo[[sample_col]])
+if (anyNA(sample_idx)) {
+  stop(sprintf("Could not resolve SRA libraries for: %s",
+               paste(meta$sample[is.na(sample_idx)], collapse = ", ")))
 }
 
+meta$library_id <- runinfo[[library_col]][sample_idx]
 missing_libs <- setdiff(meta$library_id, raw_names)
 if (length(missing_libs) > 0) {
   stop(sprintf("SRA-resolved library IDs absent from count matrix: %s",
