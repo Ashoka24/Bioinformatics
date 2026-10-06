@@ -1,0 +1,4 @@
+# Project 04 test configuration
+profile: test,docker
+pipeline: nf-core/rnaseq
+version: 3.27.0
