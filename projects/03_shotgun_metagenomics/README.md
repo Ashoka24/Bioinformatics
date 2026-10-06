@@ -15,6 +15,12 @@ End-to-end shotgun metagenomics workflow using a real public human infant fecal 
 - Layout: paired-end
 - Analysis scope: one public paired-end WGS run, selected for reproducible GitHub-hosted execution
 
+## Workflow figure
+
+![Shotgun metagenomics workflow](figures/01_workflow.svg)
+
+![Output file map](figures/02_output_file_map.svg)
+
 ## Workflow
 
 ~~~text
