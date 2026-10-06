@@ -1,30 +1,62 @@
 # 03 — Public Shotgun Metagenomics Taxonomic Profiling
 
-End-to-end shotgun metagenomics workflow using a public NCBI human gut metagenome.
+End-to-end shotgun metagenomics workflow using a real public human infant fecal WGS sample.
 
 ## Dataset
 
-- BioProject: PRJNA786061
-- Study: Association between anemia and gut microbiome composition in the rural Odisha population
-- Data type: human gut metagenome
-- Source cohort: 102 SRA experiments, approximately 3.1 GB
-- Analysis scope: one paired-end shotgun run selected automatically from the public ENA run API
+- BioProject: PRJNA273761
+- Study: Metagenomes from human infant fecal samples with and without necrotizing enterocolitis
+- Run analyzed: SRR1779146
+- BioSample: SAMN03295851
+- Experiment: SRX858749
+- Study accession: SRP052967
+- Instrument: Illumina HiSeq 2000
+- Library strategy: WGS
+- Layout: paired-end
+- Analysis scope: one public paired-end WGS run, selected for reproducible GitHub-hosted execution
 
 ## Workflow
 
-```text
-NCBI/ENA public run → FASTQ → FASTP → Kraken 2 → taxonomic report → top-taxa summary
-```
+~~~text
+NCBI/ENA public WGS run
+        ↓
+Paired FASTQ
+        ↓
+FASTP QC + adapter detection
+        ↓
+Kraken2 taxonomic classification
+        ↓
+Centrifuge taxonomic classification
+        ↓
+Independent classifier comparison
+        ↓
+Top-taxa + QC + provenance reports
+~~~
 
-Kraken 2 classifies DNA reads using k-mer/minimizer matches and a lowest-common-ancestor framework. It supports paired-end classification.
+Kraken2 and Centrifuge are run independently on the same cleaned paired-end reads. This makes the comparison methodological rather than treating one classifier as ground truth.
 
-## Reference database
+## Reference databases
 
-MiniKraken2 v2 8-GB: RefSeq bacteria, archaea and viruses plus the GRCh38 human genome. This reduced database is used deliberately because the full Kraken 2 standard database is too large for ordinary GitHub-hosted CI resources.
+### Kraken2
+
+A maintained **Standard-8 Kraken2/Bracken index, June 2026**, from the Langmead Lab AWS Open Data index zone. The archive is 5.5 GB and the resulting database is capped at 8 GB. The index contains RefSeq archaea, bacteria, viral, plasmid, human and UniVec Core sequences. Reduced indexes trade some sensitivity/accuracy for smaller size.
+
+### Centrifuge
+
+The workflow uses the compressed bacteria + human + viral Centrifuge index hosted by the Langmead Lab AWS index infrastructure.
 
 ## Reproducibility
 
-The workflow resolves a public run, records its accession metadata, downloads the FASTQ files, performs FASTP filtering, downloads the pinned MiniKraken2 database, runs Kraken 2, and commits only derived results. Raw FASTQ files and the database are never committed.
+The workflow:
+
+1. Downloads the pinned public FASTQ pair for SRR1779146 from ENA.
+2. Runs FASTP and records the JSON QC summary.
+3. Downloads the pinned June 2026 Kraken2 Standard-8 database over HTTPS.
+4. Runs Kraken2 on the cleaned paired-end reads.
+5. Removes the large Kraken2 database before downloading the Centrifuge index.
+6. Runs Centrifuge on the same cleaned reads.
+7. Generates top-taxa and classifier-comparison tables.
+8. Commits only compact derived results; raw FASTQ, databases and per-read Centrifuge classifications are not committed.
 
 ## Results
 
@@ -35,24 +67,31 @@ The workflow creates:
 - fastp_summary.json
 - kraken2.report
 - top_taxa.tsv
+- centrifuge.report.tsv
+- classifier_comparison.tsv
+- CLASSIFIER_COMPARISON.md
 
-### Interpretation boundary
+Actual numerical results are populated only after the GitHub Actions workflow completes successfully.
 
-This is a single-run taxonomic profile. It cannot establish anemia-associated taxa, biomarkers, causality, prevalence or cohort-level conclusions. A cohort analysis would require all 102 samples, consistent metadata, compositional analysis and statistical testing.
+## Interpretation boundary
+
+This is a **single-run taxonomic profile**. It cannot establish NEC-associated taxa, biomarkers, causality, prevalence, or cohort-level differences. A biological comparison would require the full study cohort, consistent metadata, appropriate compositional/statistical analysis and multiple-testing control.
 
 ## Local execution
 
-```bash
+~~~bash
 bash scripts/run_shotgun.sh
-```
+~~~
 
 ## Repository structure
 
-```text
+~~~text
 03_shotgun_metagenomics/
 ├── README.md
 ├── metadata/DATASET.md
-├── scripts/run_shotgun.sh
-├── scripts/summarize_kraken.py
+├── scripts/
+│   ├── run_shotgun.sh
+│   ├── summarize_kraken.py
+│   └── compare_classifiers.py
 └── results/
-```
+~~~
