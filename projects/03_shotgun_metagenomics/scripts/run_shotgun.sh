@@ -1,35 +1,25 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT="PRJNA786061"
+PROJECT="PRJNA273761"
+RUN_ACCESSION="SRR1779146"
+SAMPLE_ACCESSION="SAMN03295851"
+EXPERIMENT_ACCESSION="SRX858749"
+STUDY_ACCESSION="SRP052967"
+INSTRUMENT_PLATFORM="ILLUMINA"
+LIBRARY_STRATEGY="WGS"
+LIBRARY_LAYOUT="PAIRED"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 WORK="$ROOT/work"
 RESULTS="$ROOT/results"
 DB="$WORK/minikraken2_v2_8GB"
 mkdir -p "$WORK" "$RESULTS"
 
-API="https://www.ebi.ac.uk/ena/portal/api/search?result=read_run&query=study_accession=%22${PROJECT}%22%20AND%20library_strategy=%22WGS%22%20AND%20library_layout=%22PAIRED%22&fields=run_accession,study_accession,sample_accession,experiment_accession,instrument_platform,library_strategy,library_layout,fastq_ftp,fastq_bytes&format=tsv&limit=1"
+R1_URL="https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR177/006/SRR1779146/SRR1779146_1.fastq.gz"
+R2_URL="https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR177/006/SRR1779146/SRR1779146_2.fastq.gz"
 
-curl -fsSL --retry 8 --retry-all-errors --retry-delay 3 "$API" > "$WORK/ena.tsv"
-test "$(wc -l < "$WORK/ena.tsv")" -ge 2
-
-python3 - "$WORK/ena.tsv" "$WORK/run.env" <<'PY'
-import csv, sys
-src, out = sys.argv[1:]
-with open(src, newline="") as f:
-    row = next(csv.DictReader(f, delimiter="\t"))
-with open(out, "w") as w:
-    for key in ["run_accession","study_accession","sample_accession","experiment_accession",
-                "instrument_platform","library_strategy","library_layout","fastq_ftp","fastq_bytes"]:
-        w.write(f'{key.upper()}="{row.get(key,"")}"\n')
-PY
-
-source "$WORK/run.env"
-echo "Selected run: $RUN_ACCESSION"
-
-IFS=';' read -r FTP1 FTP2 <<< "$FASTQ_FTP"
-curl -fL --retry 8 --retry-all-errors --retry-delay 3 "https://$FTP1" -o "$WORK/raw_R1.fastq.gz"
-curl -fL --retry 8 --retry-all-errors --retry-delay 3 "https://$FTP2" -o "$WORK/raw_R2.fastq.gz"
+curl -fL --retry 8 --retry-all-errors --retry-delay 3 "$R1_URL" -o "$WORK/raw_R1.fastq.gz"
+curl -fL --retry 8 --retry-all-errors --retry-delay 3 "$R2_URL" -o "$WORK/raw_R2.fastq.gz"
 
 fastp --in1 "$WORK/raw_R1.fastq.gz" --in2 "$WORK/raw_R2.fastq.gz"   --out1 "$WORK/clean_R1.fastq.gz" --out2 "$WORK/clean_R2.fastq.gz"   --json "$RESULTS/fastp_summary.json" --html "$WORK/fastp.html"   --thread 4 --detect_adapter_for_pe
 
@@ -46,9 +36,25 @@ fi
 
 kraken2 --db "$DB" --paired --threads 4 --gzip-compressed --use-names   --report "$RESULTS/kraken2.report" --output "$WORK/kraken2.output"   "$WORK/clean_R1.fastq.gz" "$WORK/clean_R2.fastq.gz"
 
-printf "run_accession\t%s\nstudy_accession\t%s\nsample_accession\t%s\nexperiment_accession\t%s\ninstrument_platform\t%s\nlibrary_strategy\t%s\nlibrary_layout\t%s\nfastq_bytes\t%s\n"   "$RUN_ACCESSION" "$STUDY_ACCESSION" "$SAMPLE_ACCESSION" "$EXPERIMENT_ACCESSION"   "$INSTRUMENT_PLATFORM" "$LIBRARY_STRATEGY" "$LIBRARY_LAYOUT" "$FASTQ_BYTES" > "$RESULTS/run_metadata.tsv"
+printf "run_accession\t%s\nstudy_accession\t%s\nsample_accession\t%s\nexperiment_accession\t%s\ninstrument_platform\t%s\nlibrary_strategy\t%s\nlibrary_layout\t%s\nproject_accession\t%s\n"   "$RUN_ACCESSION" "$STUDY_ACCESSION" "$SAMPLE_ACCESSION" "$EXPERIMENT_ACCESSION"   "$INSTRUMENT_PLATFORM" "$LIBRARY_STRATEGY" "$LIBRARY_LAYOUT" "$PROJECT" > "$RESULTS/run_metadata.tsv"
+
+rm -rf "$DB" "$DB_TGZ"
+
+CENT_DB_DIR="$WORK/centrifuge_db"
+CENT_TGZ="$WORK/p_compressed+h+v.tar.gz"
+CENT_URL="https://genome-idx.s3.amazonaws.com/centrifuge/p_compressed+h+v.tar.gz"
+mkdir -p "$CENT_DB_DIR"
+curl -fL --retry 5 --retry-all-errors --retry-delay 5 "$CENT_URL" -o "$CENT_TGZ"
+tar -xzf "$CENT_TGZ" -C "$CENT_DB_DIR"
+
+CENT_INDEX="$(find "$CENT_DB_DIR" -maxdepth 1 -type f -name '*.1.cf' | sed 's/\.1\.cf$//' | head -n1)"
+test -n "$CENT_INDEX"
+
+centrifuge -x "$CENT_INDEX" -1 "$WORK/clean_R1.fastq.gz" -2 "$WORK/clean_R2.fastq.gz"   -p 4 -S "$RESULTS/centrifuge.classification.tsv"   --report-file "$RESULTS/centrifuge.report.tsv"
 
 python3 "$ROOT/scripts/summarize_kraken.py"   "$RESULTS/kraken2.report" "$RESULTS/top_taxa.tsv"   "$RESULTS/REPORT.md" "$RESULTS/run_metadata.tsv"
 
+python3 "$ROOT/scripts/compare_classifiers.py"   "$RESULTS/kraken2.report" "$RESULTS/centrifuge.report.tsv"   "$RESULTS/classifier_comparison.tsv"
+
 rm -rf "$WORK"
-echo "Project 03 completed successfully."
+echo "Project 03 completed successfully with Kraken2 and Centrifuge."
