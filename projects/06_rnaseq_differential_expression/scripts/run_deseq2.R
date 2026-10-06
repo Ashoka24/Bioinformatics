@@ -59,19 +59,19 @@ if (anyNA(meta$srx)) {
               paste(meta$sample[is.na(meta$srx)], collapse = ", ")))
 }
 
-srx_query <- paste(unique(meta$srx), collapse = ",")
-xml_url <- paste0("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=sra&id=",
-                  srx_query, "&retmode=xml")
-xml_file <- tempfile(fileext = ".xml")
-download.file(xml_url, xml_file, mode = "wb", quiet = TRUE)
-xml_text <- paste(readLines(xml_file, warn = FALSE), collapse = "")
+runinfo_url <- paste0("https://trace.ncbi.nlm.nih.gov/Traces/sra-db-be/runinfo?acc=",
+                       paste(unique(meta$srx), collapse = ","))
+runinfo_file <- tempfile(fileext = ".csv")
+download.file(runinfo_url, runinfo_file, mode = "wb", quiet = TRUE)
+runinfo <- read.csv(runinfo_file, check.names = FALSE, stringsAsFactors = FALSE)
 
-srx_hits <- regmatches(xml_text, gregexpr('(?<=<EXPERIMENT accession=")SRX[0-9]+', xml_text, perl = TRUE))[[1]]
-lib_hits <- regmatches(xml_text, gregexpr('(?<=<LIBRARY_NAME>)[^<]+', xml_text, perl = TRUE))[[1]]
-if (length(srx_hits) == 0 || length(srx_hits) != length(lib_hits)) {
-  stop("Could not align SRA experiment accessions with library names")
+if (!all(c("Experiment", "LibraryName") %in% colnames(runinfo))) {
+  stop(sprintf("RunInfo response lacks Experiment/LibraryName fields. Columns: %s",
+              paste(colnames(runinfo), collapse = ", ")))
 }
-sra_map <- setNames(lib_hits, srx_hits)
+
+runinfo <- runinfo[!duplicated(runinfo$Experiment), , drop = FALSE]
+sra_map <- setNames(runinfo$LibraryName, runinfo$Experiment)
 meta$library_id <- unname(sra_map[meta$srx])
 
 if (anyNA(meta$library_id)) {
