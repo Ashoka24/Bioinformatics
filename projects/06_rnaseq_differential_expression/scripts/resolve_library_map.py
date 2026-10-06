@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import re
 import pandas as pd
 from pysradb.sraweb import SRAweb
 
@@ -17,14 +18,16 @@ if hits is None or hits.empty:
     raise SystemExit("SRA search returned no library records")
 
 hits = hits[hits["library_name"].isin(LIBS)].copy()
-hits = hits[["experiment_accession", "library_name"]].drop_duplicates()
 
-gsm = db.srx_to_gsm(hits["experiment_accession"].tolist())
-gsm = gsm[["experiment_accession", "experiment_alias"]].drop_duplicates()
-gsm = gsm.rename(columns={"experiment_alias": "gsm"})
+def find_gsm(row):
+    for value in row.astype(str).tolist():
+        m = re.search(r"GSM\d+", value)
+        if m:
+            return m.group(0)
+    return None
 
-m = hits.merge(gsm, on="experiment_accession", how="left")
-m = m[["gsm", "library_name"]].drop_duplicates("gsm")
+hits["gsm"] = hits.apply(find_gsm, axis=1)
+m = hits[["gsm", "library_name"]].dropna().drop_duplicates("gsm")
 
 expected = set([
 "GSM3211196","GSM3211194","GSM3211169","GSM3211171","GSM3211174","GSM3211175",
@@ -33,7 +36,8 @@ expected = set([
 ])
 
 m = m[m["gsm"].isin(expected)]
-if len(m) != len(expected) or m["library_name"].isna().any():
-    raise SystemExit("Incomplete GSM/library mapping:\n" + m.to_string(index=False))
+if len(m) != len(expected):
+    print(hits[["experiment_accession","experiment_title","sample_accession","sample_title","library_name","gsm"]].to_string(index=False))
+    raise SystemExit("Incomplete GSM/library mapping")
 
 m.to_csv("results/library_mapping.tsv", sep="\t", index=False)
