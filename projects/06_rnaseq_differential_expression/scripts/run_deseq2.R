@@ -66,15 +66,12 @@ xml_file <- tempfile(fileext = ".xml")
 download.file(xml_url, xml_file, mode = "wb", quiet = TRUE)
 xml_text <- paste(readLines(xml_file, warn = FALSE), collapse = "")
 
-matches <- gregexec(
-  "<EXPERIMENT[^>]*accession="(SRX[0-9]+)"[^>]*>.*?<LIBRARY_NAME>([^<]+)</LIBRARY_NAME>",
-  xml_text, perl = TRUE
-)
-m <- matches[[1]]
-if (length(m) < 3 || m[1] == -1) {
-  stop("Could not extract SRA library names from the combined metadata response")
+srx_hits <- regmatches(xml_text, gregexpr('(?<=<EXPERIMENT accession=")SRX[0-9]+', xml_text, perl = TRUE))[[1]]
+lib_hits <- regmatches(xml_text, gregexpr('(?<=<LIBRARY_NAME>)[^<]+', xml_text, perl = TRUE))[[1]]
+if (length(srx_hits) == 0 || length(srx_hits) != length(lib_hits)) {
+  stop("Could not align SRA experiment accessions with library names")
 }
-sra_map <- setNames(m[3, ], m[2, ])
+sra_map <- setNames(lib_hits, srx_hits)
 meta$library_id <- unname(sra_map[meta$srx])
 
 if (anyNA(meta$library_id)) {
