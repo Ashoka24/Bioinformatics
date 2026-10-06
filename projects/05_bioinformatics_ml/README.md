@@ -103,6 +103,14 @@ Figures + reproducibility report
 
 Raw GEO data and the downloaded matrix are not committed.
 
+## Figures
+
+![Project 05 workflow](figures/01_workflow.svg)
+
+![Output file map](figures/02_output_file_map.svg)
+
+![Verified model performance](results/figures/model_performance.svg)
+
 ## Verified run
 
 GitHub Actions run #2 completed successfully.
