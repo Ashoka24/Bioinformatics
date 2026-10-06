@@ -41,7 +41,7 @@ for line in report.read_text().splitlines():
 lines = [
     "# Actual outcome — shotgun metagenomics",
     "",
-    "Public-data-only analysis of one paired-end shotgun-metagenomic run from PRJNA786061.",
+    "Public-data-only analysis of one paired-end shotgun-metagenomic run from PRJNA273761.",
     "",
     "## Run",
     f"- Run accession: {meta.get('RUN_ACCESSION','')}",
@@ -53,7 +53,7 @@ lines = [
     f"- Layout: {meta.get('LIBRARY_LAYOUT','')}",
     "",
     "## Kraken 2",
-    "- Database: MiniKraken2 v2 8-GB",
+    "- Database: Kraken 2 Standard-8 archive (June 2026)",
 ]
 if root_pct is not None:
     lines.append(f"- Root-level classified-read percentage: **{root_pct:.4f}%**")
