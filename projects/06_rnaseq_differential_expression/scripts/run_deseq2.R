@@ -43,33 +43,18 @@ rownames(meta) <- meta$sample
 raw <- read.delim(gzfile(input), check.names = FALSE, comment.char = "", stringsAsFactors = FALSE)
 raw_names <- colnames(raw)
 
-# NCBI's matrix uses internal library IDs. Resolve them from the SRA study metadata in one request.
-runinfo_url <- "https://trace.ncbi.nlm.nih.gov/Traces/sra-db-be/runinfo?acc=SRP151065"
-runinfo_file <- file.path(tempdir(), "SRP151065_runinfo.csv")
-download.file(runinfo_url, runinfo_file, mode = "wb", quiet = TRUE)
-runinfo <- read.csv(runinfo_file, check.names = FALSE, stringsAsFactors = FALSE)
+# Resolve internal NCBI library IDs from SRA experiment metadata.
+system2("python", "scripts/resolve_library_map.py")
 
-candidate_sample_cols <- c("SampleName", "Sample_Name", "sample_name", "Sample")
-sample_col <- candidate_sample_cols[candidate_sample_cols %in% colnames(runinfo)][1]
-library_col <- c("LibraryName", "Library_Name", "library_name")[c("LibraryName", "Library_Name", "library_name") %in% colnames(runinfo)][1]
+map <- read.delim("results/library_mapping.tsv", check.names = FALSE, stringsAsFactors = FALSE)
+sample_idx <- match(meta$sample, map$experiment_geo_accession)
 
-if (is.na(sample_col) || is.na(library_col)) {
-  stop(sprintf("SRA RunInfo columns available: %s", paste(colnames(runinfo), collapse = ", ")))
-}
-
-runinfo[[sample_col]] <- trimws(as.character(runinfo[[sample_col]]))
-print(unique(runinfo[, c(sample_col, library_col), drop = FALSE]))
-runinfo[[library_col]] <- trimws(as.character(runinfo[[library_col]]))
-runinfo <- runinfo[runinfo[[sample_col]] %in% meta$sample_title, , drop = FALSE]
-runinfo <- runinfo[!duplicated(runinfo[[sample_col]]), , drop = FALSE]
-
-sample_idx <- match(meta$sample_title, runinfo[[sample_col]])
 if (anyNA(sample_idx)) {
   stop(sprintf("Could not resolve SRA libraries for: %s",
                paste(meta$sample[is.na(sample_idx)], collapse = ", ")))
 }
 
-meta$library_id <- runinfo[[library_col]][sample_idx]
+meta$library_id <- map$library_name[sample_idx]
 missing_libs <- setdiff(meta$library_id, raw_names)
 if (length(missing_libs) > 0) {
   stop(sprintf("SRA-resolved library IDs absent from count matrix: %s",
