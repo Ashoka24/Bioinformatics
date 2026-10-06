@@ -10,7 +10,7 @@ A practical, reproducible bioinformatics portfolio built around **public biologi
 | 02 | [IBS Microbiome Analysis](projects/02_ibs_microbiome/) | 16S, QIIME 2, Deblur, SILVA, diversity, machine learning | 🟢 Completed |
 | 03 | [Shotgun Metagenomics](projects/03_shotgun_metagenomics/) | FASTP, Kraken2, Centrifuge, taxonomic profiling | 🟢 Completed |
 | 04 | [Nextflow / nf-core Pipeline](projects/04_nfcore_pipeline/) | workflow engineering, containers, reproducibility, CI | 🟢 Completed |
-| 05 | Bioinformatics + Machine Learning | Python, feature engineering, model evaluation | Planned |
+| 05 | [Bioinformatics + Machine Learning](projects/05_bioinformatics_ml/) | transcriptomics, feature selection, scikit-learn, model evaluation | 🟢 Completed |
 | 06 | RNA-seq / Transcriptomics | QC, alignment/quantification, differential expression | Planned |
 
 > Projects are added one at a time. The repository will not contain fabricated results: generated results are added only after the corresponding workflow has actually been run.
@@ -83,6 +83,24 @@ NCBI/ENA WGS → FASTP QC → Kraken2 → Centrifuge → independent classifier 
 **Interpretation boundary:** this is a single-run taxonomic profile. It does not establish NEC-associated taxa, biomarkers, causality, prevalence or cohort-level differences.
 
 [Open Project 03 →](projects/03_shotgun_metagenomics/)
+
+---
+
+## Project 05 — Bioinformatics + Machine Learning
+
+Project 05 applies machine learning to a public transcriptomics dataset from **NCBI GEO GSE42568**, classifying breast cancer tissue versus normal breast tissue.
+
+**Verified results**
+- 121 samples: 104 breast cancer + 17 normal
+- 54,579 non-constant probes
+- Logistic Regression ROC-AUC: **0.9802**
+- Random Forest ROC-AUC: **0.9740**
+- Evaluation: stratified 5-fold out-of-fold predictions
+- Feature selection performed inside each training fold to avoid leakage
+
+The project explicitly treats feature rankings as exploratory and does not claim clinical diagnostic validity.
+
+[Open Project 05 →](projects/05_bioinformatics_ml/)
 
 ---
 
