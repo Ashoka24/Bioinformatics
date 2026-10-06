@@ -2,109 +2,37 @@
 
 A practical, reproducible bioinformatics portfolio built around **public biological datasets**.
 
-The repository is organized as independent projects. Each project is written so that another reader can understand:
-
-**biological question → public data → file organization → quality control → analysis → results → interpretation → limitations**
-
 ## Portfolio roadmap
 
 | # | Project | Main skills | Status |
 |---|---|---|---|
 | 01 | [16S Microbiome Analysis](projects/01_16s_microbiome/) | NCBI SRA, FASTQ, FastQC, MultiQC, nf-core/ampliseq, QIIME 2 | 🟢 Completed |
-| 02 | [IBS Microbiome Analysis](projects/02_ibs_microbiome/) | 16S microbiome analysis, QIIME 2, Deblur, SILVA, alpha diversity, machine learning | 🟢 Completed |
-| 03 | [Shotgun Metagenomics](projects/03_shotgun_metagenomics/) | FASTP, Kraken2, Centrifuge, taxonomic profiling and classifier comparison | 🟢 Completed |
-| 04 | Nextflow / nf-core Pipeline | workflow engineering, containers, reproducibility | Planned |
+| 02 | [IBS Microbiome Analysis](projects/02_ibs_microbiome/) | 16S, QIIME 2, Deblur, SILVA, diversity, machine learning | 🟢 Completed |
+| 03 | [Shotgun Metagenomics](projects/03_shotgun_metagenomics/) | FASTP, Kraken2, Centrifuge, taxonomic profiling | 🟢 Completed |
+| 04 | [Nextflow / nf-core Pipeline](projects/04_nfcore_pipeline/) | workflow engineering, containers, reproducibility, CI | 🟡 In progress |
 | 05 | Bioinformatics + Machine Learning | Python, feature engineering, model evaluation | Planned |
 | 06 | RNA-seq / Transcriptomics | QC, alignment/quantification, differential expression | Planned |
 
-> Projects will be added one at a time. The repository will not contain fabricated results: generated results are added only after the corresponding workflow has actually been run.
+> Projects are added one at a time. The repository will not contain fabricated results: generated results are added only after the corresponding workflow has actually been run.
 
-## Project design
+## Project 04 — Production-style Nextflow / nf-core
 
-Every project follows the same structure:
+Project 04 moves from individual analysis scripts to **workflow engineering**. It validates nf-core/rnaseq 3.27.0 using the public nf-core test profile, Docker containers and GitHub Actions CI.
 
-```text
-project/
-├── README.md
-├── docs/
-├── metadata/
-├── params/
-├── scripts/
-└── logs/
-```
+The project will be marked **completed only after the CI workflow succeeds and its outputs are inspected**.
 
-Large sequencing files, credentials, temporary pipeline work directories, and generated QIIME 2 artifacts are intentionally kept out of Git.
-
-## Local data convention
-
-The examples use a local Windows data folder:
-
-```text
-C:\Users\ashok\OneDrive\Desktop\Ashoka\data
-```
-
-When running the Bash scripts from WSL, the same folder is:
-
-```text
-/mnt/c/Users/ashok/OneDrive/Desktop/Ashoka/data
-```
-
-You can override the path in every script with `DATA_ROOT`.
-
-## Start here
-
-Go to **[Project 01 — 16S Microbiome Analysis](projects/01_16s_microbiome/)**.
-
-The first project uses a public NCBI SRA human stool 16S dataset rather than private/company data. The selected run is `SRR26534086`, linked to BioProject `PRJNA1031545`. NCBI describes it as paired-end Illumina MiSeq 16S V3–V4 amplicon data and provides the primer sequences used for the experiment.
-
-### Project 02 — IBS Microbiome Analysis
-
-The second project is a public-data re-analysis of BioProject `PRJNA637763`.
-
-**Verified cohort results:**
-- **111 samples** analyzed
-- **85 IBS** samples
-- **26 healthy controls**
-- **131 genus-level features** after prevalence filtering
-- Mean observed features: **275.38 IBS vs 301.96 HC**
-- Mean Shannon diversity: **3.9586 IBS vs 4.2491 HC**
-- L1 Logistic Regression: **ROC-AUC 0.9186**
-- Random Forest: **ROC-AUC 0.8604**
-- Machine-learning evaluation: **5-fold stratified cross-validation**
-
-These are independent re-analysis metrics and are **not clinical diagnostic-validation results**.
-
-See the complete [Project 02 documentation and verified results](projects/02_ibs_microbiome/).
-
-
-### Project 03 — Shotgun Metagenomics Taxonomic Profiling
-
-An end-to-end public-data shotgun metagenomics workflow using **SRR1779146** from BioProject **PRJNA273761**. The project processes paired-end Illumina WGS reads through FASTP, Kraken2 and Centrifuge, then compares the independent taxonomic profiles.
-
-**Verified results:**
-- **7,954,717** sequencing fragments analyzed
-- **6,940,503 (87.25%)** classified by Kraken2
-- **1,014,214 (12.75%)** unclassified
-- Leading Kraken2 species: **Enterobacter roggenkampii — 17.06%**
-- Top-10 species overlap between Kraken2 and Centrifuge: **7/10**
-- Top-10 species Jaccard overlap: **0.5385**
-
-The workflow uses pinned public reference databases, records provenance and generates reproducible derived results. Kraken2 percentages and Centrifuge abundance estimates are treated as classifier-specific metrics rather than directly interchangeable measurements.
-
-This is a **single-sample taxonomic profile** and therefore does not establish NEC-associated biomarkers, prevalence, causality or cohort-level differences.
-
-See the complete [Project 03 documentation and verified results](projects/03_shotgun_metagenomics/).
+See the [Project 04 documentation](projects/04_nfcore_pipeline/).
 
 ## Reproducibility principles
 
 - Use public accession numbers whenever possible.
-- Record the exact dataset and metadata before analysis.
+- Record exact datasets and metadata before analysis.
 - Keep raw data outside Git.
 - Validate downloads before analysis.
 - Run QC before choosing trimming parameters.
 - Record software versions and resource limits.
-- Keep pipeline parameters in a separate file.
-- Do not report biological conclusions from a single sample as if they were cohort-level findings.
+- Keep pipeline parameters separate from scripts.
+- Do not report biological conclusions from a single sample as cohort-level findings.
 - Separate observed results from interpretation.
 
 ## Author
