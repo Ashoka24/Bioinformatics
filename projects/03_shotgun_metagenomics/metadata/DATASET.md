@@ -2,18 +2,23 @@
 
 ## Source
 
-NCBI BioProject: PRJNA786061
+NCBI BioProject: PRJNA273761
 
-Study: Association between anemia and gut microbiome composition in the rural Odisha population.
+Study: Metagenomes from human infant fecal samples with and without necrotizing enterocolitis.
 
-NCBI lists 102 SRA experiments and approximately 3.1 GB of sequence data for this metagenome project.
+Selected run: SRR1779146  
+Sample: SAMN03295851  
+Experiment: SRX858749  
+Study accession: SRP052967
+
+NCBI identifies the selected experiment as human gut metagenome, Illumina HiSeq 2000, WGS, metagenomic source, paired-end, with 8M spots, 2.3G bases and approximately 1.5 GB download size. citeturn8search1
 
 ## Selection policy
 
-At runtime the workflow queries the public ENA run API for PRJNA786061 and selects a paired-end WGS run with available FASTQ files. The exact run accession is written to results/run_metadata.tsv.
+A fixed public run is used so the analysis is deterministic and reproducible. The workflow records the accession and sequencing metadata in `results/run_metadata.tsv`.
 
 ## Analysis scope
 
-Only the selected run is analyzed in this portfolio project. The source project contains 102 samples, but this workflow is intentionally limited to one sample so the complete pipeline can run within ordinary CI compute constraints.
+Only SRR1779146 is analyzed in this portfolio project. The source BioProject contains 60 SRA experiments; this workflow intentionally analyzes one public paired-end WGS sample so the complete Kraken2 + Centrifuge workflow can run within ordinary CI compute constraints. citeturn6search0
 
-No cohort-level anemia comparison is performed.
+No cohort-level NEC comparison is performed.
