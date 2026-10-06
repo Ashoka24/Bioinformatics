@@ -1,0 +1,53 @@
+name: Project 05 - Bioinformatics ML
+
+on:
+  push:
+    paths:
+      - 'projects/05_bioinformatics_ml/**'
+      - '.github/workflows/project05_ml.yml'
+  workflow_dispatch:
+
+jobs:
+  transcriptomics-ml:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy pandas scikit-learn matplotlib
+
+      - name: Download GEO processed matrix
+        run: |
+          mkdir -p projects/05_bioinformatics_ml/data
+          curl -L --fail --retry 3             'https://ftp.ncbi.nlm.nih.gov/geo/series/GSE42nnn/GSE42568/matrix/GSE42568_series_matrix.txt.gz'             -o projects/05_bioinformatics_ml/data/GSE42568_series_matrix.txt.gz
+          gzip -t projects/05_bioinformatics_ml/data/GSE42568_series_matrix.txt.gz
+
+      - name: Run machine-learning analysis
+        run: |
+          python projects/05_bioinformatics_ml/scripts/run_ml.py
+
+      - name: Verify required outputs
+        run: |
+          test -s projects/05_bioinformatics_ml/results/REPORT.md
+          test -s projects/05_bioinformatics_ml/results/metrics.tsv
+          test -s projects/05_bioinformatics_ml/results/feature_ranking.tsv
+          test -s projects/05_bioinformatics_ml/results/figures/model_performance.png
+          test -s projects/05_bioinformatics_ml/results/figures/roc_curves.png
+
+      - name: Upload Project 05 results
+        uses: actions/upload-artifact@v4
+        with:
+          name: project05-ml-results
+          path: |
+            projects/05_bioinformatics_ml/results/
+            projects/05_bioinformatics_ml/data/GSE42568_series_matrix.txt.gz
+          retention-days: 90
