@@ -32,32 +32,55 @@ rownames(meta) <- meta$sample
 raw <- read.delim(gzfile(input), check.names = FALSE, comment.char = "", stringsAsFactors = FALSE)
 raw_names <- colnames(raw)
 
-# GEO family SOFT contains the authoritative sample-to-library mapping.
+# Resolve GSM -> SRA experiment -> library name using NCBI GEO/SRA metadata.
 soft_url <- "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE116nnn/GSE116139/soft/GSE116139_family.soft.gz"
 soft_file <- file.path(tempdir(), "GSE116139_family.soft.gz")
 download.file(soft_url, soft_file, mode = "wb", quiet = TRUE)
 soft <- readLines(gzfile(soft_file), warn = FALSE)
 
-geo_lines <- grep("^!Sample_geo_accession", soft, value = TRUE)
-lib_lines <- grep("^!Sample_library_id", soft, value = TRUE)
+sample_starts <- grep("^!Sample_geo_accession", soft)
+sample_map <- data.frame(sample = character(), srx = character(), stringsAsFactors = FALSE)
 
-if (length(geo_lines) != length(lib_lines) || length(geo_lines) == 0) {
-  stop("Could not extract GEO sample/library metadata from the family SOFT file")
+for (i in seq_along(sample_starts)) {
+  a <- sample_starts[i]
+  b <- if (i < length(sample_starts)) sample_starts[i + 1] - 1 else length(soft)
+  block <- soft[a:b]
+  gsm <- sub("^!Sample_geo_accession\\s*=\\s*", "", block[1])
+  rel <- grep("^!Sample_relation\\s*=\\s*SRA:", block, value = TRUE)
+  if (length(rel)) {
+    srx <- sub("^!Sample_relation\\s*=\\s*SRA:", "", rel[1])
+    sample_map <- rbind(sample_map, data.frame(sample = gsm, srx = srx, stringsAsFactors = FALSE))
+  }
 }
 
-geo_ids <- sub("^!Sample_geo_accession\\s*=\\s*", "", geo_lines)
-library_ids <- sub("^!Sample_library_id\\s*=\\s*", "", lib_lines)
-geo_to_lib <- setNames(library_ids, geo_ids)
+meta$srx <- sample_map$srx[match(meta$sample, sample_map$sample)]
+if (anyNA(meta$srx)) {
+  stop(sprintf("Missing SRA experiment mapping for: %s",
+              paste(meta$sample[is.na(meta$srx)], collapse = ", ")))
+}
 
-meta$library_id <- unname(geo_to_lib[meta$sample])
+get_library_name <- function(srx) {
+  url <- paste0("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=sra&id=",
+                srx, "&retmode=xml")
+  f <- tempfile(fileext = ".xml")
+  download.file(url, f, mode = "wb", quiet = TRUE)
+  x <- paste(readLines(f, warn = FALSE), collapse = "")
+  m <- regexpr("<LIBRARY_NAME>([^<]+)</LIBRARY_NAME>", x, perl = TRUE)
+  if (m[1] < 0) return(NA_character_)
+  regmatches(x, m) <- list(sub("^<LIBRARY_NAME>|</LIBRARY_NAME>$", "", regmatches(x, m)))
+  regmatches(x, m)[1]
+}
+
+meta$library_id <- vapply(meta$srx, get_library_name, character(1))
+
 if (anyNA(meta$library_id)) {
-  stop(sprintf("Missing library mapping for: %s",
+  stop(sprintf("Could not resolve library names for: %s",
               paste(meta$sample[is.na(meta$library_id)], collapse = ", ")))
 }
 
 missing_libs <- setdiff(meta$library_id, raw_names)
 if (length(missing_libs) > 0) {
-  stop(sprintf("Mapped library IDs are absent from the count matrix: %s",
+  stop(sprintf("Resolved library IDs are absent from the count matrix: %s",
               paste(missing_libs, collapse = ", ")))
 }
 
