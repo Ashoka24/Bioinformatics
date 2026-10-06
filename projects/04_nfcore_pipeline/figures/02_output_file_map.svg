@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+<rect width="1200" height="700" fill="#ffffff"/>
+<text x="70" y="70" font-family="Arial" font-size="30" font-weight="700">Project 04 — Repository &amp; CI Output Map</text>
+<text x="70" y="105" font-family="Arial" font-size="17">nf-core/rnaseq 3.27.0 • Docker • GitHub Actions</text>
+<rect x="70" y="155" width="1060" height="460" rx="18" fill="#f6f7f9" stroke="#222" stroke-width="2"/>
+<g font-family="Arial" font-size="18">
+<text x="110" y="205" font-weight="700">projects/04_nfcore_pipeline/</text>
+<text x="140" y="255">README.md — project scope, reproducibility and verification</text>
+<text x="140" y="300">params/test.yml — pinned test configuration</text>
+<text x="140" y="345">scripts/run_test.sh — reproducible local launcher</text>
+<text x="140" y="390">figures/01_workflow.svg — workflow diagram</text>
+<text x="140" y="435">figures/02_output_file_map.svg — this map</text>
+<text x="140" y="480">CI-generated results/ — uploaded as GitHub Actions artifact</text>
+<text x="140" y="525">.nextflow.log — CI execution log, uploaded as artifact</text>
+<text x="140" y="570">work/ + container cache — runtime files, kept outside Git</text>
+</g></svg>
