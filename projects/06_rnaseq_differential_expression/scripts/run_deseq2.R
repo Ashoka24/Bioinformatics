@@ -150,3 +150,22 @@ report <- c(
                         row.names = FALSE))
 )
 writeLines(report, "results/REPORT.md")
+gsm_query <- paste(meta$sample, collapse = ",")
+geo_url <- paste0("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=geo&id=",
+                  gsm_query, "&retmode=text")
+geo_file <- tempfile(fileext = ".txt")
+download.file(geo_url, geo_file, mode = "wb", quiet = TRUE)
+geo <- readLines(geo_file, warn = FALSE)
+
+gsm_lines <- grep("^!Sample_geo_accession", geo, value = TRUE)
+lib_lines <- grep("^!Sample_library_id", geo, value = TRUE)
+
+if (length(gsm_lines) == 0 || length(gsm_lines) != length(lib_lines)) {
+  stop(sprintf("GEO sample records did not expose matching library IDs. geo=%d library=%d",
+              length(gsm_lines), length(lib_lines)))
+}
+
+gsm_ids <- sub("^!Sample_geo_accession\\s*=\\s*", "", gsm_lines)
+library_ids <- sub("^!Sample_library_id\\s*=\\s*", "", lib_lines)
+geo_map <- setNames(library_ids, gsm_ids)
+meta$library_id <- unname(geo_map[meta$sample])
