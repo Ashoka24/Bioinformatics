@@ -48,7 +48,7 @@ for (i in seq_along(sample_starts)) {
   gsm <- sub("^!Sample_geo_accession\\s*=\\s*", "", block[1])
   rel <- grep("^!Sample_relation\\s*=\\s*SRA:", block, value = TRUE)
   if (length(rel)) {
-    srx <- sub("^!Sample_relation\\s*=\\s*SRA:", "", rel[1])
+    srx <- sub(".*(SRX[0-9]+).*", "\\1", rel[1])
     sample_map <- rbind(sample_map, data.frame(sample = gsm, srx = srx, stringsAsFactors = FALSE))
   }
 }
