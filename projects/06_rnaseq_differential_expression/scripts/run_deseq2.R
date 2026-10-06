@@ -44,7 +44,7 @@ raw <- read.delim(gzfile(input), check.names = FALSE, comment.char = "", strings
 raw_names <- colnames(raw)
 
 # Resolve internal NCBI library IDs from SRA experiment metadata.
-system2("python", "scripts/resolve_library_map.py")
+system2("python3", "scripts/resolve_library_map.py")
 
 map <- read.delim("results/library_mapping.tsv", check.names = FALSE, stringsAsFactors = FALSE)
 sample_idx <- match(meta$sample, map$experiment_geo_accession)
