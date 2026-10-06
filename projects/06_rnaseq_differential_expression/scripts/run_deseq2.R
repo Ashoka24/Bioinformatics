@@ -71,6 +71,9 @@ if (!all(c("Experiment", "LibraryName") %in% colnames(runinfo))) {
 }
 
 runinfo <- runinfo[!duplicated(runinfo$Experiment), , drop = FALSE]
+print(runinfo[, c("Experiment", "LibraryName"), drop = FALSE])
+runinfo$Experiment <- trimws(as.character(runinfo$Experiment))
+runinfo$LibraryName <- trimws(as.character(runinfo$LibraryName))
 sra_map <- setNames(runinfo$LibraryName, runinfo$Experiment)
 meta$library_id <- unname(sra_map[meta$srx])
 
