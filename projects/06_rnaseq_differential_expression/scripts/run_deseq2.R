@@ -32,74 +32,57 @@ rownames(meta) <- meta$sample
 raw <- read.delim(gzfile(input), check.names = FALSE, comment.char = "", stringsAsFactors = FALSE)
 raw_names <- colnames(raw)
 
-# Resolve GSM -> SRA experiment -> library name using NCBI GEO/SRA metadata.
-soft_url <- "https://ftp.ncbi.nlm.nih.gov/geo/series/GSE116nnn/GSE116139/soft/GSE116139_family.soft.gz"
-soft_file <- file.path(tempdir(), "GSE116139_family.soft.gz")
-download.file(soft_url, soft_file, mode = "wb", quiet = TRUE)
-soft <- readLines(gzfile(soft_file), warn = FALSE)
+# NCBI's matrix uses internal library IDs. Resolve them through ENA metadata,
+# retaining the GEO GSM accession via secondary_sample_accession.
+ena_url <- paste0(
+  "https://www.ebi.ac.uk/ena/portal/api/search?result=read_run",
+  "&query=study_accession%3D%22PRJNA477371%22",
+  "&fields=sample_accession,secondary_sample_accession,library_name",
+  "&format=tsv&limit=1000"
+)
+ena_file <- file.path(tempdir(), "GSE116139_ena.tsv")
+download.file(ena_url, ena_file, mode = "wb", quiet = TRUE)
+ena <- read.delim(ena_file, check.names = FALSE, stringsAsFactors = FALSE)
 
-sample_starts <- grep("^!Sample_geo_accession", soft)
-sample_map <- data.frame(sample = character(), srx = character(), stringsAsFactors = FALSE)
-
-for (i in seq_along(sample_starts)) {
-  a <- sample_starts[i]
-  b <- if (i < length(sample_starts)) sample_starts[i + 1] - 1 else length(soft)
-  block <- soft[a:b]
-  gsm <- sub("^!Sample_geo_accession\\s*=\\s*", "", block[1])
-  rel <- grep("^!Sample_relation\\s*=\\s*SRA:", block, value = TRUE)
-  if (length(rel)) {
-    srx <- sub(".*(SRX[0-9]+).*", "\\1", rel[1])
-    sample_map <- rbind(sample_map, data.frame(sample = gsm, srx = srx, stringsAsFactors = FALSE))
-  }
+required <- c("sample_accession", "secondary_sample_accession", "library_name")
+if (!all(required %in% colnames(ena))) {
+  stop(sprintf("ENA metadata missing required columns: %s",
+              paste(setdiff(required, colnames(ena)), collapse = ", ")))
 }
 
-meta$srx <- sample_map$srx[match(meta$sample, sample_map$sample)]
-if (anyNA(meta$srx)) {
-  stop(sprintf("Missing SRA experiment mapping for: %s",
-              paste(meta$sample[is.na(meta$srx)], collapse = ", ")))
+# Some records may have multiple runs. Keep the first library record for each GSM.
+ena$secondary_sample_accession <- trimws(ena$secondary_sample_accession)
+ena$library_name <- trimws(ena$library_name)
+ena <- ena[ena$secondary_sample_accession %in% meta$sample, , drop = FALSE]
+ena <- ena[!duplicated(ena$secondary_sample_accession), , drop = FALSE]
+
+sample_idx <- match(meta$sample, ena$secondary_sample_accession)
+if (anyNA(sample_idx)) {
+  print(ena)
+  stop(sprintf("Could not resolve GSM samples through ENA metadata: %s",
+               paste(meta$sample[is.na(sample_idx)], collapse = ", ")))
 }
 
-runinfo_url <- paste0("https://trace.ncbi.nlm.nih.gov/Traces/sra-db-be/runinfo?acc=",
-                       paste(unique(meta$srx), collapse = ","))
-runinfo_file <- tempfile(fileext = ".csv")
-download.file(runinfo_url, runinfo_file, mode = "wb", quiet = TRUE)
-runinfo <- read.csv(runinfo_file, check.names = FALSE, stringsAsFactors = FALSE)
-
-if (!all(c("Experiment", "LibraryName") %in% colnames(runinfo))) {
-  stop(sprintf("RunInfo response lacks Experiment/LibraryName fields. Columns: %s",
-              paste(colnames(runinfo), collapse = ", ")))
-}
-
-runinfo <- runinfo[!duplicated(runinfo$Experiment), , drop = FALSE]
-print(runinfo[, c("Experiment", "LibraryName"), drop = FALSE])
-runinfo$Experiment <- trimws(as.character(runinfo$Experiment))
-runinfo$LibraryName <- trimws(as.character(runinfo$LibraryName))
-sra_map <- setNames(runinfo$LibraryName, runinfo$Experiment)
-meta$library_id <- unname(sra_map[meta$srx])
-
-if (anyNA(meta$library_id)) {
-  stop(sprintf("Could not resolve library names for: %s",
-              paste(meta$sample[is.na(meta$library_id)], collapse = ", ")))
-}
+meta$library_id <- ena$library_name[sample_idx]
 
 missing_libs <- setdiff(meta$library_id, raw_names)
 if (length(missing_libs) > 0) {
-  stop(sprintf("Resolved library IDs are absent from the count matrix: %s",
-              paste(missing_libs, collapse = ", ")))
+  stop(sprintf("ENA-resolved library IDs absent from count matrix: %s",
+               paste(missing_libs, collapse = ", ")))
 }
 
-sample_cols <- meta$library_id
 gene_candidates <- c("gene_id", "Geneid", "gene", "Gene")
 gene_col <- gene_candidates[gene_candidates %in% raw_names][1]
 if (is.na(gene_col)) gene_col <- raw_names[1]
 
-counts <- raw[, c(gene_col, sample_cols), drop = FALSE]
+counts <- raw[, c(gene_col, meta$library_id), drop = FALSE]
 colnames(counts)[1] <- "gene_id"
 colnames(counts)[-1] <- meta$sample
 counts$gene_id <- as.character(counts$gene_id)
 counts <- counts[counts$gene_id != "" & !duplicated(counts$gene_id), , drop = FALSE]
 rownames(counts) <- counts$gene_id
 counts$gene_id <- NULL
+
 counts[] <- lapply(counts, function(x) as.numeric(as.character(x)))
 counts[is.na(counts)] <- 0
 counts <- round(as.matrix(counts))
@@ -150,22 +133,3 @@ report <- c(
                         row.names = FALSE))
 )
 writeLines(report, "results/REPORT.md")
-gsm_query <- paste(meta$sample, collapse = ",")
-geo_url <- paste0("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=geo&id=",
-                  gsm_query, "&retmode=text")
-geo_file <- tempfile(fileext = ".txt")
-download.file(geo_url, geo_file, mode = "wb", quiet = TRUE)
-geo <- readLines(geo_file, warn = FALSE)
-
-gsm_lines <- grep("^!Sample_geo_accession", geo, value = TRUE)
-lib_lines <- grep("^!Sample_library_id", geo, value = TRUE)
-
-if (length(gsm_lines) == 0 || length(gsm_lines) != length(lib_lines)) {
-  stop(sprintf("GEO sample records did not expose matching library IDs. geo=%d library=%d",
-              length(gsm_lines), length(lib_lines)))
-}
-
-gsm_ids <- sub("^!Sample_geo_accession\\s*=\\s*", "", gsm_lines)
-library_ids <- sub("^!Sample_library_id\\s*=\\s*", "", lib_lines)
-geo_map <- setNames(library_ids, gsm_ids)
-meta$library_id <- unname(geo_map[meta$sample])
