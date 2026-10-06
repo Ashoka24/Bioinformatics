@@ -2,6 +2,12 @@
 
 Public-data-only cohort analysis using PRJNA637763, a human gut 16S rRNA dataset containing 85 IBS samples and 26 healthy controls. The study used V1–V2 amplicon sequencing on Illumina MiSeq and was explicitly designed for microbiome-based IBS prediction.
 
+## Workflow figure
+
+![IBS microbiome workflow](figures/01_workflow.svg)
+
+![Output file map](figures/02_output_file_map.svg)
+
 ## Objectives
 1. Build a reproducible 16S feature table from public SRA/ENA FASTQ files.
 2. Quantify alpha diversity and taxonomic composition.
