@@ -71,7 +71,7 @@ The workflow creates:
 - classifier_comparison.tsv
 - CLASSIFIER_COMPARISON.md
 
-Actual numerical results are populated only after the GitHub Actions workflow completes successfully.
+**Verified GitHub Actions run #15:** both classifiers completed and derived files were committed. Kraken2 classified **6,940,503 / 7,954,717 fragments (87.25%)**. The leading Kraken2 species was **Enterobacter roggenkampii (17.06% of total fragments)**. The top-10 classifier species overlap was **7/10 (Jaccard 0.5385)**. See results/REPORT.md and results/CLASSIFIER_COMPARISON.md.
 
 ## Interpretation boundary
 
