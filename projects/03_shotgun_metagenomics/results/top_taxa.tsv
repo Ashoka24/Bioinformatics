@@ -1,1 +1,16 @@
-percent_classified_reads	taxon	taxid
+percent_total_fragments	taxon	taxid
+17.06	Enterobacter roggenkampii	1812935
+0.96	Clostridium butyricum	1492
+0.38	Homo sapiens	9606
+0.36	Clostridium perfringens	1502
+0.22	Enterobacter hormaechei	158836
+0.20	Enterobacter asburiae	61645
+0.20	Citrobacter freundii	546
+0.19	Klebsiella variicola	244366
+0.12	Enterococcus faecalis	1351
+0.07	Enterobacter cloacae	550
+0.07	Escherichia coli	562
+0.06	Enterobacter kobei	208224
+0.05	Staphylococcus epidermidis	1282
+0.04	Klebsiella pneumoniae	573
+0.03	Enterobacter sp. RHBSTW-00593	2742656
