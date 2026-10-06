@@ -12,7 +12,7 @@ The repository is organized as independent projects. Each project is written so 
 |---|---|---|---|
 | 01 | [16S Microbiome Analysis](projects/01_16s_microbiome/) | NCBI SRA, FASTQ, FastQC, MultiQC, nf-core/ampliseq, QIIME 2 | 🟢 Completed |
 | 02 | [IBS Microbiome Analysis](projects/02_ibs_microbiome/) | 16S microbiome analysis, QIIME 2, Deblur, SILVA, alpha diversity, machine learning | 🟢 Completed |
-| 03 | Shotgun Metagenomics | Kraken2/Centrifuge, taxonomic profiling, functional profiling | Planned |
+| 03 | [Shotgun Metagenomics](projects/03_shotgun_metagenomics/) | FASTP, Kraken2, Centrifuge, taxonomic profiling and classifier comparison | 🟢 Completed |
 | 04 | Nextflow / nf-core Pipeline | workflow engineering, containers, reproducibility | Planned |
 | 05 | Bioinformatics + Machine Learning | Python, feature engineering, model evaluation | Planned |
 | 06 | RNA-seq / Transcriptomics | QC, alignment/quantification, differential expression | Planned |
