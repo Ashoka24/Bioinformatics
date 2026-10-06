@@ -19,7 +19,7 @@ jobs:
       - name: Install tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y fastp kraken2 curl
+          sudo apt-get install -y fastp kraken2 centrifuge curl
 
       - name: Run public shotgun analysis
         run: bash projects/03_shotgun_metagenomics/scripts/run_shotgun.sh
@@ -30,6 +30,10 @@ jobs:
           test -s projects/03_shotgun_metagenomics/results/fastp_summary.json
           test -s projects/03_shotgun_metagenomics/results/kraken2.report
           test -s projects/03_shotgun_metagenomics/results/top_taxa.tsv
+          test -s projects/03_shotgun_metagenomics/results/centrifuge.report.tsv
+          test -s projects/03_shotgun_metagenomics/results/centrifuge.classification.tsv
+          test -s projects/03_shotgun_metagenomics/results/classifier_comparison.tsv
+          test -s projects/03_shotgun_metagenomics/results/CLASSIFIER_COMPARISON.md
           test -s projects/03_shotgun_metagenomics/results/REPORT.md
 
       - name: Commit verified results
