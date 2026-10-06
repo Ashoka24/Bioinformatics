@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="430" viewBox="0 0 1200 430">
+<rect width="1200" height="430" fill="#fff"/>
+<text x="60" y="55" font-family="Arial" font-size="30" font-weight="700">Project 05 — Transcriptomics + Machine Learning</text>
+<text x="60" y="88" font-family="Arial" font-size="17">GSE42568 • 121 samples • Affymetrix GPL570 • leakage-safe cross-validation</text>
+<g font-family="Arial">
+<rect x="60" y="135" width="155" height="75" rx="12" fill="#f2f2f2" stroke="#222"/><text x="137" y="167" text-anchor="middle" font-size="17">Public GEO</text><text x="137" y="192" text-anchor="middle" font-size="14">GSE42568</text>
+<rect x="260" y="135" width="155" height="75" rx="12" fill="#f2f2f2" stroke="#222"/><text x="337" y="167" text-anchor="middle" font-size="17">Expression</text><text x="337" y="192" text-anchor="middle" font-size="14">matrix + labels</text>
+<rect x="460" y="135" width="155" height="75" rx="12" fill="#f2f2f2" stroke="#222"/><text x="537" y="167" text-anchor="middle" font-size="17">Feature QC</text><text x="537" y="192" text-anchor="middle" font-size="14">variance filter</text>
+<rect x="660" y="135" width="155" height="75" rx="12" fill="#f2f2f2" stroke="#222"/><text x="737" y="167" text-anchor="middle" font-size="17">CV pipeline</text><text x="737" y="192" text-anchor="middle" font-size="14">SelectKBest + scale</text>
+<rect x="860" y="135" width="155" height="75" rx="12" fill="#f2f2f2" stroke="#222"/><text x="937" y="167" text-anchor="middle" font-size="17">Models</text><text x="937" y="192" text-anchor="middle" font-size="14">LR + Random Forest</text>
+<path d="M215 172 L260 172 M415 172 L460 172 M615 172 L660 172 M815 172 L860 172" stroke="#222" stroke-width="2" marker-end="url(#a)"/>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#222"/></marker></defs>
+<rect x="260" y="275" width="555" height="80" rx="14" fill="#fafafa" stroke="#222"/>
+<text x="537" y="307" text-anchor="middle" font-size="18" font-weight="700">Outputs</text>
+<text x="537" y="334" text-anchor="middle" font-size="15">ROC-AUC • PR-AUC • accuracy • balanced accuracy • feature ranking</text>
+<path d="M937 210 L937 245 L815 315" stroke="#222" stroke-width="2" fill="none"/>
+</g>
+</svg>
