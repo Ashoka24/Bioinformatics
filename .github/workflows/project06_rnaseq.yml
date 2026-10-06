@@ -18,9 +18,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Verify analysis environment
+      - name: Install analysis packages
         run: |
-          Rscript -e 'library(DESeq2); library(ggplot2); sessionInfo()'
+          Rscript -e 'BiocManager::install("DESeq2", ask=FALSE, update=FALSE)'
+          Rscript -e 'if (!requireNamespace("ggplot2", quietly=TRUE)) install.packages("ggplot2", repos="https://cloud.r-project.org")'
+
+      - name: Verify analysis environment
+        run: Rscript -e 'library(DESeq2); library(ggplot2); cat("DESeq2:", as.character(packageVersion("DESeq2")), "\n")'
 
       - name: Run RNA-seq analysis
         working-directory: projects/06_rnaseq_differential_expression
