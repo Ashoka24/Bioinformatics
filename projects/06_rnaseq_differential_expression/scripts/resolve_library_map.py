@@ -9,19 +9,25 @@ GSM = [
 ]
 
 db = SRAweb()
-df = db.sra_metadata("SRP151065", detailed=True)
 
-if "experiment_geo_accession" not in df.columns:
-    raise SystemExit("pysradb did not return experiment_geo_accession")
+# GEO GSM -> SRA experiment (SRX)
+gsm_srx = db.gsm_to_srx(GSM)
+gsm_srx = gsm_srx[["experiment_alias", "experiment_accession"]].drop_duplicates()
+gsm_srx = gsm_srx.rename(columns={"experiment_alias": "gsm"})
 
-cols = [c for c in ["experiment_geo_accession", "library_name", "experiment_accession"] if c in df.columns]
-m = df[cols].copy()
-m = m[m["experiment_geo_accession"].isin(GSM)].drop_duplicates("experiment_geo_accession")
+# SRA experiment -> internal library name
+sra = db.sra_metadata("SRP151065", detailed=False)
+sra = sra[["experiment_accession", "library_name"]].drop_duplicates()
 
-if len(m) != len(GSM):
-    missing = sorted(set(GSM) - set(m["experiment_geo_accession"]))
-    raise SystemExit("Missing GSM mappings: " + ",".join(missing))
+m = gsm_srx.merge(sra, on="experiment_accession", how="left")
+m = m[m["gsm"].isin(GSM)].drop_duplicates("gsm")
 
-m[["experiment_geo_accession", "library_name"]].to_csv(
+if len(m) != len(GSM) or m["library_name"].isna().any():
+    missing = sorted(set(GSM) - set(m["gsm"]))
+    if m["library_name"].isna().any():
+        missing += m.loc[m["library_name"].isna(), "gsm"].tolist()
+    raise SystemExit("Missing GSM/library mappings: " + ",".join(sorted(set(missing))))
+
+m[["gsm", "library_name"]].to_csv(
     "results/library_mapping.tsv", sep="\t", index=False
 )
