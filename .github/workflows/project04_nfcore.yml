@@ -1,0 +1,49 @@
+name: Project 04 — nf-core/rnaseq validation
+
+on:
+  push:
+    paths:
+      - "projects/04_nfcore_pipeline/**"
+      - ".github/workflows/project04_nfcore.yml"
+  workflow_dispatch:
+
+jobs:
+  nfcore-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Install Nextflow
+        run: |
+          curl -s https://get.nextflow.io | bash
+          sudo mv nextflow /usr/local/bin/nextflow
+          nextflow -version
+
+      - name: Verify Docker
+        run: docker --version
+
+      - name: Run nf-core/rnaseq test profile
+        run: |
+          nextflow run nf-core/rnaseq \
+            -r 3.27.0 \
+            -profile test,docker \
+            -name project04_ci
+
+      - name: Upload pipeline outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: project04-nfcore-results
+          path: |
+            results/
+            .nextflow.log
+          if-no-files-found: warn
