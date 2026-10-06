@@ -1,6 +1,12 @@
 name: Project 06 RNA-seq
 
 on:
+  push:
+    paths:
+      - "projects/06_rnaseq_differential_expression/**"
+      - ".github/workflows/project06_rnaseq.yml"
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
