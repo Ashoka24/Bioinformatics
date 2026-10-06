@@ -32,42 +32,32 @@ rownames(meta) <- meta$sample
 raw <- read.delim(gzfile(input), check.names = FALSE, comment.char = "", stringsAsFactors = FALSE)
 raw_names <- colnames(raw)
 
-# NCBI's matrix uses internal library IDs. Resolve them through ENA metadata,
-# retaining the GEO GSM accession via secondary_sample_accession.
-ena_url <- paste0(
-  "https://www.ebi.ac.uk/ena/portal/api/search?result=read_run",
-  "&query=secondary_study_accession%3D%22SRP151065%22",
-  "&fields=sample_accession,secondary_sample_accession,library_name",
-  "&format=tsv&limit=1000"
-)
-ena_file <- file.path(tempdir(), "GSE116139_ena.tsv")
-download.file(ena_url, ena_file, mode = "wb", quiet = TRUE)
-ena <- read.delim(ena_file, check.names = FALSE, stringsAsFactors = FALSE)
+# NCBI's matrix uses internal library IDs. Resolve each GSM through NCBI SRA.
+resolve_library <- function(gsm) {
+  q <- URLencode(paste0('"', gsm, '"'))
+  esearch <- paste0("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=sra&term=", q, "&retmode=json")
+  ejson <- paste(readLines(esearch, warn = FALSE), collapse = "")
+  ids <- regmatches(ejson, gregexpr('"id":"[0-9]+"', ejson))[[1]]
+  if (length(ids) == 0) return(NA_character_)
+  id <- sub('.*"id":"([0-9]+)".*', "\\1", ids[1])
 
-required <- c("sample_accession", "secondary_sample_accession", "library_name")
-if (!all(required %in% colnames(ena))) {
-  stop(sprintf("ENA metadata missing required columns: %s",
-              paste(setdiff(required, colnames(ena)), collapse = ", ")))
+  efetch <- paste0("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=sra&id=", id, "&retmode=xml")
+  xml <- paste(readLines(efetch, warn = FALSE), collapse = "")
+  hit <- regexec("<LIBRARY_NAME>([^<]+)</LIBRARY_NAME>", xml)
+  m <- regmatches(xml, hit)[[1]]
+  if (length(m) < 2) NA_character_ else m[2]
 }
 
-# Some records may have multiple runs. Keep the first library record for each GSM.
-ena$secondary_sample_accession <- trimws(ena$secondary_sample_accession)
-ena$library_name <- trimws(ena$library_name)
-ena <- ena[ena$secondary_sample_accession %in% meta$sample, , drop = FALSE]
-ena <- ena[!duplicated(ena$secondary_sample_accession), , drop = FALSE]
+meta$library_id <- vapply(meta$sample, resolve_library, character(1))
 
-sample_idx <- match(meta$sample, ena$secondary_sample_accession)
-if (anyNA(sample_idx)) {
-  print(ena)
-  stop(sprintf("Could not resolve GSM samples through ENA metadata: %s",
-               paste(meta$sample[is.na(sample_idx)], collapse = ", ")))
+if (anyNA(meta$library_id)) {
+  stop(sprintf("Could not resolve SRA library IDs for: %s",
+               paste(meta$sample[is.na(meta$library_id)], collapse = ", ")))
 }
-
-meta$library_id <- ena$library_name[sample_idx]
 
 missing_libs <- setdiff(meta$library_id, raw_names)
 if (length(missing_libs) > 0) {
-  stop(sprintf("ENA-resolved library IDs absent from count matrix: %s",
+  stop(sprintf("SRA-resolved library IDs absent from count matrix: %s",
                paste(missing_libs, collapse = ", ")))
 }
 
