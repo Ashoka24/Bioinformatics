@@ -36,6 +36,7 @@ jobs:
           nextflow run nf-core/rnaseq \
             -r 3.27.0 \
             -profile test,docker \
+            --outdir results \
             -name project04_ci
 
       - name: Upload pipeline outputs
