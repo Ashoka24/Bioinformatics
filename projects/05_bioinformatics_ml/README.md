@@ -29,7 +29,7 @@ The project demonstrates:
 - Experiment type: expression profiling by array
 - Public since 2013
 
-NCBI describes the dataset as gene-expression profiling of 104 breast cancer and 17 normal breast biopsies. citehttps://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE42568
+NCBI describes the dataset as gene-expression profiling of 104 breast cancer and 17 normal breast biopsies.
 
 The analysis uses the processed series-matrix expression values rather than the 935.2 MB raw CEL archive. The GEO sample records state that the processed values are log2 GC-RMA signal intensities.
 
@@ -102,6 +102,21 @@ Figures + reproducibility report
 ```
 
 Raw GEO data and the downloaded matrix are not committed.
+
+## Verified run
+
+GitHub Actions run #2 completed successfully.
+
+- Samples: 121
+- Normal: 17
+- Breast cancer: 104
+- Non-constant probes: 54,579
+- Logistic Regression ROC-AUC: **0.9802**
+- Logistic Regression Average Precision: **0.9964**
+- Random Forest ROC-AUC: **0.9740**
+- Random Forest Average Precision: **0.9953**
+
+These metrics are from stratified 5-fold out-of-fold predictions with feature selection performed inside each training fold.
 
 ## Interpretation boundary
 
