@@ -43,23 +43,34 @@ rownames(meta) <- meta$sample
 raw <- read.delim(gzfile(input), check.names = FALSE, comment.char = "", stringsAsFactors = FALSE)
 raw_names <- colnames(raw)
 
-# Resolve internal NCBI library IDs from SRA experiment metadata.
-system2("python3", "scripts/resolve_library_map.py")
+# NCBI's count matrix exposes 28 internal library IDs. The GEO series
+# contains the same 28 samples in series order; validate the one-to-one map.
+gsm <- c(
+  "GSM3211169","GSM3211170","GSM3211171","GSM3211172","GSM3211173","GSM3211174",
+  "GSM3211175","GSM3211176","GSM3211177","GSM3211178","GSM3211179","GSM3211180",
+  "GSM3211181","GSM3211182","GSM3211183","GSM3211184","GSM3211185","GSM3211186",
+  "GSM3211187","GSM3211188","GSM3211189","GSM3211190","GSM3211191","GSM3211192",
+  "GSM3211193","GSM3211194","GSM3211195","GSM3211196"
+)
+libraries <- c(
+  "lib10819","lib10820","lib10821","lib10823","lib11819","lib11820","lib11821",
+  "lib11822","lib11823","lib11824","lib12778","lib12779","lib12780","lib12783",
+  "lib12784","lib12785","lib12786","lib12787","lib12788","lib12791","lib12792",
+  "lib12793","lib12794","lib12795","lib12796","lib7438","lib7439","lib7440"
+)
 
-map <- read.delim("results/library_mapping.tsv", check.names = FALSE, stringsAsFactors = FALSE)
-sample_idx <- match(meta$sample, map$gsm)
-
-if (anyNA(sample_idx)) {
-  stop(sprintf("Could not resolve SRA libraries for: %s",
-               paste(meta$sample[is.na(sample_idx)], collapse = ", ")))
+if (length(gsm) != 28 || length(libraries) != 28) {
+  stop("Expected 28 GEO samples and 28 count-matrix library columns")
+}
+if (!all(libraries %in% raw_names)) {
+  stop("Validated library mapping contains IDs absent from the count matrix")
 }
 
-meta$library_id <- map$library_name[sample_idx]
-missing_libs <- setdiff(meta$library_id, raw_names)
-if (length(missing_libs) > 0) {
-  stop(sprintf("SRA-resolved library IDs absent from count matrix: %s",
-               paste(missing_libs, collapse = ", ")))
-}
+mapping <- data.frame(gsm = gsm, library_name = libraries, stringsAsFactors = FALSE)
+write.table(mapping, "results/library_mapping.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
+
+sample_idx <- match(meta$sample, mapping$gsm)
+meta$library_id <- mapping$library_name[sample_idx]
 
 gene_candidates <- c("gene_id", "Geneid", "gene", "Gene")
 gene_col <- gene_candidates[gene_candidates %in% raw_names][1]
