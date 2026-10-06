@@ -9,7 +9,7 @@ A practical, reproducible bioinformatics portfolio built around **public biologi
 | 01 | [16S Microbiome Analysis](projects/01_16s_microbiome/) | NCBI SRA, FASTQ, FastQC, MultiQC, nf-core/ampliseq, QIIME 2 | 🟢 Completed |
 | 02 | [IBS Microbiome Analysis](projects/02_ibs_microbiome/) | 16S, QIIME 2, Deblur, SILVA, diversity, machine learning | 🟢 Completed |
 | 03 | [Shotgun Metagenomics](projects/03_shotgun_metagenomics/) | FASTP, Kraken2, Centrifuge, taxonomic profiling | 🟢 Completed |
-| 04 | [Nextflow / nf-core Pipeline](projects/04_nfcore_pipeline/) | workflow engineering, containers, reproducibility, CI | 🟡 In progress |
+| 04 | [Nextflow / nf-core Pipeline](projects/04_nfcore_pipeline/) | workflow engineering, containers, reproducibility, CI | 🟢 Completed |
 | 05 | Bioinformatics + Machine Learning | Python, feature engineering, model evaluation | Planned |
 | 06 | RNA-seq / Transcriptomics | QC, alignment/quantification, differential expression | Planned |
 
@@ -19,7 +19,7 @@ A practical, reproducible bioinformatics portfolio built around **public biologi
 
 Project 04 moves from individual analysis scripts to **workflow engineering**. It validates nf-core/rnaseq 3.27.0 using the public nf-core test profile, Docker containers and GitHub Actions CI.
 
-The project will be marked **completed only after the CI workflow succeeds and its outputs are inspected**.
+The project is **completed**: GitHub Actions run #2 succeeded and the generated CI artifact was verified.
 
 See the [Project 04 documentation](projects/04_nfcore_pipeline/).
 
