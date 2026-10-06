@@ -52,7 +52,7 @@ def load_expression(path, sample_titles):
     with opener(path, "rt", encoding="utf-8", errors="replace") as handle:
         for line in handle:
             if line.startswith("!series_matrix_table_begin"):
-                header = next(handle).rstrip("\n").split("\t")
+                header = [x.strip().strip('"') for x in next(handle).rstrip("\n").split("\t")]
                 break
         if header is None:
             raise RuntimeError("Could not find series matrix table")
