@@ -7,9 +7,9 @@ suppressPackageStartupMessages({
 
 dir.create("results/figures", showWarnings = FALSE, recursive = TRUE)
 
-url <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE116139&file=GSE116139_BulkRNAseqCounts.txt.gz&format=file"
+count_url <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSE116139&file=GSE116139_BulkRNAseqCounts.txt.gz&format=file"
 input <- file.path(tempdir(), "GSE116139_BulkRNAseqCounts.txt.gz")
-download.file(url, input, mode = "wb", quiet = TRUE)
+download.file(count_url, input, mode = "wb", quiet = TRUE)
 
 meta <- data.frame(
   sample = c(
@@ -30,27 +30,39 @@ meta <- data.frame(
 rownames(meta) <- meta$sample
 
 raw <- read.delim(gzfile(input), check.names = FALSE, comment.char = "", stringsAsFactors = FALSE)
+raw_names <- colnames(raw)
 
-clean_name <- function(x) {
-  x <- trimws(gsub('"', "", x, fixed = TRUE))
-  x <- sub("^[^G]*(GSM[0-9]+).*$", "\\1", x)
-  x
+runinfo_url <- "https://trace.ncbi.nlm.nih.gov/Traces/sra-db-be/runinfo?acc=GSE116139"
+runinfo_file <- file.path(tempdir(), "GSE116139_runinfo.csv")
+download.file(runinfo_url, runinfo_file, mode = "wb", quiet = TRUE)
+runinfo <- read.csv(runinfo_file, check.names = FALSE, stringsAsFactors = FALSE)
+
+required_cols <- c("Library_Name", "Sample_Name")
+if (!all(required_cols %in% colnames(runinfo))) {
+  stop(sprintf("NCBI SRA RunInfo is missing required columns: %s",
+              paste(setdiff(required_cols, colnames(runinfo)), collapse = ", ")))
 }
 
-raw_names <- colnames(raw)
-normalized_names <- clean_name(raw_names)
-sample_idx <- match(meta$sample, normalized_names)
+lib_map <- runinfo[, required_cols, drop = FALSE]
+lib_map <- lib_map[!duplicated(lib_map$Library_Name), , drop = FALSE]
+
+sample_idx <- match(meta$sample, lib_map$Sample_Name)
 
 if (anyNA(sample_idx)) {
-  cat("Count matrix columns detected:\n")
-  print(raw_names)
-  stop(sprintf(
-    "Could not map all GEO sample accessions. Missing: %s",
-    paste(meta$sample[is.na(sample_idx)], collapse = ", ")
-  ))
+  matrix_libs <- raw_names[grepl("^lib[0-9]+$", raw_names)]
+  print(lib_map[lib_map$Library_Name %in% matrix_libs, , drop = FALSE])
+  stop(sprintf("Could not map GEO samples through NCBI SRA RunInfo. Missing: %s",
+               paste(meta$sample[is.na(sample_idx)], collapse = ", ")))
 }
 
-sample_cols <- raw_names[sample_idx]
+meta$library_id <- lib_map$Library_Name[sample_idx]
+sample_cols <- meta$library_id
+
+missing_libs <- setdiff(sample_cols, raw_names)
+if (length(missing_libs) > 0) {
+  stop(sprintf("Mapped library IDs are absent from the count matrix: %s",
+               paste(missing_libs, collapse = ", ")))
+}
 
 gene_candidates <- c("gene_id", "Geneid", "gene", "Gene")
 gene_col <- gene_candidates[gene_candidates %in% raw_names][1]
@@ -58,7 +70,7 @@ if (is.na(gene_col)) gene_col <- raw_names[1]
 
 counts <- raw[, c(gene_col, sample_cols), drop = FALSE]
 colnames(counts)[1] <- "gene_id"
-colnames(counts)[-1] <- normalized_names[sample_idx]
+colnames(counts)[-1] <- meta$sample
 counts$gene_id <- as.character(counts$gene_id)
 counts <- counts[counts$gene_id != "" & !duplicated(counts$gene_id), , drop = FALSE]
 rownames(counts) <- counts$gene_id
@@ -74,16 +86,10 @@ stopifnot(all(rownames(meta) == colnames(counts)))
 keep <- rowSums(counts >= 10) >= 9
 counts <- counts[keep, , drop = FALSE]
 
-dds <- DESeqDataSetFromMatrix(
-  countData = counts,
-  colData = meta,
-  design = ~ subject + tissue
-)
-
+dds <- DESeqDataSetFromMatrix(countData = counts, colData = meta, design = ~ subject + tissue)
 dds <- DESeq(dds)
 
-res <- results(dds, contrast = c("tissue", "mucosa", "blood"))
-res <- as.data.frame(res)
+res <- as.data.frame(results(dds, contrast = c("tissue", "mucosa", "blood")))
 res$gene_id <- rownames(res)
 res <- res[order(res$padj, -abs(res$log2FoldChange)), ]
 write.table(res, "results/differential_expression.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
@@ -99,27 +105,24 @@ pca <- plotPCA(vsd, intgroup = c("tissue", "subject"))
 ggsave("results/figures/01_pca.svg", pca, width = 7, height = 5)
 
 res_plot <- res[!is.na(res$padj), ]
-res_plot$significant <- ifelse(res_plot$padj < 0.05 & abs(res_plot$log2FoldChange) >= 1, "Significant", "Not significant")
-
+res_plot$significant <- ifelse(res_plot$padj < 0.05 & abs(res_plot$log2FoldChange) >= 1,
+                               "Significant", "Not significant")
 p <- ggplot(res_plot, aes(x = log2FoldChange, y = -log10(padj), color = significant)) +
   geom_point(alpha = 0.5, size = 1) +
   theme_minimal() +
   labs(title = "Mucosa vs blood: differential expression",
        x = "log2 fold change", y = "-log10 adjusted p-value") +
   theme(legend.title = element_blank())
-
 ggsave("results/figures/02_volcano_plot.svg", p, width = 7, height = 5)
 
 report <- c(
-  "# Verified Run",
-  "",
+  "# Verified Run", "",
   paste0("- Input samples: ", nrow(meta)),
   paste0("- Subjects: ", length(unique(meta$subject))),
   paste0("- Genes after low-count filtering: ", nrow(counts)),
   paste0("- Significant genes (padj < 0.05, |log2FC| >= 1): ", nrow(sig)),
-  "",
-  "## Top genes",
-  "",
-  capture.output(print(head(res[, c("gene_id","log2FoldChange","pvalue","padj")], 15), row.names = FALSE))
+  "", "## Top genes", "",
+  capture.output(print(head(res[, c("gene_id","log2FoldChange","pvalue","padj")], 15),
+                        row.names = FALSE))
 )
 writeLines(report, "results/REPORT.md")
