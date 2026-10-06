@@ -36,7 +36,7 @@ raw_names <- colnames(raw)
 # retaining the GEO GSM accession via secondary_sample_accession.
 ena_url <- paste0(
   "https://www.ebi.ac.uk/ena/portal/api/search?result=read_run",
-  "&query=study_accession%3D%22PRJNA477371%22",
+  "&query=secondary_study_accession%3D%22SRP151065%22",
   "&fields=sample_accession,secondary_sample_accession,library_name",
   "&format=tsv&limit=1000"
 )
