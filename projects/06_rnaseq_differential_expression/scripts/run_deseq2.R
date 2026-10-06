@@ -59,19 +59,23 @@ if (anyNA(meta$srx)) {
               paste(meta$sample[is.na(meta$srx)], collapse = ", ")))
 }
 
-get_library_name <- function(srx) {
-  url <- paste0("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=sra&id=",
-                srx, "&retmode=xml")
-  f <- tempfile(fileext = ".xml")
-  download.file(url, f, mode = "wb", quiet = TRUE)
-  x <- paste(readLines(f, warn = FALSE), collapse = "")
-  m <- regexpr("<LIBRARY_NAME>([^<]+)</LIBRARY_NAME>", x, perl = TRUE)
-  if (m[1] < 0) return(NA_character_)
-  regmatches(x, m) <- list(sub("^<LIBRARY_NAME>|</LIBRARY_NAME>$", "", regmatches(x, m)))
-  regmatches(x, m)[1]
-}
+srx_query <- paste(unique(meta$srx), collapse = ",")
+xml_url <- paste0("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=sra&id=",
+                  srx_query, "&retmode=xml")
+xml_file <- tempfile(fileext = ".xml")
+download.file(xml_url, xml_file, mode = "wb", quiet = TRUE)
+xml_text <- paste(readLines(xml_file, warn = FALSE), collapse = "")
 
-meta$library_id <- vapply(meta$srx, get_library_name, character(1))
+matches <- gregexec(
+  "<EXPERIMENT[^>]*accession="(SRX[0-9]+)"[^>]*>.*?<LIBRARY_NAME>([^<]+)</LIBRARY_NAME>",
+  xml_text, perl = TRUE
+)
+m <- matches[[1]]
+if (length(m) < 3 || m[1] == -1) {
+  stop("Could not extract SRA library names from the combined metadata response")
+}
+sra_map <- setNames(m[3, ], m[2, ])
+meta$library_id <- unname(sra_map[meta$srx])
 
 if (anyNA(meta$library_id)) {
   stop(sprintf("Could not resolve library names for: %s",
