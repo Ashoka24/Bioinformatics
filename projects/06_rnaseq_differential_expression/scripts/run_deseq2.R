@@ -39,12 +39,15 @@ clean_name <- function(x) {
 
 raw_names <- colnames(raw)
 normalized_names <- clean_name(raw_names)
-wanted <- setNames(meta$sample, meta$sample)
-sample_idx <- match(names(wanted), normalized_names)
+sample_idx <- match(meta$sample, normalized_names)
 
 if (anyNA(sample_idx)) {
-  missing <- names(wanted)[is.na(sample_idx)]
-  stop(sprintf("Could not map GEO sample accessions: %s", paste(missing, collapse = ", ")))
+  cat("Count matrix columns detected:\n")
+  print(raw_names)
+  stop(sprintf(
+    "Could not map all GEO sample accessions. Missing: %s",
+    paste(meta$sample[is.na(sample_idx)], collapse = ", ")
+  ))
 }
 
 sample_cols <- raw_names[sample_idx]
@@ -83,11 +86,11 @@ res <- results(dds, contrast = c("tissue", "mucosa", "blood"))
 res <- as.data.frame(res)
 res$gene_id <- rownames(res)
 res <- res[order(res$padj, -abs(res$log2FoldChange)), ]
-write.table(res, "results/differential_expression.tsv", sep = "	", quote = FALSE, row.names = FALSE)
+write.table(res, "results/differential_expression.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
 
 norm <- counts(dds, normalized = TRUE)
 norm_out <- data.frame(gene_id = rownames(norm), norm, check.names = FALSE)
-write.table(norm_out, "results/normalized_counts.tsv", sep = "	", quote = FALSE, row.names = FALSE)
+write.table(norm_out, "results/normalized_counts.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
 
 sig <- subset(res, !is.na(padj) & padj < 0.05 & abs(log2FoldChange) >= 1)
 
@@ -105,7 +108,7 @@ p <- ggplot(res_plot, aes(x = log2FoldChange, y = -log10(padj), color = signific
        x = "log2 fold change", y = "-log10 adjusted p-value") +
   theme(legend.title = element_blank())
 
-ggsave("results/figures/02_ma_plot.svg", p, width = 7, height = 5)
+ggsave("results/figures/02_volcano_plot.svg", p, width = 7, height = 5)
 
 report <- c(
   "# Verified Run",
