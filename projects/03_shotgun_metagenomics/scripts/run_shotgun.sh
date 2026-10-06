@@ -44,6 +44,7 @@ DB_ROOT="$WORK/kraken2_db"
 curl -fL --retry 8 --retry-all-errors --retry-delay 5 "$DB_URL" -o "$DB_TGZ"
 mkdir -p "$DB_ROOT"
 tar -xzf "$DB_TGZ" -C "$DB_ROOT"
+rm -f "$DB_TGZ"
 DB="$(dirname "$(find "$DB_ROOT" -type f -name 'hash.k2d' -print -quit)")"
 test -n "$DB"
 test -s "$DB/hash.k2d"
@@ -53,14 +54,15 @@ test -s "$DB/taxo.k2d"
 kraken2 \
   --db "$DB" \
   --paired \
-  --threads 4 \
+  --threads 2 \
+  --memory-mapping \
   --gzip-compressed \
   --use-names \
   --report "$RESULTS/kraken2.report" \
   --output "$WORK/kraken2.output" \
   "$WORK/clean_R1.fastq.gz" "$WORK/clean_R2.fastq.gz"
 
-rm -rf "$DB_ROOT" "$DB_TGZ" "$WORK/kraken2.output"
+rm -rf "$DB_ROOT" "$WORK/kraken2.output"
 
 CENT_DB_DIR="$WORK/centrifuge_db"
 CENT_TGZ="$WORK/p_compressed+h+v.tar.gz"
