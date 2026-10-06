@@ -22,7 +22,7 @@ jobs:
       - name: Install tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y fastp kraken2 centrifuge curl
+          sudo apt-get install -y fastp kraken2 centrifuge curl awscli
 
       - name: Run public shotgun analysis
         run: bash projects/03_shotgun_metagenomics/scripts/run_shotgun.sh
