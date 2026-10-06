@@ -58,6 +58,7 @@ if (is.na(sample_col) || is.na(library_col)) {
 }
 
 runinfo[[sample_col]] <- trimws(as.character(runinfo[[sample_col]]))
+print(unique(runinfo[, c(sample_col, library_col), drop = FALSE]))
 runinfo[[library_col]] <- trimws(as.character(runinfo[[library_col]]))
 runinfo <- runinfo[runinfo[[sample_col]] %in% meta$sample_title, , drop = FALSE]
 runinfo <- runinfo[!duplicated(runinfo[[sample_col]]), , drop = FALSE]
