@@ -13,10 +13,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Check WES project files
+      - name: Validate WES project structure
         run: |
           test -f projects/07_wes_variant_analysis/workflow/main.nf
           test -f projects/07_wes_variant_analysis/config/samplesheet.csv
           test -f projects/07_wes_variant_analysis/scripts/summarize_variants.py
+          test -f projects/07_wes_variant_analysis/scripts/run_sarek.sh
+          test -f projects/07_wes_variant_analysis/scripts/download_sra_samples.sh
+          test -f cloud/aws/run_project07_wes_ec2.sh
+      - name: Validate shell scripts
+        run: |
+          bash -n projects/07_wes_variant_analysis/scripts/run_sarek.sh
+          bash -n projects/07_wes_variant_analysis/scripts/download_sra_samples.sh
+          bash -n cloud/aws/run_project07_wes_ec2.sh
+      - name: Validate Python syntax
+        run: |
           python -m py_compile projects/07_wes_variant_analysis/scripts/summarize_variants.py
-          echo "Project 07 structure and Python syntax validated."
+          python -m py_compile projects/07_wes_variant_analysis/scripts/resolve_sra_runs.py
+      - name: Validate tumor-normal samplesheet
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+          p = Path("projects/07_wes_variant_analysis/config/samplesheet.csv")
+          rows = list(csv.DictReader(p.open()))
+          assert len(rows) == 2
+          assert {r["status"] for r in rows} == {"0", "1"}
+          assert {r["patient"] for r in rows} == {"P1001"}
+          assert all(r["lane"] for r in rows)
+          assert all(r["fastq_1"].endswith(".fastq.gz") and r["fastq_2"].endswith(".fastq.gz") for r in rows)
+          print("Tumor-normal samplesheet validated.")
+          PY
+      - name: Report validation
+        run: echo "Project 07 structure, scripts and tumor-normal metadata validated."
