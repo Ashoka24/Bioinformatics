@@ -16,6 +16,7 @@ The projects are designed to demonstrate real-world analysis skills, reproducibl
 | 04 | [Nextflow / nf-core Pipeline](projects/04_nfcore_pipeline/) | Nextflow, nf-core, Docker, workflow engineering | 🟢 Completed |
 | 05 | [Bioinformatics + Machine Learning](projects/05_bioinformatics_ml/) | Transcriptomics, feature selection, scikit-learn | 🟢 Completed |
 | 06 | [RNA-seq Differential Expression](projects/06_rnaseq_differential_expression/) | Bulk RNA-seq, DESeq2, paired differential expression | 🟢 Completed |
+| 07 | [WES Variant Analysis](projects/07_wes_variant_analysis/) | WES, tumor/normal somatic variants, nf-core/sarek | 🟡 In progress |
 
 ---
 
@@ -157,11 +158,13 @@ Paired bulk RNA-seq analysis of human CD4 T-cell samples from oral mucosa and bl
 
 ## Project 07 — WES Variant Analysis
 
-Whole-exome sequencing workflow for germline SNV and indel processing.
+Whole-exome sequencing workflow for matched tumor/normal somatic variant analysis using a real public NCBI dataset.
 
-**Workflow:** FASTQ → QC → alignment → BAM processing → germline variant calling → filtering → annotation → VCF/report.
+**Dataset:** GSE179296 • SRP326537 • PRJNA743078 • Illumina HiSeq 2500 • SureSelect Human All Exon V5 • 2 × 100 bp.
 
-The project is structured for reproducible execution with **Nextflow, Docker, Python, GitHub Actions and AWS S3/EC2**. Human sequencing data is kept outside the repository.
+**Workflow:** SRA → FASTQ → QC → alignment → BAM processing → BQSR → Mutect2 tumor/normal calling → filtering → VEP annotation → VCF/QC report.
+
+The project is structured for reproducible execution with **nf-core/sarek 3.10.0, Nextflow, Docker, Python, Bash, GitHub Actions and AWS S3/EC2**. Raw sequencing data and large results are kept outside the repository.
 
 [Open Project 07 →](projects/07_wes_variant_analysis/)
 
