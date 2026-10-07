@@ -16,7 +16,7 @@ The projects are designed to demonstrate real-world analysis skills, reproducibl
 | 04 | [Nextflow / nf-core Pipeline](projects/04_nfcore_pipeline/) | Nextflow, nf-core, Docker, workflow engineering | 🟢 Completed |
 | 05 | [Bioinformatics + Machine Learning](projects/05_bioinformatics_ml/) | Transcriptomics, feature selection, scikit-learn | 🟢 Completed |
 | 06 | [RNA-seq Differential Expression](projects/06_rnaseq_differential_expression/) | Bulk RNA-seq, DESeq2, paired differential expression | 🟢 Completed |
-| 07 | [WES Variant Analysis](projects/07_wes_variant_analysis/) | WES, tumor/normal somatic variants, nf-core/sarek | 🟡 In progress |
+| 07 | [WES Variant Analysis](projects/07_wes_variant_analysis/) | WES, tumor/normal somatic variants, nf-core/sarek | 🟡 Workflow complete* |
 
 ---
 
@@ -176,7 +176,7 @@ The omics projects share a common AWS-ready execution pattern:
 
 Shared cloud documentation and the EC2 runner are maintained under [cloud/aws](cloud/aws/) and [AWS Omics Architecture](docs/AWS_OMICS_ARCHITECTURE.md).
 
-This pattern will be reused for the remaining WES, single-cell RNA-seq, miRNA-seq and methylation projects.
+This pattern will be reused for the remaining WES, single-cell RNA-seq, miRNA-seq and methylation projects.\n\n*Project 07 workflow, metadata, automation and CI are complete. The large public FASTQ/Sarek biological execution remains an AWS compute step; no unexecuted variant metrics are claimed.
 
 ## Reproducibility
 
