@@ -111,7 +111,11 @@ The workflow also generates the complete differential-expression table, normaliz
     └── metrics.tsv
 ```
 
-## Limitations\n\nThis project analyzes only the selected CD69− paired subset, does not reproduce every comparison in the original study, and does not perform pathway enrichment or independent biological validation. The analysis uses a processed GEO count matrix rather than starting from raw FASTQ files.\n\n## Interpretation boundary
+## Limitations
+
+This project analyzes only the selected CD69− paired subset, does not reproduce every comparison in the original study, and does not perform pathway enrichment or independent biological validation. The analysis uses a processed GEO count matrix rather than starting from raw FASTQ files.
+
+## Interpretation boundary
 
 The results describe differential expression within this public research dataset. They are **not** presented as clinical biomarkers, diagnostic evidence, or proof of tissue-specific causality.
 
