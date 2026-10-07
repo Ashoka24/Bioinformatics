@@ -32,7 +32,7 @@ Total: **18 samples / 9 subjects**
 
 GEO supplementary processed count matrix:
 
-GSE116139_BulkRNAseqCounts.txt.gz
+`GSE116139_BulkRNAseqCounts.txt.gz`
 
 Raw sequencing reads remain in SRA and are not stored in this repository.
 
@@ -40,10 +40,12 @@ Raw sequencing reads remain in SRA and are not stored in this repository.
 
 The paired structure is preserved using:
 
-subject + tissue
+`~ subject + tissue`
 
 where subject accounts for between-person variation and tissue is the biological contrast of interest.
 
-## Scope\n\nThis repository does not attempt to reproduce the entire original study. It is a focused portfolio analysis built around one well-defined paired comparison.
+## Scope
+
+This repository does not attempt to reproduce the entire original study. It is a focused portfolio analysis built around one well-defined paired comparison.
 
 The project analyzes the selected CD69− paired subset only. It does not reproduce the full study, single-cell component, or every comparison described by the authors.
