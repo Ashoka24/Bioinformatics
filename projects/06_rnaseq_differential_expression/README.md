@@ -53,12 +53,12 @@ The complete differential-expression table, normalized counts, PCA and volcano p
 ├── metadata/
 │   └── DATASET.md
 ├── scripts/
-│   └── run_deseq2.R
+│   ├── run_deseq2.R
+│   └── resolve_library_map.py
 ├── figures/
 │   ├── 01_workflow.svg
 │   └── 02_output_file_map.svg
 └── results/
-    ├── REPORT.md
     ├── REPORT.md
     ├── metrics.tsv
     └── figures/
