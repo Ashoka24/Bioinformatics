@@ -55,8 +55,7 @@ GSE179296 contains 33 matched normal/tumor pairs, giving the portfolio a real pa
 
 ```bash
 pip install pysradb
-mkdir -p work
-pysradb metadata --detailed SRP326537 > work/sra_metadata.tsv
+python scripts/resolve_sra_runs.py
 ```
 
 Use **GSM5413848** and **GSM5413849** to identify the corresponding run accessions.
