@@ -133,9 +133,6 @@ The results demonstrate classification performance within this public dataset. T
 
 ---
 
-
----
-
 ## Project 06 — RNA-seq Differential Expression
 
 Paired bulk RNA-seq analysis of human CD4 T-cell samples from oral mucosa and blood using public GEO dataset **GSE116139**.
@@ -154,6 +151,29 @@ Paired bulk RNA-seq analysis of human CD4 T-cell samples from oral mucosa and bl
 - Threshold: adjusted p-value < 0.05 and |log2FC| ≥ 1
 
 [Open Project 06 →](projects/06_rnaseq_differential_expression/)
+
+
+---
+
+## Project 07 — WES Variant Analysis
+
+Whole-exome sequencing workflow for germline SNV and indel processing.
+
+**Workflow:** FASTQ → QC → alignment → BAM processing → germline variant calling → filtering → annotation → VCF/report.
+
+The project is structured for reproducible execution with **Nextflow, Docker, Python, GitHub Actions and AWS S3/EC2**. Human sequencing data is kept outside the repository.
+
+[Open Project 07 →](projects/07_wes_variant_analysis/)
+
+## Cloud Execution
+
+The omics projects share a common AWS-ready execution pattern:
+
+**S3 → EC2/HPC compute → Docker → Nextflow → analysis → S3**
+
+Shared cloud documentation and the EC2 runner are maintained under [cloud/aws](cloud/aws/) and [AWS Omics Architecture](docs/AWS_OMICS_ARCHITECTURE.md).
+
+This pattern will be reused for the remaining WES, single-cell RNA-seq, miRNA-seq and methylation projects.
 
 ## Reproducibility
 
