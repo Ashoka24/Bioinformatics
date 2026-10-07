@@ -13,7 +13,7 @@ The projects are designed to demonstrate real-world analysis skills, reproducibl
 | 03 | [Shotgun Metagenomics](projects/03_shotgun_metagenomics/) | WGS, Kraken2, Centrifuge, taxonomic profiling | 🟢 Completed |
 | 04 | [Nextflow / nf-core Pipeline](projects/04_nfcore_pipeline/) | Nextflow, nf-core, Docker, workflow engineering | 🟢 Completed |
 | 05 | [Bioinformatics + Machine Learning](projects/05_bioinformatics_ml/) | Transcriptomics, feature selection, scikit-learn | 🟢 Completed |
-| 06 | RNA-seq / Transcriptomics | QC, quantification, differential expression | Planned |
+| 06 | [RNA-seq Differential Expression](projects/06_rnaseq_differential_expression/) | Bulk RNA-seq, DESeq2, paired differential expression | 🟢 Completed |
 
 ---
 
@@ -130,6 +130,28 @@ The results demonstrate classification performance within this public dataset. T
 [Open Project 05 →](projects/05_bioinformatics_ml/)
 
 ---
+
+
+---
+
+## Project 06 — RNA-seq Differential Expression
+
+Paired bulk RNA-seq analysis of human CD4 T-cell samples from oral mucosa and blood using public GEO dataset **GSE116139**.
+
+**Analysis**
+- 18 matched CD69− samples from 9 subjects
+- Paired DESeq2 design: `~ subject + tissue`
+- Low-count filtering
+- Benjamini–Hochberg correction
+- PCA and differential-expression visualization
+
+**Results**
+- 11,696 genes after filtering
+- **519 significant genes**
+- **294 upregulated / 225 downregulated**
+- Threshold: adjusted p-value < 0.05 and |log2FC| ≥ 1
+
+[Open Project 06 →](projects/06_rnaseq_differential_expression/)
 
 ## Reproducibility
 
