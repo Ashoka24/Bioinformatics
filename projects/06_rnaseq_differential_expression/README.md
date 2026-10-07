@@ -28,12 +28,23 @@ GEO count matrix → sample selection → count filtering → DESeq2 → PCA / d
 
 ## Results
 
-Results will be added only after the analysis has been executed and verified.
+The analysis was executed successfully and the outputs were verified from the workflow artifact.
 
-- Samples: 18 matched CD69− samples from 9 subjects
+- Samples: **18** matched CD69− samples from **9 subjects**
+- Genes after low-count filtering: **11,696**
+- Significant genes: **519**
+- Upregulated: **294**
+- Downregulated: **225**
 - Comparison: oral mucosa vs blood
-- Statistical model: subject + tissue
+- Statistical model: `~ subject + tissue`
 - Significance threshold: adjusted p-value < 0.05 and |log2FC| ≥ 1
+
+### Key output
+
+[Verified results report](results/REPORT.md)  
+[Metrics](results/metrics.tsv)
+
+The complete differential-expression table, normalized counts, PCA and volcano plot were generated in the successful workflow artifact. The repository keeps the concise verified report and metrics to avoid committing large generated matrices.
 
 ## Repository structure
 
@@ -48,8 +59,8 @@ Results will be added only after the analysis has been executed and verified.
 │   └── 02_output_file_map.svg
 └── results/
     ├── REPORT.md
-    ├── differential_expression.tsv
-    ├── normalized_counts.tsv
+    ├── REPORT.md
+    ├── metrics.tsv
     └── figures/
 
 ## Notes
