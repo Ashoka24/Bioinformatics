@@ -6,6 +6,8 @@ The projects are designed to demonstrate real-world analysis skills, reproducibl
 
 ## Projects
 
+[Complete technical project documentation →](docs/PROJECT_DOCUMENTATION.md)
+
 | # | Project | Focus | Status |
 |---|---|---|---|
 | 01 | [16S Microbiome Analysis](projects/01_16s_microbiome/) | 16S rRNA, QIIME 2, SRA, microbiome profiling | 🟢 Completed |
