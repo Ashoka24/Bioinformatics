@@ -6,7 +6,7 @@ params.genome = "GATK.GRCh38"
 params.sarek = "3.10.0"
 
 workflow {
-    log.info "Project 07 — WES | GSE179296 | nf-core/sarek $\{params.sarek\} | $\{params.genome\}"
+    log.info "Project 07 — WES | GSE179296 | nf-core/sarek ${params.sarek} | ${params.genome}"
     log.info "Production execution is pinned to nf-core/sarek $\{params.sarek\}."
 
     /*
