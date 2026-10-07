@@ -1,13 +1,38 @@
 #!/usr/bin/env python3
-import csv
+import re
+from pysradb.sraweb import SRAweb
 
-gsm = ["GSM3211169","GSM3211170","GSM3211171","GSM3211172","GSM3211173","GSM3211174","GSM3211175","GSM3211176","GSM3211177","GSM3211178","GSM3211179","GSM3211180","GSM3211181","GSM3211182","GSM3211183","GSM3211184","GSM3211185","GSM3211186","GSM3211187","GSM3211188","GSM3211189","GSM3211190","GSM3211191","GSM3211192","GSM3211193","GSM3211194","GSM3211195","GSM3211196"]
-libraries = ["lib10819","lib10820","lib10821","lib10823","lib11819","lib11820","lib11821","lib11822","lib11823","lib11824","lib12778","lib12779","lib12780","lib12783","lib12784","lib12785","lib12786","lib12787","lib12788","lib12791","lib12792","lib12793","lib12794","lib12795","lib12796","lib7438","lib7439","lib7440"]
+GSM = [
+"GSM3211196","GSM3211194","GSM3211169","GSM3211171","GSM3211174","GSM3211175",
+"GSM3211177","GSM3211178","GSM3211186","GSM3211185","GSM3211180","GSM3211179",
+"GSM3211183","GSM3211182","GSM3211189","GSM3211190","GSM3211193","GSM3211191"
+]
 
-if len(gsm) != 28 or len(libraries) != 28:
-    raise SystemExit("GEO sample count and matrix library count must both equal 28")
+db = SRAweb()
+df = db.metadata("SRP151065", detailed=True)
 
-with open("results/library_mapping.tsv", "w", newline="") as handle:
-    writer = csv.writer(handle, delimiter="\t")
-    writer.writerow(["gsm", "library_name"])
-    writer.writerows(zip(gsm, libraries))
+if "library_name" not in df.columns:
+    raise SystemExit("pysradb metadata does not contain library_name")
+
+text_cols = [c for c in ["experiment_title", "sample_title", "experiment_desc"] if c in df.columns]
+if not text_cols:
+    raise SystemExit("pysradb metadata has no searchable sample/experiment title columns")
+
+mapping = {}
+for _, row in df.iterrows():
+    text = " ".join(str(row.get(c, "")) for c in text_cols)
+    hits = re.findall(r"GSM\d+", text)
+    for gsm in hits:
+        if gsm in GSM and gsm not in mapping:
+            mapping[gsm] = str(row["library_name"])
+
+missing = [g for g in GSM if g not in mapping]
+if missing:
+    raise SystemExit("Missing GSM mappings: " + ",".join(missing))
+
+import pandas as pd
+out = pd.DataFrame({
+    "experiment_geo_accession": GSM,
+    "library_name": [mapping[g] for g in GSM]
+})
+out.to_csv("results/library_mapping.tsv", sep="\t", index=False)
