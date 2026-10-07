@@ -6,12 +6,14 @@ params.genome = "GATK.GRCh38"
 params.sarek = "3.10.0"
 
 workflow {
-    log.info "Project 07 — WES | GSE179296 | nf-core/sarek ${params.sarek} | ${params.genome}"
+    log.info "Project 07 — WES | GSE179296 | nf-core/sarek $\{params.sarek\} | $\{params.genome\}"
+    log.info "Production execution is pinned to nf-core/sarek $\{params.sarek\}."
 
-    // Production command:
-    // nextflow run nf-core/sarek -r 3.10.0 -profile docker \
-    //   --input config/samplesheet.csv --outdir results \
-    //   --genome GATK.GRCh38 --wes --tools mutect2,vep
-
-    Channel.of(params.input).view { "Input samplesheet: $it" }
+    /*
+     * This repository workflow is intentionally a thin entry point.
+     * Run the pinned nf-core/sarek release through scripts/run_sarek.sh.
+     * Keeping Sarek as the upstream workflow avoids duplicating a large
+     * production pipeline in this portfolio repository.
+     */
+    Channel.of(params.input).view { "Sarek samplesheet: $it" }
 }
