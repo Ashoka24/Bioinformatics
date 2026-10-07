@@ -11,7 +11,7 @@
 - Significant upregulated genes: 294
 - Significant downregulated genes: 225
 
-## Top ranked genes
+## Most significant genes meeting the project cutoff
 
 | Gene | log2FC | p-value | adjusted p-value |
 |---|---:|---:|---:|
