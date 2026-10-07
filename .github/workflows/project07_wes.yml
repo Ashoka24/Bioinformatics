@@ -1,0 +1,22 @@
+name: Project 07 WES
+
+on:
+  push:
+    paths:
+      - "projects/07_wes_variant_analysis/**"
+      - ".github/workflows/project07_wes.yml"
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check WES project files
+        run: |
+          test -f projects/07_wes_variant_analysis/workflow/main.nf
+          test -f projects/07_wes_variant_analysis/config/samplesheet.csv
+          test -f projects/07_wes_variant_analysis/scripts/summarize_variants.py
+          python -m py_compile projects/07_wes_variant_analysis/scripts/summarize_variants.py
+          echo "Project 07 structure and Python syntax validated."
