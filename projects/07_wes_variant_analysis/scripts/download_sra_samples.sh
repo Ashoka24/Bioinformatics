@@ -2,21 +2,33 @@
 set -euo pipefail
 
 # Project 07: retrieve the selected public NCBI/SRA WES pair.
-# Requires SRA Toolkit. Resolve run accessions from SRP326537 first.
+# Resolve run accessions first with resolve_sra_runs.py.
 
-OUTDIR="${1:-work/fastq}"
-NORMAL_SRR="${NORMAL_SRR:?Set NORMAL_SRR to the NCBI run accession}"
-TUMOR_SRR="${TUMOR_SRR:?Set TUMOR_SRR to the NCBI run accession}"
+OUTDIR="${OUTDIR:-work/fastq}"
+RUNS_TSV="${RUNS_TSV:-work/selected_sra_runs.tsv}"
 
 mkdir -p "$OUTDIR"
 
-prefetch "$NORMAL_SRR"
-prefetch "$TUMOR_SRR"
+if [[ ! -s "$RUNS_TSV" ]]; then
+  echo "Missing $RUNS_TSV. Run: python scripts/resolve_sra_runs.py" >&2
+  exit 1
+fi
 
-fasterq-dump "$NORMAL_SRR" --split-files --gzip --outdir "$OUTDIR"
-fasterq-dump "$TUMOR_SRR" --split-files --gzip --outdir "$OUTDIR"
+normal_run="$(awk -F "\t" '$1 == "N1001" {print $3; exit}' "$RUNS_TSV")"
+tumor_run="$(awk -F "\t" '$1 == "T1001" {print $3; exit}' "$RUNS_TSV")"
+[[ -n "$normal_run" ]] || { echo "No N1001 run found in $RUNS_TSV" >&2; exit 1; }
+[[ -n "$tumor_run" ]] || { echo "No T1001 run found in $RUNS_TSV" >&2; exit 1; }
 
-mv "$OUTDIR/${NORMAL_SRR}_1.fastq.gz" "$OUTDIR/N1001_R1.fastq.gz"
-mv "$OUTDIR/${NORMAL_SRR}_2.fastq.gz" "$OUTDIR/N1001_R2.fastq.gz"
-mv "$OUTDIR/${TUMOR_SRR}_1.fastq.gz" "$OUTDIR/T1001_R1.fastq.gz"
-mv "$OUTDIR/${TUMOR_SRR}_2.fastq.gz" "$OUTDIR/T1001_R2.fastq.gz"
+download_pair() {
+  local run="$1"
+  local prefix="$2"
+  prefetch "$run"
+  fasterq-dump "$run" --split-files --gzip --outdir "$OUTDIR"
+  mv "$OUTDIR/${run}_1.fastq.gz" "$OUTDIR/${prefix}_R1.fastq.gz"
+  mv "$OUTDIR/${run}_2.fastq.gz" "$OUTDIR/${prefix}_R2.fastq.gz"
+}
+
+download_pair "$normal_run" "N1001"
+download_pair "$tumor_run" "T1001"
+
+echo "FASTQ files written to $OUTDIR"
