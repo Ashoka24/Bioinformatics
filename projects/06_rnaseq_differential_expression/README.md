@@ -1,53 +1,101 @@
 # Project 06 — RNA-seq Differential Expression
 
-Bulk RNA-seq analysis of paired human CD4 T-cell samples from oral mucosa and blood.
+Differential-expression analysis of paired human CD4 T-cell bulk RNA-seq samples from oral mucosa and blood.
+
+## Objective
+
+Use a public RNA-seq dataset to identify genes that differ between **oral mucosa and blood** while accounting for the matched subject design.
+
+The project demonstrates:
+
+- public GEO count-matrix processing
+- paired sample design
+- low-count filtering
+- DESeq2 normalization and Wald testing
+- multiple-testing correction
+- PCA-based sample structure assessment
+- differential-expression reporting
+- reproducible analysis with R and Python metadata handling
 
 ## Dataset
 
-**NCBI GEO:** GSE116139  
-**Organism:** Homo sapiens  
-**Platform:** Illumina HiSeq 2500  
-**Study:** A human TH17 population with a tissue-resident signature in healthy and inflamed oral mucosal tissues
+**NCBI GEO:** GSE116139 — *A human TH17 population with a tissue-resident signature in healthy and inflamed oral mucosal tissues [Bulk RNA-seq]*
 
-The GEO study contains paired oral mucosa and blood CD4 T-cell RNA-seq samples from multiple subjects. This project uses the matched CD69− samples only and compares mucosa against blood within subject.
+- Organism: *Homo sapiens*
+- Platform: Illumina HiSeq 2500
+- Input: processed bulk RNA-seq count matrix
+- Analysis subset: matched CD69− samples
+- Samples analyzed: 18
+- Subjects: 9
+- Comparison: oral mucosa vs blood
 
-## Analysis
+The full GEO series contains additional sample types and experimental components. This project deliberately uses the matched CD69− subset so that the comparison remains focused and paired.
 
-- Public processed gene-count matrix from GEO
-- Matched CD69− samples
-- Paired differential-expression design: subject + tissue
-- Low-count filtering
-- DESeq2 normalization and Wald testing
-- Benjamini–Hochberg multiple-testing correction
-- PCA for sample-level structure
-- Differential-expression table and plots
+## Statistical design
+
+The analysis uses a subject-blocked design:
+
+`~ subject + tissue`
+
+This accounts for subject-to-subject variation while testing the tissue effect.
+
+Significance is defined as:
+
+- adjusted p-value < 0.05
+- |log2 fold change| ≥ 1
+
+Benjamini–Hochberg correction is used for multiple testing.
 
 ## Workflow
 
-GEO count matrix → sample selection → count filtering → DESeq2 → PCA / differential expression → interpretation
+![Project 06 RNA-seq workflow](figures/01_workflow.svg)
+
+GEO count matrix  
+↓  
+Matched CD69− sample selection  
+↓  
+Subject/tissue metadata  
+↓  
+Low-count filtering  
+↓  
+DESeq2 normalization + Wald test  
+↓  
+PCA + differential-expression results  
+↓  
+Verified summary and output tables
 
 ## Results
 
-The analysis was executed successfully and the outputs were verified from the workflow artifact.
+The verified analysis summary contains:
 
-- Samples: **18** matched CD69− samples from **9 subjects**
-- Genes after low-count filtering: **11,696**
-- Significant genes: **519**
-- Upregulated: **294**
-- Downregulated: **225**
-- Comparison: oral mucosa vs blood
-- Statistical model: `~ subject + tissue`
-- Significance threshold: adjusted p-value < 0.05 and |log2FC| ≥ 1
+- **18** matched samples
+- **9** subjects
+- **11,696** genes after low-count filtering
+- **519** significant genes
+- **294** significantly upregulated genes
+- **225** significantly downregulated genes
 
-### Key output
+| Result | Value |
+|---|---:|
+| Samples | 18 |
+| Subjects | 9 |
+| Genes after filtering | 11,696 |
+| Significant genes | **519** |
+| Upregulated | **294** |
+| Downregulated | **225** |
 
 [Verified results report](results/REPORT.md)  
-[Metrics](results/metrics.tsv)
+[Metrics table](results/metrics.tsv)
 
-The complete differential-expression table, normalized counts, PCA and volcano plot were generated in the successful workflow artifact. The repository keeps the concise verified report and metrics to avoid committing large generated matrices.
+## Output map
+
+![Project 06 output map](figures/02_output_file_map.svg)
+
+The workflow also generates the complete differential-expression table, normalized counts, PCA, volcano plot and sample/library mapping. These larger generated outputs are retained as workflow artifacts rather than committed to the repository.
 
 ## Repository structure
 
+```text
 06_rnaseq_differential_expression/
 ├── README.md
 ├── metadata/
@@ -60,11 +108,17 @@ The complete differential-expression table, normalized counts, PCA and volcano p
 │   └── 02_output_file_map.svg
 └── results/
     ├── REPORT.md
-    ├── metrics.tsv
-    └── figures/
+    └── metrics.tsv
+```
 
-## Notes
+## Interpretation boundary
 
-This is a transcriptomic differential-expression analysis of a public research dataset. The findings are not presented as clinical biomarkers or diagnostic evidence.
+The results describe differential expression within this public research dataset. They are **not** presented as clinical biomarkers, diagnostic evidence, or proof of tissue-specific causality.
+
+Independent cohorts and additional biological validation would be required before making claims about generalization or clinical relevance.
+
+## Reproducibility
+
+The analysis records the GEO accession, sample subset, paired statistical design, filtering threshold and analysis outputs. Large raw/generated files are kept outside the repository so the project remains lightweight and easy to inspect.
 
 [Back to portfolio](../../)
