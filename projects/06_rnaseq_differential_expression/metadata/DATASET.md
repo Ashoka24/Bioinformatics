@@ -6,7 +6,7 @@ NCBI Gene Expression Omnibus (GEO): **GSE116139**
 
 The study is a human bulk RNA-seq dataset investigating CD4 T-cell transcriptional profiles in oral mucosa and blood. GEO reports 28 samples in the series and describes paired oral mucosa and blood CD4 T-cell subsets from 10 subjects.
 
-## Focused subset
+## Selected analysis subset
 
 This project uses the **CD69−** samples that have a matched mucosa and blood sample from the same subject.
 
@@ -36,7 +36,7 @@ GSE116139_BulkRNAseqCounts.txt.gz
 
 Raw sequencing reads remain in SRA and are not stored in this repository.
 
-## Statistical design
+## Statistical model
 
 The paired structure is preserved using:
 
@@ -44,6 +44,6 @@ subject + tissue
 
 where subject accounts for between-person variation and tissue is the biological contrast of interest.
 
-## Important limitation
+## Scope\n\nThis repository does not attempt to reproduce the entire original study. It is a focused portfolio analysis built around one well-defined paired comparison.
 
 The project analyzes the selected CD69− paired subset only. It does not reproduce the full study, single-cell component, or every comparison described by the authors.
