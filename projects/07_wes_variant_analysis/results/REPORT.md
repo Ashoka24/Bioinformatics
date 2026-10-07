@@ -1,18 +1,34 @@
 # Project 07 — WES Analysis Report
 
-## Status
+## Dataset
 
-The reproducible workflow scaffold and cloud execution pattern are established. Biological results are generated only after an approved WES dataset and reference bundle are supplied.
+GSE179296 / SRP326537, public NCBI WES dataset.
 
-## Planned outputs
+Pilot pair:
 
-- FastQC reports
-- aligned and indexed BAM files
-- alignment/QC summary
-- germline SNV/indel VCF
-- filtered variant table
-- variant summary metrics
+- Sample 1001 Normal — GSM5413848
+- Sample 1001 Tumor — GSM5413849
 
-## Analysis boundary
+NCBI reports 2 × 100 bp paired-end sequencing with SureSelect Human All Exon V5 capture and hg38 processing. citeturn2search0turn2search4
 
-This project demonstrates reproducible WES processing and variant-analysis engineering. It does not claim clinical interpretation or validated diagnostic performance.
+## Analysis status
+
+The repository contains the reproducible workflow definition and public dataset selection. Large FASTQ, BAM and VCF files are intentionally not committed to GitHub.
+
+Biological result metrics will be populated from the actual AWS/Nextflow run rather than invented.
+
+## Expected outputs
+
+- raw-read QC
+- trimmed-read QC
+- alignment statistics
+- duplicate metrics
+- BQSR metrics
+- tumor/normal somatic VCF
+- filtered PASS variants
+- functional annotation
+- MultiQC summary
+
+## Interpretation boundary
+
+Results are intended for portfolio demonstration and method development. They are not clinical diagnostic results.
