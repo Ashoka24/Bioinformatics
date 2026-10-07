@@ -76,7 +76,9 @@ gene_candidates <- c("gene_id", "Geneid", "gene", "Gene")
 gene_col <- gene_candidates[gene_candidates %in% raw_names][1]
 if (is.na(gene_col)) gene_col <- raw_names[1]
 
-counts <- raw[, c(gene_col, meta$library_id), drop = FALSE]
+library_idx <- match(meta$library_id, raw_names)
+if (anyNA(library_idx)) stop("One or more mapped libraries are absent from the count matrix")
+counts <- raw[, c(1, library_idx), drop = FALSE]
 colnames(counts)[1] <- "gene_id"
 colnames(counts)[-1] <- meta$sample
 counts$gene_id <- as.character(counts$gene_id)
