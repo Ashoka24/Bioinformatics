@@ -2,9 +2,9 @@
 
 Differential-expression analysis of paired human CD4 T-cell bulk RNA-seq samples from oral mucosa and blood.
 
-## Objective
+## What this project does
 
-Use a public RNA-seq dataset to identify genes that differ between **oral mucosa and blood** while accounting for the matched subject design.
+Use a public GEO count matrix to identify genes that differ between **oral mucosa and blood** while accounting for the matched subject design.
 
 The project demonstrates:
 
@@ -31,7 +31,7 @@ The project demonstrates:
 
 The full GEO series contains additional sample types and experimental components. This project deliberately uses the matched CD69− subset so that the comparison remains focused and paired.
 
-## Statistical design
+## Analysis design
 
 The analysis uses a subject-blocked design:
 
@@ -111,7 +111,7 @@ The workflow also generates the complete differential-expression table, normaliz
     └── metrics.tsv
 ```
 
-## Interpretation boundary
+## Limitations\n\nThis project analyzes only the selected CD69− paired subset, does not reproduce every comparison in the original study, and does not perform pathway enrichment or independent biological validation. The analysis uses a processed GEO count matrix rather than starting from raw FASTQ files.\n\n## Interpretation boundary
 
 The results describe differential expression within this public research dataset. They are **not** presented as clinical biomarkers, diagnostic evidence, or proof of tissue-specific causality.
 
