@@ -193,16 +193,30 @@ The portfolio follows a consistent approach:
 ## Skills Demonstrated
 
 **Bioinformatics:**  
-16S rRNA analysis • microbiome analysis • metagenomics • transcriptomics • NGS workflows • taxonomic profiling
-
-**Tools:**  
-QIIME 2 • nf-core • Nextflow • Kraken2 • Centrifuge • FASTP • FastQC • MultiQC • SILVA
+16S rRNA analysis • microbiome analysis • shotgun metagenomics • taxonomic profiling • bulk RNA-seq • differential expression • WES • matched tumor/normal somatic variant analysis
 
 **Programming & Data:**  
-Python • R • SQL • Linux • Bash • Pandas • NumPy • scikit-learn • data visualization
+Python • R • SQL • Linux • Bash • Pandas • NumPy • scikit-learn • data cleaning • feature engineering • data visualization
 
-**Workflow & Analysis:**  
-Machine learning • feature engineering • statistical analysis • workflow automation • reproducible research
+**Workflow & Reproducibility:**  
+Nextflow • nf-core • Docker • workflow automation • parameterized pipelines • Git/GitHub • GitHub Actions • QC reporting • reproducible research
+
+**Statistics & Machine Learning:**  
+Diversity analysis • differential expression • statistical testing • Logistic Regression • Random Forest • cross-validation • ROC-AUC • average precision
+
+### Tools Used by Project
+
+| Project | Main tools and technologies |
+|---|---|
+| 01 — 16S Gut Microbiome | NCBI SRA Toolkit, FastQC, MultiQC, nf-core/ampliseq, QIIME 2, SILVA |
+| 02 — IBS Microbiome Classification | QIIME 2, Deblur, SILVA, Python, Pandas, scikit-learn, Logistic Regression, Random Forest |
+| 03 — Shotgun Metagenomics | Fastp, Kraken2, Centrifuge, Python, taxonomic profiling and classifier-comparison scripts |
+| 04 — Nextflow / nf-core Engineering | Nextflow, nf-core/rnaseq, Docker, GitHub Actions |
+| 05 — Bioinformatics + Machine Learning | Python, Pandas, NumPy, scikit-learn, Logistic Regression, Random Forest, ROC-AUC and average-precision evaluation |
+| 06 — RNA-seq Differential Expression | R, DESeq2, paired design, multiple-testing correction, PCA and differential-expression visualization |
+| 07 — WES Variant Analysis | nf-core/sarek 3.10.0, Nextflow, Docker, FastQC, MultiQC, Fastp, BWA-MEM2, SAMtools, GATK/Mutect2, VEP, Python, Bash, Git/GitHub, GitHub Actions, AWS S3/EC2/IAM |
+
+Tools listed describe each project's documented workflow; a tool's presence in a workflow does not by itself imply that every optional stage or cloud deployment has been executed.
 
 ## Author
 
