@@ -43,9 +43,7 @@ done
 
 # Small Nextflow HTML execution reports, when available.
 while IFS= read -r -d '' f; do files+=("$f"); done < <(
-  find "$RESULTS/pipeline_info" -type f \(
-    -iname '*execution_report.html' -o -iname '*execution_timeline.html'
-  \) -size -10M -print0 2>/dev/null || true
+  find "$RESULTS/pipeline_info" -type f \( -iname '*execution_report.html' -o -iname '*execution_timeline.html' \) -size -10M -print0 2>/dev/null || true
 )
 
 # Remove duplicate paths.
