@@ -158,9 +158,10 @@ Paired bulk RNA-seq analysis of human CD4 T-cell samples from oral mucosa and bl
 
 ## Project 07 — WES Variant Analysis
 
-Whole-exome sequencing workflow for matched tumor/normal somatic variant analysis using a real public NCBI dataset.
+Whole-exome sequencing workflow for matched tumor/normal somatic variant analysis. The repository distinguishes the completed local run from the separate public pilot.
 
-**Dataset:** GSE179296 • SRP326537 • PRJNA743078 • Illumina HiSeq 2500 • SureSelect Human All Exon V5 • 2 × 100 bp.
+- **Completed local run:** normal `HCC1395BL` (`status=0`) + tumor `HCC1395` (`status=1`). The published annotated VCF is labeled `HCC1395_vs_HCC1395BL` and contains 5,289 records.
+- **Planned public pilot:** GSE179296 • SRP326537 • PRJNA743078 • Sample 1001, with normal `N1001` / GSM5413848 and tumor `T1001` / GSM5413849. Execution of this public pilot is not yet confirmed.
 
 **Workflow:** SRA → FASTQ → QC → alignment → BAM processing → BQSR → Mutect2 tumor/normal calling → filtering → VEP annotation → VCF/QC report.
 
