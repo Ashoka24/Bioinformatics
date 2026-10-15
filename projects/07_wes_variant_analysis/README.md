@@ -151,7 +151,9 @@ Large sequencing, reference and workflow-result files stay outside GitHub. AWS c
 
 ## Results status
 
-The repository currently contains the reproducible workflow and reporting structure. No biological variant counts are claimed until the public FASTQ pair has actually been processed through the workflow. This prevents placeholder metrics from being presented as experimental results.
+The repository includes the reproducible GSE179296 / Sample 1001 workflow described above. A separate local Sarek run has also completed for the `HCC1395_vs_HCC1395BL` pair; its recorded validation summary is in [`results/hcc1395_sarek/REPORT.md`](results/hcc1395_sarek/REPORT.md). That run reported 5,289 VCF records, a present VEP `CSQ` header, and a passing gzip integrity check. It is documented separately and should not be confused with the GSE179296 / Sample 1001 pilot pair.
+
+Raw sequencing files, reference assets, Nextflow work files, and Docker storage are intentionally kept out of GitHub. Only reproducible code, reusable configuration, documentation, and selected lightweight reports should be version-controlled.
 
 ## Interpretation boundary
 
