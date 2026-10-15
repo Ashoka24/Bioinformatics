@@ -5,7 +5,10 @@
 A local whole-exome sequencing workflow was completed with **nf-core/sarek 3.10.0**, Nextflow, and Docker. The final Nextflow session status was `OK`.
 
 - Analysis: matched tumor/normal somatic variant analysis
+- **Tumor sample ID:** `HCC1395` (`status=1` in the HCC1395 example samplesheet)
+- **Normal sample ID:** `HCC1395BL` (`status=0` in the HCC1395 example samplesheet)
 - Pair label in output: `HCC1395_vs_HCC1395BL`
+- This report and its VCF describe the local HCC1395/HCC1395BL run, not the separate planned GSE179296 / Sample 1001 public pilot (`T1001` / `N1001`).
 - Reference: GATK GRCh38
 - Variant caller: Mutect2
 - Annotation: Ensembl VEP
