@@ -142,12 +142,26 @@ Large sequencing, reference and workflow-result files stay outside GitHub. AWS c
 
 ## Skills demonstrated
 
-**Omics:** WES, matched tumor/normal somatic analysis  
-**Workflow:** Nextflow, nf-core/sarek, Docker  
-**Programming:** Python, Bash  
-**NGS:** FastQC, Fastp, BWA-MEM2, SAMtools, GATK/Mutect2, VEP  
-**Cloud:** AWS S3, EC2, IAM-aware execution  
-**Versioning:** Git/GitHub
+**Omics and variant analysis:** Whole-exome sequencing (WES), matched tumor/normal design, somatic variant calling, variant filtering, VEP annotation, VCF validation  
+**Workflow and containers:** Nextflow, nf-core/sarek 3.10.0, Docker, workflow resumption with `-resume`  
+**Quality control:** FastQC, MultiQC, Fastp, gzip integrity validation, VCF/header checks  
+**NGS tools:** BWA-MEM2, SAMtools, GATK/Mutect2, FilterMutectCalls, Ensembl VEP  
+**Programming and automation:** Python, Bash, JSON configuration, Git/GitHub, GitHub Actions  
+**Cloud concepts:** AWS S3, EC2, IAM-aware execution design
+
+### Tools used
+
+- **Workflow:** Nextflow, nf-core/sarek 3.10.0
+- **Execution:** Docker
+- **Read QC/preprocessing:** FastQC, MultiQC, Fastp
+- **Alignment and BAM processing:** BWA-MEM2, SAMtools, GATK preprocessing tools
+- **Somatic variant calling/filtering:** GATK Mutect2, FilterMutectCalls
+- **Annotation:** Ensembl Variant Effect Predictor (VEP)
+- **Validation and reporting:** gzip integrity check, VCF record/header checks, MultiQC HTML
+- **Code and delivery:** Python, Bash, Git, GitHub, GitHub Actions
+- **Cloud-ready components:** AWS S3, EC2, IAM
+
+Cloud services are documented as the intended execution pattern; the completed HCC1395 run described below was local, not an AWS deployment.
 
 ## Results status
 
