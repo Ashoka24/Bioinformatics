@@ -4,11 +4,18 @@ This directory separates the completed local HCC1395/HCC1395BL run from the plan
 
 ## Completed local run
 
+- **Tumor sample:** `HCC1395` (`status=1`)
+- **Normal sample:** `HCC1395BL` (`status=0`)
+- **Output pair label:** `HCC1395_vs_HCC1395BL`
 - [HCC1395 execution and validation report](hcc1395_sarek/REPORT.md)
 - Final filtered, VEP-annotated VCF reported by the run: `annotation/mutect2/HCC1395_vs_HCC1395BL/HCC1395_vs_HCC1395BL.mutect2.filtered_VEP.ann.vcf.gz`
 - MultiQC report reported by the run: `multiqc/multiqc_report.html`
 
 The report records 5,289 VCF records, a VEP `CSQ` header, passing gzip integrity validation, and a present Tabix index. The index query was not independently validated in the recorded checks. These are workflow-level checks, not clinical interpretation.
+
+## Separate public pilot — not the source of the HCC1395 VCF
+
+The planned GSE179296 / Sample 1001 pilot uses `N1001` as normal (GSM5413848) and `T1001` as tumor (GSM5413849), as configured in `config/samplesheet.csv`. Its execution is not confirmed in this repository. Do not label the published HCC1395/HCC1395BL results as Sample 1001.
 
 ## Recommended publication policy
 
