@@ -120,6 +120,19 @@ For a new Nextflow/Sarek installation, run the upstream test profile before star
 nextflow run nf-core/sarek -r 3.10.0 -profile test,docker
 ```
 
+## Curate and publish completed results
+
+After the local Sarek run has completed, prepare a small, reviewable set of outputs for GitHub:
+
+```bash
+bash scripts/prepare_curated_results.sh
+git diff --cached --check
+git diff --cached --name-only
+git diff --cached --stat
+```
+
+The helper stages only selected FastQC HTML, MultiQC HTML, small CSV/TSV result tables, the final filtered VEP-annotated VCF and its index (when present and within the configured size thresholds), plus a manifest and summary. It deliberately does not commit or push automatically. Review the staged files before committing. Do not stage the entire `results/` tree or raw/intermediate sequencing files.
+
 ## AWS execution
 
 ```text
