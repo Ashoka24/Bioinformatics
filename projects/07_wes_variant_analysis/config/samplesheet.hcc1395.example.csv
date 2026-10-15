@@ -1,0 +1,3 @@
+patient,sample,lane,fastq_1,fastq_2,status
+HCC1395,HCC1395BL,L001,work/fastq/hcc1395/HCC1395_N_R1.recovered.fastq.gz,work/fastq/hcc1395/HCC1395_N_R2.fastq.gz,0
+HCC1395,HCC1395,L001,work/fastq/hcc1395/HCC1395_T_R1.fastq.gz,work/fastq/hcc1395/HCC1395_T_R2.fastq.gz,1

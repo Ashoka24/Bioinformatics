@@ -1,0 +1,2 @@
+patient,sample,variantcaller,vcf
+HCC1395,HCC1395_vs_HCC1395BL,mutect2,results/hcc1395_sarek/variant_calling/mutect2/HCC1395_vs_HCC1395BL/HCC1395_vs_HCC1395BL.mutect2.filtered.vcf.gz
