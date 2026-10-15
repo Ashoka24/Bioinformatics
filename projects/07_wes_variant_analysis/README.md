@@ -2,7 +2,18 @@
 
 A reproducible matched tumor/normal whole-exome sequencing workflow using a real public NCBI dataset. The project is built around **Illumina WES + nf-core/sarek**, not Nanopore; Nanopore will be used in a separate long-read project.
 
-## Dataset
+## Sample identity and run status
+
+This project documents **two distinct matched tumor/normal pairs**. Their identifiers must not be mixed:
+
+| Run | Normal sample ID | Tumor sample ID | Status | Which outputs belong to it? |
+|---|---|---|---|---|
+| Local completed run | `HCC1395BL` (`status=0`) | `HCC1395` (`status=1`) | Completed and validated locally | `results/hcc1395_sarek/`; VCF pair label `HCC1395_vs_HCC1395BL` |
+| Public pilot, Sample 1001 | `N1001` / GEO `GSM5413848` | `T1001` / GEO `GSM5413849` | Planned pilot; execution not confirmed | `config/samplesheet.csv` is the public-pilot samplesheet; no claim that the published HCC1395 VCF came from this pair |
+
+The curated VCF currently published in this repository is from the **HCC1395/HCC1395BL local run**, not Sample 1001. The local example samplesheet is [`config/samplesheet.hcc1395.example.csv`](config/samplesheet.hcc1395.example.csv); the public-pilot samplesheet remains [`config/samplesheet.csv`](config/samplesheet.csv).
+
+## Public pilot dataset (Sample 1001)
 
 **NCBI GEO:** GSE179296  
 **SRA study:** SRP326537  
