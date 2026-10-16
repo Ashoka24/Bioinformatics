@@ -29,7 +29,7 @@ def main() -> int:
 
     project_dir = Path(__file__).resolve().parents[1]
     sheet_path = Path(args.samplesheet)
-    if not sheet_path.is_absolute():
+    if not sheet_path.is_absolute() and not sheet_path.is_file():
         sheet_path = project_dir / sheet_path
 
     if not sheet_path.is_file():
