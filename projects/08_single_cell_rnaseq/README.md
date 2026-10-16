@@ -47,11 +47,13 @@ These are reproducibility instructions, not a claim that the analysis has alread
 - results/qc_metrics.csv
 - results/highly_variable_genes.csv
 - results/marker_genes.csv
+- results/cluster_annotations.csv
 - results/pbmc3k_processed.h5ad
 - results/run_metadata.json
 - results/figures/qc_violin.png
 - results/figures/umap_clusters.png
 - results/figures/umap_marker_genes.png
+- results/figures/dotplot_canonical_markers.png
 
 ## Validation
 
@@ -65,6 +67,8 @@ The validator checks file presence, not matrix content or biological quality. Gi
 - QC cutoffs and dimensionality/clustering settings are read from `config/analysis.json`; command-line options can override individual values. Cutoffs remain dataset-dependent.
 - Leiden clusters are not automatically validated cell types.
 - UMAP is a visualization, not proof of biological separation.
+- `cluster_annotations.csv` contains working labels and the marker evidence to check; labels are provisional, not automated reference mapping.
+- `dotplot_canonical_markers.png` compares selected PBMC marker genes across clusters. Missing genes are omitted if they are absent from the input matrix.
 - Marker genes require multi-marker and reference-based interpretation.
 - This is an exploratory portfolio workflow, not a clinical diagnostic pipeline.
 
