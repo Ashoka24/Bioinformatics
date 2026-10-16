@@ -78,12 +78,12 @@ def main() -> int:
             fastq = Path(values[column])
             if not fastq.is_absolute():
                 fastq = project_dir / fastq
+            if not fastq.name.endswith(".fastq.gz"):
+                errors.append(f"line {line_number}: expected a .fastq.gz path in {column}: {fastq}")
             if args.check_files:
                 if not fastq.is_file():
                     errors.append(f"line {line_number}: {column} file not found: {fastq}")
-                elif not fastq.name.endswith(".fastq.gz"):
-                    errors.append(f"line {line_number}: expected a .fastq.gz file: {fastq}")
-                else:
+                elif fastq.name.endswith(".fastq.gz"):
                     try:
                         with gzip.open(fastq, "rb") as stream:
                             while stream.read(1024 * 1024):
