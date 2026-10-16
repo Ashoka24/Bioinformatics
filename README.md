@@ -16,7 +16,7 @@ The projects are designed to demonstrate real-world analysis skills, reproducibl
 | 04 | [Nextflow / nf-core Pipeline](projects/04_nfcore_pipeline/) | Nextflow, nf-core, Docker, workflow engineering | 🟢 Completed |
 | 05 | [Bioinformatics + Machine Learning](projects/05_bioinformatics_ml/) | Transcriptomics, feature selection, scikit-learn | 🟢 Completed |
 | 06 | [RNA-seq Differential Expression](projects/06_rnaseq_differential_expression/) | Bulk RNA-seq, DESeq2, paired differential expression | 🟢 Completed |
-| 07 | [WES Variant Analysis](projects/07_wes_variant_analysis/) | WES, tumor/normal somatic variants, nf-core/sarek | 🟢 Completed — HCC1395/HCC1395BL tumor-normal run with samplesheet validation |\n| 08 | [Single-Cell RNA-seq Analysis](projects/08_single_cell_rnaseq/) | scRNA-seq, Scanpy, QC, PCA, UMAP, Leiden clustering | 🟡 Repository and cloud-check workflow added; analysis execution pending |
+| 07 | [WES Variant Analysis](projects/07_wes_variant_analysis/) | WES, tumor/normal somatic variants, nf-core/sarek | 🟢 Completed — HCC1395/HCC1395BL tumor-normal run with samplesheet validation |\n| 08 | [Single-Cell RNA-seq Analysis](projects/08_single_cell_rnaseq/) | PBMC 3k, Scanpy, QC, PCA, UMAP, Leiden clustering, marker annotation | 🟢 Core analysis completed; latest annotation outputs pending verification |
 
 ---
 
@@ -171,6 +171,33 @@ The project uses **nf-core/sarek 3.10.0, Nextflow, Docker, Python, Bash, GitHub 
 
 [Open Project 07 →](projects/07_wes_variant_analysis/)
 
+## Project 08 — Single-Cell RNA-seq Analysis
+
+Single-cell RNA-seq analysis of the public **10x Genomics PBMC 3k healthy-donor dataset** using Python, Scanpy and AnnData.
+
+**Dataset:** 10x Genomics PBMC 3k • filtered gene-barcode matrix • hg19 reference.
+
+**Workflow**
+- Download and validate the public matrix
+- Load the data into AnnData and calculate cell/gene quality-control metrics
+- Filter low-quality cells and low-detection genes
+- Normalize counts, log-transform expression and identify highly variable genes
+- Run scaling, PCA, nearest-neighbour graph construction and UMAP
+- Cluster cells with Leiden and rank cluster marker genes
+- Export QC metrics, marker tables, provisional cluster annotations and plots
+
+**Core run results**
+- Input: 2,700 cells and 32,738 genes
+- After filtering: 2,699 cells and 13,714 genes
+- Highly variable genes: 2,000
+- Marker table: 123,426 records
+
+Cluster labels are provisional and should be reviewed against canonical markers. This is a single-donor dataset, so cells are not independent biological replicates and cell-level statistical results should not be interpreted as population-level evidence. The latest annotation-table and marker-dot-plot outputs still need confirmation from a post-merge cloud run.
+
+The GitHub Actions workflow runs static/unit checks on pull requests and runs the full analysis on pushes to the main branch. Generated outputs are uploaded as a workflow artifact rather than committed with the raw data.
+
+[Open Project 08 →](projects/08_single_cell_rnaseq/)
+
 ## Cloud Execution
 
 The omics projects share a common AWS-ready execution pattern:
@@ -179,7 +206,7 @@ The omics projects share a common AWS-ready execution pattern:
 
 Shared cloud documentation and the EC2 runner are maintained under [cloud/aws](cloud/aws/) and [AWS Omics Architecture](docs/AWS_OMICS_ARCHITECTURE.md).
 
-This pattern will be reused for the remaining WES, single-cell RNA-seq, miRNA-seq and methylation projects.
+This pattern can be reused for future miRNA-seq and methylation projects.
 
 *Project 07 core deliverable is complete for the HCC1395/HCC1395BL local run. AWS execution remains an optional deployment path; the completed local run did not use AWS.
 
@@ -219,7 +246,7 @@ Diversity analysis • differential expression • statistical testing • Logis
 | 04 — Nextflow / nf-core Engineering | Nextflow, nf-core/rnaseq, Docker, GitHub Actions |
 | 05 — Bioinformatics + Machine Learning | Python, Pandas, NumPy, scikit-learn, Logistic Regression, Random Forest, ROC-AUC and average-precision evaluation |
 | 06 — RNA-seq Differential Expression | R, DESeq2, paired design, multiple-testing correction, PCA and differential-expression visualization |
-| 07 — WES Variant Analysis | nf-core/sarek 3.10.0, Nextflow, Docker, FastQC, MultiQC, Fastp, BWA-MEM2, SAMtools, GATK/Mutect2, VEP, Python, Bash, Git/GitHub, GitHub Actions, AWS S3/EC2/IAM |
+| 07 — WES Variant Analysis | nf-core/sarek 3.10.0, Nextflow, Docker, FastQC, MultiQC, Fastp, BWA-MEM2, SAMtools, GATK/Mutect2, VEP, Python, Bash, Git/GitHub, GitHub Actions, AWS S3/EC2/IAM |\n| 08 — Single-Cell RNA-seq | Python, Scanpy, AnnData, Pandas, SciPy, PCA, UMAP, Leiden, GitHub Actions |
 
 Tools listed describe each project's documented workflow; a tool's presence in a workflow does not by itself imply that every optional stage or cloud deployment has been executed.
 
