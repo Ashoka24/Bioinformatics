@@ -12,9 +12,13 @@ OUTDIR="${OUTDIR:-results}"
 SAREK_VERSION="${SAREK_VERSION:-3.10.0}"
 GENOME="${GENOME:-GATK.GRCh38}"
 
+command -v python3 >/dev/null || { echo "Python 3 is required for samplesheet validation." >&2; exit 1; }
 command -v nextflow >/dev/null || { echo "Nextflow is required." >&2; exit 1; }
 command -v docker >/dev/null || { echo "Docker is required for -profile docker." >&2; exit 1; }
 [[ -f "$INPUT" ]] || { echo "Samplesheet not found: $INPUT" >&2; exit 1; }
+
+echo "Validating samplesheet and input FASTQs..."
+python3 scripts/validate_samplesheet.py --samplesheet "$INPUT" --check-files
 
 echo "Running nf-core/sarek $SAREK_VERSION"
 echo "Input: $INPUT"
