@@ -158,16 +158,16 @@ Paired bulk RNA-seq analysis of human CD4 T-cell samples from oral mucosa and bl
 
 ## Project 07 — WES Variant Analysis
 
-Whole-exome sequencing workflow for matched tumor/normal somatic variant analysis using the actual analyzed pair.
+Whole-exome sequencing workflow for the completed matched tumor/normal pair:
 
 - **Normal:** `HCC1395BL` (`status=0`)
 - **Tumor:** `HCC1395` (`status=1`)
 - **Pair label:** `HCC1395_vs_HCC1395BL`; the annotated VCF contains 5,289 records.
-- **Input validation:** a project validator checks samplesheet columns, matched-pair status, FASTQ file existence and gzip integrity before execution.
+- **Input validation:** a project validator checks samplesheet columns, tumor/normal pairing, FASTQ file existence and gzip integrity before execution.
 
-**Workflow:** SRA → FASTQ → QC → alignment → BAM processing → BQSR → Mutect2 tumor/normal calling → filtering → VEP annotation → VCF/QC report.
+**Workflow:** paired FASTQ → QC → alignment → BAM processing → BQSR → Mutect2 tumor/normal calling → filtering → VEP annotation → VCF/QC report.
 
-The project is structured for reproducible execution with **nf-core/sarek 3.10.0, Nextflow, Docker, Python, Bash, GitHub Actions and AWS S3/EC2**. Raw sequencing data and large results are kept outside the repository.
+The project uses **nf-core/sarek 3.10.0, Nextflow, Docker, Python, Bash, GitHub Actions and an AWS-ready runner**. Raw sequencing data and large results are kept outside the repository.
 
 [Open Project 07 →](projects/07_wes_variant_analysis/)
 
@@ -181,7 +181,7 @@ Shared cloud documentation and the EC2 runner are maintained under [cloud/aws](c
 
 This pattern will be reused for the remaining WES, single-cell RNA-seq, miRNA-seq and methylation projects.
 
-*Project 07 core deliverable is complete for the validated local HCC1395/HCC1395BL run. The GSE179296 / Sample 1001 public pilot is documented as a separate optional extension and has not been confirmed as executed. AWS execution remains a planned deployment path; the completed local run did not use AWS.
+*Project 07 core deliverable is complete for the HCC1395/HCC1395BL local run. AWS execution remains an optional deployment path; the completed local run did not use AWS.
 
 ## Reproducibility
 
