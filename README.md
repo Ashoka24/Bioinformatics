@@ -16,7 +16,7 @@ The projects are designed to demonstrate real-world analysis skills, reproducibl
 | 04 | [Nextflow / nf-core Pipeline](projects/04_nfcore_pipeline/) | Nextflow, nf-core, Docker, workflow engineering | 🟢 Completed |
 | 05 | [Bioinformatics + Machine Learning](projects/05_bioinformatics_ml/) | Transcriptomics, feature selection, scikit-learn | 🟢 Completed |
 | 06 | [RNA-seq Differential Expression](projects/06_rnaseq_differential_expression/) | Bulk RNA-seq, DESeq2, paired differential expression | 🟢 Completed |
-| 07 | [WES Variant Analysis](projects/07_wes_variant_analysis/) | WES, tumor/normal somatic variants, nf-core/sarek | 🟢 Core project completed — validated local HCC1395 run; public P1001 pilot is an optional extension |
+| 07 | [WES Variant Analysis](projects/07_wes_variant_analysis/) | WES, tumor/normal somatic variants, nf-core/sarek | 🟢 Completed — HCC1395/HCC1395BL tumor-normal run with samplesheet validation |
 
 ---
 
@@ -158,10 +158,12 @@ Paired bulk RNA-seq analysis of human CD4 T-cell samples from oral mucosa and bl
 
 ## Project 07 — WES Variant Analysis
 
-Whole-exome sequencing workflow for matched tumor/normal somatic variant analysis. The repository distinguishes the completed local run from the separate public pilot.
+Whole-exome sequencing workflow for matched tumor/normal somatic variant analysis using the actual analyzed pair.
 
-- **Completed local run:** normal `HCC1395BL` (`status=0`) + tumor `HCC1395` (`status=1`). The published annotated VCF is labeled `HCC1395_vs_HCC1395BL` and contains 5,289 records.
-- **Planned public pilot:** GSE179296 • SRP326537 • PRJNA743078 • Sample 1001, with normal `N1001` / GSM5413848 and tumor `T1001` / GSM5413849. Execution of this public pilot is not yet confirmed.
+- **Normal:** `HCC1395BL` (`status=0`)
+- **Tumor:** `HCC1395` (`status=1`)
+- **Pair label:** `HCC1395_vs_HCC1395BL`; the annotated VCF contains 5,289 records.
+- **Input validation:** a project validator checks samplesheet columns, matched-pair status, FASTQ file existence and gzip integrity before execution.
 
 **Workflow:** SRA → FASTQ → QC → alignment → BAM processing → BQSR → Mutect2 tumor/normal calling → filtering → VEP annotation → VCF/QC report.
 
