@@ -40,7 +40,7 @@ Use Python 3.10 or 3.11 in a supported environment:
     python scripts/validate_inputs.py --input data/raw/filtered_gene_bc_matrices/hg19
     python scripts/run_analysis.py --config config/analysis.json --input data/raw/filtered_gene_bc_matrices/hg19 --output results
 
-These are reproducibility instructions, not a claim that the analysis has already run. GitHub Actions performs static and unit checks without requiring a local machine.
+These are reproducibility instructions, not a claim that the analysis has already run. GitHub Actions performs static and unit checks and, on pushes to `main` that touch this project, attempts the complete dataset download and analysis in a cloud runner. The full run uploads generated outputs as a workflow artifact for 14 days; no local machine is required.
 
 ## Outputs generated when the workflow is run
 
@@ -58,7 +58,7 @@ These are reproducibility instructions, not a claim that the analysis has alread
     python -m unittest discover -s tests -v
     python scripts/validate_inputs.py --input <matrix-directory>
 
-The validator checks file presence, not matrix content or biological quality. GitHub Actions compiles scripts and runs unit tests; it does not download the full dataset or claim completed biological analysis.
+The validator checks file presence, not matrix content or biological quality. GitHub Actions compiles scripts, validates the JSON configuration, and runs unit tests. Pushes to `main` that touch this project also trigger a cloud analysis job; check the Actions run and artifact before treating the analysis as successful.
 
 ## Limitations
 
