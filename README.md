@@ -16,7 +16,7 @@ The projects are designed to demonstrate real-world analysis skills, reproducibl
 | 04 | [Nextflow / nf-core Pipeline](projects/04_nfcore_pipeline/) | Nextflow, nf-core, Docker, workflow engineering | 🟢 Completed |
 | 05 | [Bioinformatics + Machine Learning](projects/05_bioinformatics_ml/) | Transcriptomics, feature selection, scikit-learn | 🟢 Completed |
 | 06 | [RNA-seq Differential Expression](projects/06_rnaseq_differential_expression/) | Bulk RNA-seq, DESeq2, paired differential expression | 🟢 Completed |
-| 07 | [WES Variant Analysis](projects/07_wes_variant_analysis/) | WES, tumor/normal somatic variants, nf-core/sarek | 🟡 Local HCC1395 run complete; public P1001 pilot pending |
+| 07 | [WES Variant Analysis](projects/07_wes_variant_analysis/) | WES, tumor/normal somatic variants, nf-core/sarek | 🟢 Core project completed — validated local HCC1395 run; public P1001 pilot is an optional extension |
 
 ---
 
@@ -177,7 +177,9 @@ The omics projects share a common AWS-ready execution pattern:
 
 Shared cloud documentation and the EC2 runner are maintained under [cloud/aws](cloud/aws/) and [AWS Omics Architecture](docs/AWS_OMICS_ARCHITECTURE.md).
 
-This pattern will be reused for the remaining WES, single-cell RNA-seq, miRNA-seq and methylation projects.\n\n*Project 07 workflow, metadata, automation and CI are documented. A separate local HCC1395/HCC1395BL run completed and is reported in the project. The GSE179296 / Sample 1001 public pilot has not yet been confirmed as executed; do not conflate it with the HCC1395 run. AWS execution remains a planned deployment path, not a claim that the local run used AWS.
+This pattern will be reused for the remaining WES, single-cell RNA-seq, miRNA-seq and methylation projects.
+
+*Project 07 core deliverable is complete for the validated local HCC1395/HCC1395BL run. The GSE179296 / Sample 1001 public pilot is documented as a separate optional extension and has not been confirmed as executed. AWS execution remains a planned deployment path; the completed local run did not use AWS.
 
 ## Reproducibility
 
