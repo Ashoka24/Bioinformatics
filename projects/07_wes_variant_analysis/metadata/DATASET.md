@@ -1,48 +1,34 @@
-# Dataset — Project 07 WES
+# Dataset and sample manifest — Project 07
 
-## Public NCBI dataset
+## Actual analyzed pair
 
-**NCBI GEO:** GSE179296 — *COL11A1 mutations in cutaneous squamous cell carcinoma [WES]*  
-**NCBI SRA study:** SRP326537  
-**BioProject:** PRJNA743078  
-**Platform:** Illumina HiSeq 2500  
-**Capture:** Agilent SureSelect Human All Exon V5 (51 Mb)  
-**Reads:** 2 × 100 bp paired-end  
-**Reference reported by the study:** hg38 / GRCh38
+This project uses the matched tumor/normal pair recorded in the completed local run report.
 
-NCBI reports 66 samples in the series, arranged as matched normal skin and cSCC tumor samples for 33 sample IDs. The study describes BWA-MEM alignment, duplicate marking, base recalibration, Mutect2 somatic calling and FilterMutectCalls filtering. citeturn2search0turn1view0
+| Patient ID | Sample ID | Role | Sarek status | Expected FASTQ prefix |
+|---|---|---|---|---|
+| HCC1395 | HCC1395BL | Normal | 0 | `HCC1395_N` |
+| HCC1395 | HCC1395 | Tumor | 1 | `HCC1395_T` |
 
-## Portfolio pilot pair
+Expected local files:
 
-| Patient | Role | GEO |
-|---|---|---|
-| 1001 | Normal | GSM5413848 |
-| 1001 | Tumor | GSM5413849 |
+- `work/fastq/hcc1395/HCC1395_N_R1.recovered.fastq.gz`
+- `work/fastq/hcc1395/HCC1395_N_R2.recovered.fastq.gz`
+- `work/fastq/hcc1395/HCC1395_T_R1.fastq.gz`
+- `work/fastq/hcc1395/HCC1395_T_R2.fastq.gz`
 
-The tumor sample is explicitly identified by NCBI as **Sample 1001 Tumor**, using the same 51 Mb SureSelect capture and 2 × 100 bp sequencing design. citeturn2search4
+These files are inputs on the analysis machine and are intentionally not stored in GitHub. The sample IDs, roles, and output pair label are aligned with `results/hcc1395_sarek/REPORT.md`.
 
-The corresponding SRA run accessions are resolved at runtime from the NCBI study metadata rather than guessed or hard-coded.
+## Validation
 
-## Download strategy
+Run from the project directory:
 
-Raw reads remain in NCBI SRA and are **not committed to GitHub**. The workflow resolves the selected GEO records to run-level accessions and downloads the FASTQ files at execution time.
+```bash
+python3 scripts/validate_samplesheet.py
+python3 scripts/validate_samplesheet.py --check-files
+```
 
-The AWS implementation stages the reads into S3 before compute. This keeps large sequencing files out of Git and allows the same workflow to run on EC2.
-
-## Reference
-
-The study reports **hg38 / GRCh38**. The portfolio records the exact GATK GRCh38 resource release used for each run. citeturn1view0
+The first command checks the samplesheet schema and matched tumor/normal assignments. The second also verifies that all four FASTQ files exist and that each gzip stream can be read to completion. Do not report file-level validation as passed until the second command succeeds on the machine containing the actual FASTQs.
 
 ## Scope
 
-1. SRA → FASTQ retrieval
-2. read QC
-3. WES alignment
-4. duplicate marking
-5. base-quality recalibration
-6. tumor/normal somatic calling
-7. variant filtering
-8. functional annotation
-9. QC and summary reporting
-
-This is a research/portfolio workflow, not a clinical diagnostic pipeline.
+The workflow covers read QC, WES alignment and BAM processing, matched tumor/normal somatic calling, variant filtering, VEP annotation, and QC reporting. This is a research/portfolio workflow, not a clinical diagnostic pipeline.
