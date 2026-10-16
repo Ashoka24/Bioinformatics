@@ -126,6 +126,62 @@ def main() -> int:
     plt.savefig(figures / "umap_clusters.png", bbox_inches="tight")
     plt.close("all")
 
+    # Keep labels conservative: these are working interpretations of the
+    # observed marker patterns, not reference-mapped or experimentally
+    # validated cell identities.
+    annotation_notes = {
+        "0": ("T-cell-enriched", "CD3D; inspect IL7R, CCR7, CD4 and CD8A before finer labels", "moderate"),
+        "1": ("Classical monocyte-like", "LYZ; S100A8; S100A9; FCN1", "high"),
+        "2": ("Cytotoxic T/NK-like", "NKG7; GZMA; CCL5; PRF1", "moderate"),
+        "3": ("B-cell-like", "CD79A; CD79B; MS4A1; CD74", "high"),
+        "4": ("FCGR3A-positive monocyte-like", "FCGR3A; LST1; FCER1G; AIF1", "moderate"),
+        "5": ("Dendritic/APC-like; small cluster", "FCER1A; CLEC10A; HLA class II genes", "low"),
+        "6": ("Unresolved; possible cell-cycle signal", "KIAA0101; HMGB2; insufficient evidence for a firm label", "low"),
+        "7": ("Platelet-associated", "PPBP; PF4; SDPR; GNG11", "moderate"),
+        "8": ("Unresolved; very small cluster", "Ribosomal-dominated signature; no clear specific marker pattern", "low"),
+    }
+    cluster_counts = adata.obs["leiden"].astype(str).value_counts()
+    annotation_rows = []
+    for cluster in sorted(cluster_counts.index, key=lambda value: int(value)):
+        label, evidence, confidence = annotation_notes.get(
+            cluster, ("Unannotated", "No manual note supplied; inspect cluster markers", "low")
+        )
+        annotation_rows.append({
+            "cluster": cluster,
+            "cell_count": int(cluster_counts[cluster]),
+            "working_label": label,
+            "marker_evidence_to_review": evidence,
+            "confidence": confidence,
+            "status": "provisional; verify against marker expression and references",
+        })
+    import pandas as pd
+    pd.DataFrame(annotation_rows).to_csv(args.output / "cluster_annotations.csv", index=False)
+
+    marker_groups = {
+        "T cells": ["CD3D", "CD3E", "IL7R", "CCR7", "CD4", "CD8A"],
+        "Cytotoxic": ["NKG7", "GNLY", "PRF1", "GZMA"],
+        "B cells": ["MS4A1", "CD79A", "CD79B", "CD74"],
+        "Monocytes": ["LYZ", "S100A8", "S100A9", "FCN1", "FCGR3A", "LST1"],
+        "Dendritic/APC": ["FCER1A", "CLEC10A", "HLA-DRA"],
+        "Platelet": ["PPBP", "PF4", "SDPR"],
+    }
+    present_marker_groups = {
+        label: [gene for gene in genes if gene in adata.raw.var_names]
+        for label, genes in marker_groups.items()
+    }
+    present_marker_groups = {label: genes for label, genes in present_marker_groups.items() if genes}
+    if present_marker_groups:
+        sc.pl.dotplot(
+            adata,
+            var_names=present_marker_groups,
+            groupby="leiden",
+            use_raw=True,
+            standard_scale="var",
+            show=False,
+        )
+        plt.savefig(figures / "dotplot_canonical_markers.png", bbox_inches="tight")
+        plt.close("all")
+
     top_genes = markers.groupby("group", sort=True).head(3)["names"].dropna().astype(str).unique().tolist()
     if top_genes:
         sc.pl.umap(adata, color=top_genes[:6], show=False)
