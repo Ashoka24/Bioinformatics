@@ -24,5 +24,7 @@ jobs:
           python-version: "3.11"
       - name: Compile scripts
         run: python -m compileall -q scripts tests
+      - name: Validate analysis configuration JSON
+        run: python -m json.tool config/analysis.json > /dev/null
       - name: Run validator tests
         run: python -m unittest discover -s tests -v
