@@ -11,17 +11,58 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import scanpy as sc
 
+DEFAULT_CONFIG = Path("config/analysis.json")
+
+
+def load_config(path: Path) -> dict:
+    """Load and minimally validate analysis parameters from a JSON config."""
+    try:
+        config = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise SystemExit(f"Could not read config file {path}: {exc}") from exc
+    if not isinstance(config, dict):
+        raise SystemExit(f"Config must contain a JSON object: {path}")
+    return config
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--input", type=Path, default=Path("data/raw/filtered_gene_bc_matrices/hg19"))
     parser.add_argument("--output", type=Path, default=Path("results"))
-    parser.add_argument("--min-genes", type=int, default=200)
-    parser.add_argument("--max-genes", type=int, default=6000)
-    parser.add_argument("--min-cells", type=int, default=3)
-    parser.add_argument("--max-pct-mt", type=float, default=20.0)
-    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--min-genes", type=int)
+    parser.add_argument("--max-genes", type=int)
+    parser.add_argument("--min-cells", type=int)
+    parser.add_argument("--max-pct-mt", type=float)
+    parser.add_argument("--target-sum", type=float)
+    parser.add_argument("--n-top-genes", type=int)
+    parser.add_argument("--n-pcs", type=int)
+    parser.add_argument("--n-neighbors", type=int)
+    parser.add_argument("--leiden-resolution", type=float)
+    parser.add_argument("--seed", type=int)
     args = parser.parse_args()
+
+    config = load_config(args.config)
+    params = {
+        "min_genes": args.min_genes if args.min_genes is not None else config.get("min_genes_per_cell", 200),
+        "max_genes": args.max_genes if args.max_genes is not None else config.get("max_genes_per_cell", 6000),
+        "min_cells": args.min_cells if args.min_cells is not None else config.get("min_cells_per_gene", 3),
+        "max_pct_mt": args.max_pct_mt if args.max_pct_mt is not None else config.get("max_pct_mt", 20.0),
+        "target_sum": args.target_sum if args.target_sum is not None else config.get("target_sum", 10000),
+        "n_top_genes": args.n_top_genes if args.n_top_genes is not None else config.get("n_top_genes", 2000),
+        "n_pcs": args.n_pcs if args.n_pcs is not None else config.get("n_pcs", 30),
+        "n_neighbors": args.n_neighbors if args.n_neighbors is not None else config.get("n_neighbors", 15),
+        "leiden_resolution": args.leiden_resolution if args.leiden_resolution is not None else config.get("leiden_resolution", 0.8),
+        "seed": args.seed if args.seed is not None else config.get("random_seed", 42),
+    }
+    if params["min_genes"] < 0 or params["max_genes"] < params["min_genes"]:
+        raise SystemExit("Require 0 <= min_genes <= max_genes.")
+    if params["min_cells"] < 1 or params["target_sum"] <= 0:
+        raise SystemExit("min_cells must be >= 1 and target_sum must be positive.")
+    if params["n_top_genes"] < 2 or params["n_pcs"] < 2 or params["n_neighbors"] < 2:
+        raise SystemExit("n_top_genes, n_pcs, and n_neighbors must each be >= 2.")
+    if not 0 <= params["max_pct_mt"] <= 100 or params["leiden_resolution"] <= 0:
+        raise SystemExit("max_pct_mt must be in [0, 100] and leiden_resolution must be positive.")
 
     args.output.mkdir(parents=True, exist_ok=True)
     figures = args.output / "figures"
@@ -45,29 +86,32 @@ def main() -> int:
     plt.close("all")
 
     keep = (
-        (adata.obs["n_genes_by_counts"] >= args.min_genes)
-        & (adata.obs["n_genes_by_counts"] <= args.max_genes)
-        & (adata.obs["pct_counts_mt"] <= args.max_pct_mt)
+        (adata.obs["n_genes_by_counts"] >= params["min_genes"])
+        & (adata.obs["n_genes_by_counts"] <= params["max_genes"])
+        & (adata.obs["pct_counts_mt"] <= params["max_pct_mt"])
     )
     adata = adata[keep].copy()
-    sc.pp.filter_genes(adata, min_cells=args.min_cells)
+    sc.pp.filter_genes(adata, min_cells=params["min_cells"])
     filtered_shape = {"cells": int(adata.n_obs), "genes": int(adata.n_vars)}
     if adata.n_obs < 3 or adata.n_vars < 3:
         raise SystemExit("Too few cells or genes remain; review thresholds and input matrix.")
 
     adata.layers["counts"] = adata.X.copy()
-    sc.pp.normalize_total(adata, target_sum=1e4)
+    sc.pp.normalize_total(adata, target_sum=params["target_sum"])
     sc.pp.log1p(adata)
-    sc.pp.highly_variable_genes(adata, n_top_genes=min(2000, max(1, adata.n_vars - 1)), flavor="seurat")
+    n_top_genes = min(params["n_top_genes"], max(2, adata.n_vars - 1))
+    sc.pp.highly_variable_genes(adata, n_top_genes=n_top_genes, flavor="seurat")
     adata.var[adata.var["highly_variable"]].to_csv(args.output / "highly_variable_genes.csv")
     adata = adata[:, adata.var["highly_variable"]].copy()
     sc.pp.scale(adata, max_value=10)
-    sc.tl.pca(adata, svd_solver="arpack", random_state=args.seed)
-    n_pcs = min(30, max(2, adata.obsm["X_pca"].shape[1] - 1))
-    sc.pp.neighbors(adata, n_neighbors=min(15, max(2, adata.n_obs - 1)), n_pcs=n_pcs, random_state=args.seed)
-    sc.tl.umap(adata, random_state=args.seed)
+    sc.tl.pca(adata, svd_solver="arpack", random_state=params["seed"])
+    available_pcs = int(adata.obsm["X_pca"].shape[1])
+    n_pcs = min(params["n_pcs"], max(2, available_pcs - 1))
+    n_neighbors = min(params["n_neighbors"], max(2, adata.n_obs - 1))
+    sc.pp.neighbors(adata, n_neighbors=n_neighbors, n_pcs=n_pcs, random_state=params["seed"])
+    sc.tl.umap(adata, random_state=params["seed"])
     try:
-        sc.tl.leiden(adata, resolution=0.8, random_state=args.seed, key_added="leiden")
+        sc.tl.leiden(adata, resolution=params["leiden_resolution"], random_state=params["seed"], key_added="leiden")
     except ImportError as exc:
         raise SystemExit("Install project requirements, including python-igraph and leidenalg.") from exc
 
@@ -86,14 +130,15 @@ def main() -> int:
     adata.write_h5ad(args.output / "pbmc3k_processed.h5ad", compression="gzip")
 
     metadata = {
-        "dataset": "10x Genomics 3k PBMCs from a Healthy Donor",
+        "dataset": config.get("dataset_name", "10x Genomics 3k PBMCs from a Healthy Donor"),
         "dataset_page": "https://www.10xgenomics.com/datasets/3-k-pbm-cells-from-a-healthy-donor-1-standard-1-1-0",
         "python_version": platform.python_version(),
         "scanpy_version": sc.__version__,
         "anndata_version": anndata.__version__,
-        "seed": args.seed,
-        "parameters": {"min_genes": args.min_genes, "max_genes": args.max_genes,
-                       "min_cells": args.min_cells, "max_pct_mt": args.max_pct_mt},
+        "parameters": params,
+        "effective_n_top_genes": n_top_genes,
+        "effective_n_pcs": n_pcs,
+        "effective_n_neighbors": n_neighbors,
         "input_shape": input_shape,
         "filtered_shape": filtered_shape,
         "interpretation": "Exploratory results; clusters are not clinical findings."
