@@ -16,7 +16,8 @@ The projects are designed to demonstrate real-world analysis skills, reproducibl
 | 04 | [Nextflow / nf-core Pipeline](projects/04_nfcore_pipeline/) | Nextflow, nf-core, Docker, workflow engineering | 🟢 Completed |
 | 05 | [Bioinformatics + Machine Learning](projects/05_bioinformatics_ml/) | Transcriptomics, feature selection, scikit-learn | 🟢 Completed |
 | 06 | [RNA-seq Differential Expression](projects/06_rnaseq_differential_expression/) | Bulk RNA-seq, DESeq2, paired differential expression | 🟢 Completed |
-| 07 | [WES Variant Analysis](projects/07_wes_variant_analysis/) | WES, tumor/normal somatic variants, nf-core/sarek | 🟢 Completed — HCC1395/HCC1395BL tumor-normal run with samplesheet validation |\n| 08 | [Single-Cell RNA-seq Analysis](projects/08_single_cell_rnaseq/) | PBMC 3k, Scanpy, QC, PCA, UMAP, Leiden clustering, marker annotation | 🟢 Core analysis completed; latest annotation outputs pending verification |
+| 07 | [WES Variant Analysis](projects/07_wes_variant_analysis/) | WES, tumor/normal somatic variants, nf-core/sarek | 🟢 Completed — HCC1395/HCC1395BL tumor-normal run with samplesheet validation |
+| 08 | [Single-Cell RNA-seq Analysis](projects/08_single_cell_rnaseq/) | PBMC 3k, Scanpy, QC, PCA, UMAP, Leiden clustering, marker annotation | 🟡 Core analysis completed; latest annotation outputs pending verification |
 
 ---
 
