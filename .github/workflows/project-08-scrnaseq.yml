@@ -1,0 +1,28 @@
+name: Project 08 scRNA-seq checks
+
+on:
+  push:
+    paths:
+      - "projects/08_single_cell_rnaseq/**"
+      - ".github/workflows/project-08-scrnaseq.yml"
+  pull_request:
+    paths:
+      - "projects/08_single_cell_rnaseq/**"
+      - ".github/workflows/project-08-scrnaseq.yml"
+  workflow_dispatch:
+
+jobs:
+  static-and-unit-checks:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: projects/08_single_cell_rnaseq
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile scripts
+        run: python -m compileall -q scripts tests
+      - name: Run validator tests
+        run: python -m unittest discover -s tests -v

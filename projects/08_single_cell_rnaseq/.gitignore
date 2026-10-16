@@ -1,0 +1,16 @@
+data/raw/
+data/processed/
+results/
+*.h5
+*.h5ad
+*.mtx
+*.mtx.gz
+*.tsv
+*.tsv.gz
+*.csv.gz
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+.DS_Store
