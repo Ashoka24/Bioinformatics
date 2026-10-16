@@ -99,6 +99,10 @@ def main() -> int:
     adata.layers["counts"] = adata.X.copy()
     sc.pp.normalize_total(adata, target_sum=params["target_sum"])
     sc.pp.log1p(adata)
+    # Preserve normalized log-expression for marker statistics before scaling.
+    # Rank genes on this representation, not on z-scored values (which can
+    # produce undefined fold changes when exponentiated).
+    adata.raw = adata.copy()
     n_top_genes = min(params["n_top_genes"], max(2, adata.n_vars - 1))
     sc.pp.highly_variable_genes(adata, n_top_genes=n_top_genes, flavor="seurat")
     adata.var[adata.var["highly_variable"]].to_csv(args.output / "highly_variable_genes.csv")
@@ -115,7 +119,7 @@ def main() -> int:
     except ImportError as exc:
         raise SystemExit("Install project requirements, including python-igraph and leidenalg.") from exc
 
-    sc.tl.rank_genes_groups(adata, groupby="leiden", method="wilcoxon")
+    sc.tl.rank_genes_groups(adata, groupby="leiden", method="wilcoxon", use_raw=True)
     markers = sc.get.rank_genes_groups_df(adata, group=None)
     markers.to_csv(args.output / "marker_genes.csv", index=False)
     sc.pl.umap(adata, color=["leiden"], show=False)
