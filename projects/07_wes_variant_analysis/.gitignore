@@ -1,0 +1,24 @@
+# Project-local working data and temporary files
+work/
+null/
+
+# Local backup copies of configuration
+config/*.backup
+config/*.pre_identity_update.csv
+
+# Unverified/optional public pilot outputs; keep out of Git until reviewed
+results/p1001/
+
+# Regenerable MultiQC detail files (retain the curated HTML report)
+results/hcc1395_sarek/multiqc/index.json
+results/hcc1395_sarek/multiqc/multiqc_data/
+results/hcc1395_sarek/multiqc/multiqc_plots/
+
+# Large/generated Sarek execution outputs; publish selected validated deliverables only
+results/hcc1395_sarek/pipeline_info/
+results/hcc1395_sarek/preprocessing/
+results/hcc1395_sarek/reports/
+results/hcc1395_sarek/variant_calling/
+
+# Local machine-specific metadata exports; commit only after review
+metadata/hcc1395_sra_metadata.xml
