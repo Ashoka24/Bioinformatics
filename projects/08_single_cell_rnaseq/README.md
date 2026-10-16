@@ -1,79 +1,66 @@
 # Project 08 — Single-Cell RNA-seq Analysis
 
-A reproducible single-cell RNA sequencing workflow using Scanpy and the public 10x Genomics PBMC 3k dataset. This project is being built directly in GitHub; no local execution is required to create the repository structure.
+I used the public 10x Genomics PBMC 3k dataset to explore gene-expression patterns in peripheral blood mononuclear cells. The analysis was run in GitHub Actions, so it did not depend on my local machine.
 
-## Objective
+## What I did
 
-Explore PBMC gene-expression data through quality control, normalization, highly variable gene selection, PCA, neighborhood graph construction, UMAP, Leiden clustering, and marker-gene ranking.
+- Downloaded and checked the filtered gene-expression matrix.
+- Looked at basic cell and gene quality metrics and filtered low-quality entries.
+- Normalized the counts and selected highly variable genes.
+- Used PCA, a neighbour graph and UMAP to explore the data.
+- Grouped cells with Leiden clustering and ranked marker genes for each cluster.
+- Saved the processed data, tables and plots as workflow outputs.
 
-## Dataset and provenance
+## Dataset
 
-- Dataset: 10x Genomics, 3k PBMCs from a Healthy Donor
-- Official page: https://www.10xgenomics.com/datasets/3-k-pbm-cells-from-a-healthy-donor-1-standard-1-1-0
-- Expected data: filtered feature-barcode matrix (Matrix Market matrix, barcodes, and genes/features)
-- Download with: python scripts/download_data.py
-- Downloaded matrices and generated results are excluded from Git.
+- **Dataset:** 3k PBMCs from a healthy donor
+- **Source:** [10x Genomics](https://www.10xgenomics.com/datasets/3-k-pbm-cells-from-a-healthy-donor-1-standard-1-1-0)
+- **Reference:** hg19
+- **Tools:** Python, Scanpy, AnnData and GitHub Actions
 
-The downloader uses the commonly used 10x PBMC3k archive endpoint and reports the official dataset page as provenance. Verify the vendor page if the archive URL or file layout changes.
+## Results
 
-## Workflow
+The cloud run started with **2,700 cells and 32,738 genes**. After filtering, **2,699 cells and 13,714 genes** remained. The analysis selected **2,000 highly variable genes** and produced a marker-gene table with **123,426 records**.
 
-1. Download and extract the public filtered matrix.
-2. Validate expected matrix, barcode, and feature files.
-3. Calculate cell QC metrics and export QC summaries.
-4. Filter cells and genes using configurable thresholds.
-5. Load analysis thresholds from `config/analysis.json`; normalize counts, log-transform, and identify highly variable genes.
-6. Run scaling, PCA, neighborhood graph, and UMAP.
-7. Cluster with Leiden and rank marker genes.
-8. Export tables, plots, an AnnData object, and run metadata.
+The run completed successfully in [GitHub Actions](https://github.com/Ashoka24/Bioinformatics/actions/runs/38929166318). The workflow uploaded an artifact containing the processed AnnData file, QC metrics, marker tables, cluster annotations, run metadata and plots.
 
-## Quick start
+## How to run it again
 
-Use Python 3.10 or 3.11 in a supported environment:
+The workflow can be run through GitHub Actions, or locally with Python 3.10 or 3.11:
 
-    python -m venv .venv
-    # Windows: .venv\Scripts\activate
-    # macOS/Linux: source .venv/bin/activate
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-    python scripts/download_data.py
-    python scripts/validate_inputs.py --input data/raw/filtered_gene_bc_matrices/hg19
-    python scripts/run_analysis.py --config config/analysis.json --input data/raw/filtered_gene_bc_matrices/hg19 --output results
+```bash
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+# macOS/Linux: source .venv/bin/activate
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+python scripts/download_data.py
+python scripts/validate_inputs.py --input data/raw/filtered_gene_bc_matrices/hg19
+python scripts/run_analysis.py --config config/analysis.json --input data/raw/filtered_gene_bc_matrices/hg19 --output results
+```
 
-These are reproducibility instructions, not a claim that the analysis has already run. GitHub Actions performs static and unit checks and, on pushes to `main` that touch this project, attempts the complete dataset download and analysis in a cloud runner. The full run uploads generated outputs as a workflow artifact for 14 days; no local machine is required.
+These commands are included so the analysis can be reproduced; the results above are from the completed GitHub Actions run.
 
-## Outputs generated when the workflow is run
+## Outputs
 
-- results/qc_metrics.csv
-- results/highly_variable_genes.csv
-- results/marker_genes.csv
-- results/cluster_annotations.csv
-- results/pbmc3k_processed.h5ad
-- results/run_metadata.json
-- results/figures/qc_violin.png
-- results/figures/umap_clusters.png
-- results/figures/umap_marker_genes.png
-- results/figures/dotplot_canonical_markers.png
+The workflow artifact includes:
 
-## Validation
+- `qc_metrics.csv`
+- `highly_variable_genes.csv`
+- `marker_genes.csv`
+- `cluster_annotations.csv`
+- `pbmc3k_processed.h5ad`
+- `run_metadata.json`
+- QC, UMAP and canonical-marker plots
 
-    python -m unittest discover -s tests -v
-    python scripts/validate_inputs.py --input <matrix-directory>
+Generated results and the raw dataset are kept out of the Git repository. The workflow artifact is available for a limited time, so rerun the workflow if it has expired.
 
-The validator checks file presence, not matrix content or biological quality. GitHub Actions compiles scripts, validates the JSON configuration, and runs unit tests. Pushes to `main` that touch this project also trigger a cloud analysis job; check the Actions run and artifact before treating the analysis as successful.
+## A few things to keep in mind
 
-## Limitations
-
-- QC cutoffs and dimensionality/clustering settings are read from `config/analysis.json`; command-line options can override individual values. Cutoffs remain dataset-dependent.
-- Leiden clusters are not automatically validated cell types.
-- UMAP is a visualization, not proof of biological separation.
-- `cluster_annotations.csv` contains working labels and the marker evidence to check; labels are provisional, not automated reference mapping.
-- `dotplot_canonical_markers.png` compares selected PBMC marker genes across clusters. Missing genes are omitted if they are absent from the input matrix.
-- Marker genes require multi-marker and reference-based interpretation.
-- This is an exploratory portfolio workflow, not a clinical diagnostic pipeline.
+The cluster labels are preliminary and should be checked against known marker genes and suitable references. UMAP is useful for visualizing patterns, but it does not prove that clusters are biologically distinct. This dataset comes from one healthy donor, so individual cells should not be treated as independent biological replicates for population-level conclusions. This is an exploratory analysis, not a clinical diagnostic tool.
 
 ## References
 
-- 10x Genomics dataset: https://www.10xgenomics.com/datasets/3-k-pbm-cells-from-a-healthy-donor-1-standard-1-1-0
-- Scanpy: https://scanpy.readthedocs.io/
-- AnnData: https://anndata.readthedocs.io/
+- [10x Genomics PBMC 3k dataset](https://www.10xgenomics.com/datasets/3-k-pbm-cells-from-a-healthy-donor-1-standard-1-1-0)
+- [Scanpy documentation](https://scanpy.readthedocs.io/)
+- [AnnData documentation](https://anndata.readthedocs.io/)
