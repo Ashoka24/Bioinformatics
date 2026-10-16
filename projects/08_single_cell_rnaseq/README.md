@@ -22,7 +22,7 @@ The downloader uses the commonly used 10x PBMC3k archive endpoint and reports th
 2. Validate expected matrix, barcode, and feature files.
 3. Calculate cell QC metrics and export QC summaries.
 4. Filter cells and genes using configurable thresholds.
-5. Normalize counts, log-transform, and identify highly variable genes.
+5. Load analysis thresholds from `config/analysis.json`; normalize counts, log-transform, and identify highly variable genes.
 6. Run scaling, PCA, neighborhood graph, and UMAP.
 7. Cluster with Leiden and rank marker genes.
 8. Export tables, plots, an AnnData object, and run metadata.
@@ -38,7 +38,7 @@ Use Python 3.10 or 3.11 in a supported environment:
     pip install -r requirements.txt
     python scripts/download_data.py
     python scripts/validate_inputs.py --input data/raw/filtered_gene_bc_matrices/hg19
-    python scripts/run_analysis.py --input data/raw/filtered_gene_bc_matrices/hg19 --output results
+    python scripts/run_analysis.py --config config/analysis.json --input data/raw/filtered_gene_bc_matrices/hg19 --output results
 
 These are reproducibility instructions, not a claim that the analysis has already run. GitHub Actions performs static and unit checks without requiring a local machine.
 
@@ -62,7 +62,7 @@ The validator checks file presence, not matrix content or biological quality. Gi
 
 ## Limitations
 
-- QC cutoffs are configurable and dataset-dependent.
+- QC cutoffs and dimensionality/clustering settings are read from `config/analysis.json`; command-line options can override individual values. Cutoffs remain dataset-dependent.
 - Leiden clusters are not automatically validated cell types.
 - UMAP is a visualization, not proof of biological separation.
 - Marker genes require multi-marker and reference-based interpretation.
