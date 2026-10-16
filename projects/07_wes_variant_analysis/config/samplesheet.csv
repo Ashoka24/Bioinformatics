@@ -1,3 +1,3 @@
 patient,sample,lane,fastq_1,fastq_2,status
-P1001,N1001,L001,work/fastq/N1001_R1.fastq.gz,work/fastq/N1001_R2.fastq.gz,0
-P1001,T1001,L001,work/fastq/T1001_R1.fastq.gz,work/fastq/T1001_R2.fastq.gz,1
+HCC1395,HCC1395BL,L001,work/fastq/hcc1395/HCC1395_N_R1.recovered.fastq.gz,work/fastq/hcc1395/HCC1395_N_R2.recovered.fastq.gz,0
+HCC1395,HCC1395,L001,work/fastq/hcc1395/HCC1395_T_R1.fastq.gz,work/fastq/hcc1395/HCC1395_T_R2.fastq.gz,1
