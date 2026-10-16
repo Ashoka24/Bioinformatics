@@ -8,8 +8,8 @@ This project documents **two distinct matched tumor/normal pairs**. Their identi
 
 | Run | Normal sample ID | Tumor sample ID | Status | Which outputs belong to it? |
 |---|---|---|---|---|
-| Local completed run | `HCC1395BL` (`status=0`) | `HCC1395` (`status=1`) | Completed and validated locally | `results/hcc1395_sarek/`; VCF pair label `HCC1395_vs_HCC1395BL` |
-| Public pilot, Sample 1001 | `N1001` / GEO `GSM5413848` | `T1001` / GEO `GSM5413849` | Planned pilot; execution not confirmed | `config/samplesheet.csv` is the public-pilot samplesheet; no claim that the published HCC1395 VCF came from this pair |
+| **Core deliverable — completed** | `HCC1395BL` (`status=0`) | `HCC1395` (`status=1`) | **Completed and validated locally** | `results/hcc1395_sarek/`; VCF pair label `HCC1395_vs_HCC1395BL` |
+| Optional public extension, Sample 1001 | `N1001` / GEO `GSM5413848` | `T1001` / GEO `GSM5413849` | Documented extension; not executed/verified as part of the completed deliverable | `config/samplesheet.csv` is the public-pilot samplesheet; it is not the source of the published HCC1395 VCF |
 
 The curated VCF currently published in this repository is from the **HCC1395/HCC1395BL local run**, not Sample 1001. The local example samplesheet is [`config/samplesheet.hcc1395.example.csv`](config/samplesheet.hcc1395.example.csv); the public-pilot samplesheet remains [`config/samplesheet.csv`](config/samplesheet.csv).
 
@@ -187,9 +187,11 @@ Large sequencing, reference and workflow-result files stay outside GitHub. AWS c
 
 Cloud services are documented as the intended execution pattern; the completed HCC1395 run described below was local, not an AWS deployment.
 
-## Results status
+## Results status — core project completed
 
-The repository includes the reproducible GSE179296 / Sample 1001 workflow described above. A separate local Sarek run has also completed for the `HCC1395_vs_HCC1395BL` pair; its recorded validation summary is in [`results/hcc1395_sarek/REPORT.md`](results/hcc1395_sarek/REPORT.md). That run reported 5,289 VCF records, a present VEP `CSQ` header, and a passing gzip integrity check. It is documented separately and should not be confused with the GSE179296 / Sample 1001 pilot pair.
+**Completion status: COMPLETE for the local HCC1395/HCC1395BL matched tumor/normal workflow.** The execution report is in [`results/hcc1395_sarek/REPORT.md`](results/hcc1395_sarek/REPORT.md). Recorded validation includes 5,289 VCF records, a present VEP `CSQ` header, a passing gzip integrity check, and a present Tabix index. The index file was not independently query-tested in the recorded checks.
+
+The separate GSE179296 / Sample 1001 (`N1001` / `T1001`) public pilot remains a documented optional extension and is not included in the completed status. The repository does not claim that the HCC1395 results came from Sample 1001 or that AWS was used for the local run.
 
 Raw sequencing files, reference assets, Nextflow work files, and Docker storage are intentionally kept out of GitHub. Only reproducible code, reusable configuration, documentation, and selected lightweight reports should be version-controlled.
 
