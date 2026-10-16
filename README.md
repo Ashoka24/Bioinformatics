@@ -247,7 +247,8 @@ Diversity analysis • differential expression • statistical testing • Logis
 | 04 — Nextflow / nf-core Engineering | Nextflow, nf-core/rnaseq, Docker, GitHub Actions |
 | 05 — Bioinformatics + Machine Learning | Python, Pandas, NumPy, scikit-learn, Logistic Regression, Random Forest, ROC-AUC and average-precision evaluation |
 | 06 — RNA-seq Differential Expression | R, DESeq2, paired design, multiple-testing correction, PCA and differential-expression visualization |
-| 07 — WES Variant Analysis | nf-core/sarek 3.10.0, Nextflow, Docker, FastQC, MultiQC, Fastp, BWA-MEM2, SAMtools, GATK/Mutect2, VEP, Python, Bash, Git/GitHub, GitHub Actions, AWS S3/EC2/IAM |\n| 08 — Single-Cell RNA-seq | Python, Scanpy, AnnData, Pandas, SciPy, PCA, UMAP, Leiden, GitHub Actions |
+| 07 — WES Variant Analysis | nf-core/sarek 3.10.0, Nextflow, Docker, FastQC, MultiQC, Fastp, BWA-MEM2, SAMtools, GATK/Mutect2, VEP, Python, Bash, Git/GitHub, GitHub Actions, AWS S3/EC2/IAM |
+| 08 — Single-Cell RNA-seq | Python, Scanpy, AnnData, Pandas, SciPy, PCA, UMAP, Leiden, GitHub Actions |
 
 Tools listed describe each project's documented workflow; a tool's presence in a workflow does not by itself imply that every optional stage or cloud deployment has been executed.
 
