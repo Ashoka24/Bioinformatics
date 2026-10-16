@@ -17,7 +17,7 @@ The projects are designed to demonstrate real-world analysis skills, reproducibl
 | 05 | [Bioinformatics + Machine Learning](projects/05_bioinformatics_ml/) | Transcriptomics, feature selection, scikit-learn | 🟢 Completed |
 | 06 | [RNA-seq Differential Expression](projects/06_rnaseq_differential_expression/) | Bulk RNA-seq, DESeq2, paired differential expression | 🟢 Completed |
 | 07 | [WES Variant Analysis](projects/07_wes_variant_analysis/) | WES, tumor/normal somatic variants, nf-core/sarek | 🟢 Completed — HCC1395/HCC1395BL tumor-normal run with samplesheet validation |
-| 08 | [Single-Cell RNA-seq Analysis](projects/08_single_cell_rnaseq/) | PBMC 3k, Scanpy, QC, PCA, UMAP, Leiden clustering, marker annotation | 🟡 Core analysis completed; latest annotation outputs pending verification |
+| 08 | [Single-Cell RNA-seq Analysis](projects/08_single_cell_rnaseq/) | PBMC 3k, Scanpy, QC, PCA, UMAP, Leiden clustering, marker annotation | 🟢 Cloud run verified; annotation outputs generated |
 
 ---
 
@@ -193,7 +193,7 @@ Single-cell RNA-seq analysis of the public **10x Genomics PBMC 3k healthy-donor 
 - Highly variable genes: 2,000
 - Marker table: 123,426 records
 
-Cluster labels are provisional and should be reviewed against canonical markers. This is a single-donor dataset, so cells are not independent biological replicates and cell-level statistical results should not be interpreted as population-level evidence. The latest annotation-table and marker-dot-plot outputs still need confirmation from a post-merge cloud run.
+**Verified cloud run:** GitHub Actions run [38929166318](https://github.com/Ashoka24/Bioinformatics/actions/runs/38929166318) completed successfully on the merged `main` commit. Both the static/unit-check job and the full cloud-analysis job passed, and the run uploaded the `project-08-scrnaseq-results` artifact. The artifact was inspected and contains `cluster_annotations.csv`, `figures/dotplot_canonical_markers.png`, QC/UMAP plots, `qc_metrics.csv`, `highly_variable_genes.csv`, `marker_genes.csv`, `pbmc3k_processed.h5ad` and `run_metadata.json`. The metadata confirms 2,700 input cells / 32,738 genes, 2,699 cells / 13,714 genes after filtering, and 2,000 highly variable genes. The marker table contains 123,426 records.\n\nCluster labels remain provisional and should be reviewed against canonical markers. This is a single-donor dataset, so cells are not independent biological replicates and cell-level statistical results should not be interpreted as population-level evidence.
 
 The GitHub Actions workflow runs static/unit checks on pull requests and runs the full analysis on pushes to the main branch. Generated outputs are uploaded as a workflow artifact rather than committed with the raw data.
 
