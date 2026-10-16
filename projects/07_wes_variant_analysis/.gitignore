@@ -6,8 +6,6 @@ null/
 config/*.backup
 config/*.pre_identity_update.csv
 
-# Unverified/optional public pilot outputs; keep out of Git until reviewed
-results/p1001/
 
 # Regenerable MultiQC detail files (retain the curated HTML report)
 results/hcc1395_sarek/multiqc/index.json
