@@ -1,34 +1,33 @@
 # WES Results Directory
 
-This directory separates the completed local HCC1395/HCC1395BL run from the planned GSE179296 / Sample 1001 public pilot.
-
-## Completed local run
+## Completed local HCC1395/HCC1395BL run
 
 - **Tumor sample:** `HCC1395` (`status=1`)
 - **Normal sample:** `HCC1395BL` (`status=0`)
+- **Patient ID:** `HCC1395`
 - **Output pair label:** `HCC1395_vs_HCC1395BL`
-- [HCC1395 execution and validation report](hcc1395_sarek/REPORT.md)
-- Final filtered, VEP-annotated VCF reported by the run: `annotation/mutect2/HCC1395_vs_HCC1395BL/HCC1395_vs_HCC1395BL.mutect2.filtered_VEP.ann.vcf.gz`
+- [Execution and validation report](hcc1395_sarek/REPORT.md)
+- Final filtered VEP-annotated VCF reported by the run: `annotation/mutect2/HCC1395_vs_HCC1395BL/HCC1395_vs_HCC1395BL.mutect2.filtered_VEP.ann.vcf.gz`
 - MultiQC report reported by the run: `multiqc/multiqc_report.html`
 
-The report records 5,289 VCF records, a VEP `CSQ` header, passing gzip integrity validation, and a present Tabix index. The index query was not independently validated in the recorded checks. These are workflow-level checks, not clinical interpretation.
+The report records 5,289 VCF records, a VEP `CSQ` header, passing gzip integrity validation, and a present Tabix index. Index-query validation was not independently completed in the recorded checks.
 
-## Separate public pilot — not the source of the HCC1395 VCF
+## Samplesheet validation
 
-The planned GSE179296 / Sample 1001 pilot uses `N1001` as normal (GSM5413848) and `T1001` as tumor (GSM5413849), as configured in `config/samplesheet.csv`. Its execution is not confirmed in this repository. Do not label the published HCC1395/HCC1395BL results as Sample 1001.
+The root samplesheet, `../config/samplesheet.csv`, is configured for this pair. Validate its structure and pairing with:
 
-## Recommended publication policy
+```bash
+python3 scripts/validate_samplesheet.py
+```
 
-Include only selected, reviewable deliverables:
+From the project root, validate actual input file existence and gzip integrity with:
 
-1. FastQC HTML reports for the analyzed samples, when present.
-2. MultiQC HTML report and a concise QC summary.
-3. The final filtered, VEP-annotated VCF and its index, if file sizes and data-sharing permissions allow.
-4. Small summary tables and reproducible comparison metrics, if they were generated from actual outputs.
-5. A run manifest recording file paths, sizes, checksums, software versions, and validation status.
+```bash
+python3 scripts/validate_samplesheet.py --check-files
+```
 
-Do not commit raw FASTQ/SRA reads, BAM/CRAM files, large intermediate outputs, reference assets, Nextflow `work/` files, credentials, or machine-specific absolute paths. Keep the original P1001 samplesheet unchanged; store other sample configurations as separate example files.
+Raw FASTQ/SRA reads, BAM/CRAM files, reference assets, Nextflow work files, and credentials should remain outside GitHub. Publish only reviewed, appropriately sized outputs and summaries.
 
 ## Interpretation boundary
 
-A VCF record count is not a count of pathogenic variants. This project is for computational portfolio demonstration, not clinical diagnosis. Distinguish results actually produced by a run from planned steps and from biological interpretation.
+A VCF record count is not a count of pathogenic variants. This project demonstrates a computational workflow and is not a clinical diagnostic pipeline.
