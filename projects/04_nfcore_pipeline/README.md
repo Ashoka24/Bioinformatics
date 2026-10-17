@@ -28,6 +28,12 @@ nf-core/rnaseq test data → Nextflow → Docker containers → QC → trimming 
 - Test profile: test,docker
 - Output directory: results
 
+## Execution evidence
+
+The figure summarizes the successful GitHub Actions run recorded below. It is an execution-status summary, not a sequencing QC plot.
+
+![nf-core execution evidence](figures/04_ci_evidence.svg)
+
 ## CI verification
 
 **Status: 🟢 Completed**
