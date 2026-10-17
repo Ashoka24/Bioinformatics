@@ -1,5 +1,11 @@
 # Project 02 — IBS microbiome classification
 
+## Analysis evidence
+
+The figure summarizes the cohort size, genus-level feature count, and cross-validation metrics recorded in the project outputs. The read-processing statistics are available in `results/qc/deblur-stats/stats.csv`.
+
+![IBS cohort analysis evidence](results/figures/03_read_processing_evidence.svg)
+
 ## Overview figure
 
 ![IBS microbiome classification results overview](figures/03_overview.svg)
