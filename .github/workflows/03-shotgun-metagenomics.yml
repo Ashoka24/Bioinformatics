@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - "projects/03_shotgun_metagenomics/**"
+      - "shotgun-metagenomics/**"
       - ".github/workflows/03-shotgun-metagenomics.yml"
 
 permissions:
@@ -25,25 +25,25 @@ jobs:
           sudo apt-get install -y fastp kraken2 centrifuge curl
 
       - name: Run public shotgun analysis
-        run: bash projects/03_shotgun_metagenomics/scripts/run_shotgun.sh
+        run: bash shotgun-metagenomics/scripts/run_shotgun.sh
 
       - name: Verify derived results
         run: |
-          test -s projects/03_shotgun_metagenomics/results/run_metadata.tsv
-          test -s projects/03_shotgun_metagenomics/results/fastp_summary.json
-          test -s projects/03_shotgun_metagenomics/results/kraken2.report
-          test -s projects/03_shotgun_metagenomics/results/top_taxa.tsv
-          test -s projects/03_shotgun_metagenomics/results/centrifuge.report.tsv
-          test -s projects/03_shotgun_metagenomics/results/classifier_comparison.tsv
-          test -s projects/03_shotgun_metagenomics/results/CLASSIFIER_COMPARISON.md
-          test -s projects/03_shotgun_metagenomics/results/REPORT.md
-          test ! -e projects/03_shotgun_metagenomics/results/centrifuge.classification.tsv
+          test -s shotgun-metagenomics/results/run_metadata.tsv
+          test -s shotgun-metagenomics/results/fastp_summary.json
+          test -s shotgun-metagenomics/results/kraken2.report
+          test -s shotgun-metagenomics/results/top_taxa.tsv
+          test -s shotgun-metagenomics/results/centrifuge.report.tsv
+          test -s shotgun-metagenomics/results/classifier_comparison.tsv
+          test -s shotgun-metagenomics/results/CLASSIFIER_COMPARISON.md
+          test -s shotgun-metagenomics/results/REPORT.md
+          test ! -e shotgun-metagenomics/results/centrifuge.classification.tsv
 
       - name: Commit verified results
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add projects/03_shotgun_metagenomics/results
+          git add shotgun-metagenomics/results
           if git diff --cached --quiet; then
             echo "No result changes to commit"
           else
