@@ -3,7 +3,7 @@ name: Project 06 RNA-seq
 on:
   push:
     paths:
-      - "projects/06_rnaseq_differential_expression/**"
+      - "rnaseq-differential-expression/**"
       - ".github/workflows/project06_rnaseq.yml"
     branches:
       - main
@@ -27,11 +27,11 @@ jobs:
         run: Rscript -e 'library(DESeq2); library(ggplot2); cat("DESeq2:", as.character(packageVersion("DESeq2")), "\n")'
 
       - name: Run RNA-seq analysis
-        working-directory: projects/06_rnaseq_differential_expression
+        working-directory: rnaseq-differential-expression
         run: Rscript scripts/run_deseq2.R
 
       - name: Upload results
         uses: actions/upload-artifact@v4
         with:
           name: project06-rnaseq-results
-          path: projects/06_rnaseq_differential_expression/results/
+          path: rnaseq-differential-expression/results/
