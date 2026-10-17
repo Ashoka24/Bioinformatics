@@ -1,5 +1,8 @@
 # 01 — Public NCBI 16S Gut Microbiome Analysis
 
+## Overview figure
+
+![16S workflow and dataset overview](figures/03_overview.svg)
 End-to-end 16S rRNA amplicon workflow using a public NCBI SRA human stool run.
 
 ## Dataset
