@@ -21,6 +21,12 @@ I used the public 10x Genomics PBMC 3k dataset to explore gene-expression patter
 - **Reference:** hg19
 - **Tools:** Python, Scanpy, AnnData and GitHub Actions
 
+## Analysis evidence
+
+The summary below reflects the completed cloud run metadata. The underlying QC, UMAP, and marker plots were uploaded as a GitHub Actions artifact; the summary graphic here is not a substitute for those original plots.
+
+![Single-cell analysis evidence](figures/04_analysis_evidence.svg)
+
 ## Results
 
 The cloud run started with **2,700 cells and 32,738 genes**. After filtering, **2,699 cells and 13,714 genes** remained. The analysis selected **2,000 highly variable genes** and produced a marker-gene table with **123,426 records**.
