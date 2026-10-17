@@ -1,4 +1,4 @@
-# Project 04 — Reproducible RNA-seq Pipeline with nf-core and Nextflow
+# Reproducible RNA-seq Pipeline with nf-core and Nextflow
 
 ## Overview figure
 
