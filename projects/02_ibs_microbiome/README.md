@@ -1,4 +1,4 @@
-# Project 02 — IBS microbiome classification
+# Project 02 — IBS Microbiome Analysis and Machine Learning
 
 ## Analysis evidence
 
