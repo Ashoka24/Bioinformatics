@@ -1,3 +1,15 @@
-# Exclude generated QC report output from GitHub's language statistics.
-# This report is a generated MultiQC artifact, not hand-written project code.
+# Generated reports and machine-produced outputs are not hand-written source code.
+# Keep the MultiQC report available in the repository, but exclude it from language statistics.
 wes-variant-analysis/results/hcc1395_sarek/multiqc/multiqc_report.html linguist-generated=true
+
+# Treat scientific data files and generated figures as data/assets, not source languages.
+**/*.tsv linguist-detectable=false
+**/*.csv linguist-detectable=false
+**/*.fasta linguist-detectable=false
+**/*.biom linguist-detectable=false
+**/*.report linguist-detectable=false
+**/*.json linguist-detectable=false
+**/*.svg linguist-detectable=false
+**/*.png linguist-detectable=false
+**/*.gz linguist-detectable=false
+**/*.tbi linguist-detectable=false
