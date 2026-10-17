@@ -1,5 +1,8 @@
 # Project 02 — IBS microbiome classification
 
+## Overview figure
+
+![IBS microbiome classification results overview](figures/03_overview.svg)
 Public-data-only cohort analysis using PRJNA637763, a human gut 16S rRNA dataset containing 85 IBS samples and 26 healthy controls. The study used V1–V2 amplicon sequencing on Illumina MiSeq and was explicitly designed for microbiome-based IBS prediction.
 
 ## Workflow figure
