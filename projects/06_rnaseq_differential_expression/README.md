@@ -1,4 +1,4 @@
-# Project 06 — RNA-seq Differential Expression
+# Project 06 — Paired RNA-seq Differential Expression Analysis
 
 ## Overview figure
 
