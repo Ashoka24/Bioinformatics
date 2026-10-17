@@ -1,4 +1,4 @@
-# Project 07 — WES Variant Analysis
+# Project 07 — Whole-Exome Sequencing Variant Analysis with nf-core/sarek
 
 A matched tumor/normal whole-exome sequencing workflow using **Illumina WES and nf-core/sarek 3.10.0**. The primary samplesheet uses the actual pair analyzed for this project: **HCC1395 tumor** and **HCC1395BL normal**.
 
