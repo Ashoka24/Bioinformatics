@@ -1,5 +1,8 @@
 # Project 05 — Bioinformatics + Machine Learning
 
+## Overview figure
+
+![Transcriptomics machine-learning results overview](figures/03_overview.svg)
 Machine-learning classification of breast cancer tissue from public transcriptomic data.
 
 ## Objective
