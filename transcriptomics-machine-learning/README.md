@@ -1,4 +1,4 @@
-# Project 05 — Transcriptomics Classification with Machine Learning
+# Transcriptomics Classification with Machine Learning
 
 ## Overview figure
 
