@@ -10,18 +10,18 @@ The projects are designed to demonstrate real-world analysis skills, reproducibl
 
 | # | Project | Focus | Status |
 |---|---|---|---|
-| 01 | [16S Microbiome Analysis](projects/01_16s_microbiome/) | 16S rRNA, QIIME 2, SRA, microbiome profiling | 🟢 Completed |
-| 02 | [IBS Microbiome Analysis](projects/02_ibs_microbiome/) | 16S, diversity analysis, machine learning | 🟢 Completed |
-| 03 | [Shotgun Metagenomics](projects/03_shotgun_metagenomics/) | WGS, Kraken2, Centrifuge, taxonomic profiling | 🟢 Completed |
-| 04 | [Nextflow / nf-core Pipeline](projects/04_nfcore_pipeline/) | Nextflow, nf-core, Docker, workflow engineering | 🟢 Completed |
-| 05 | [Bioinformatics + Machine Learning](projects/05_bioinformatics_ml/) | Transcriptomics, feature selection, scikit-learn | 🟢 Completed |
-| 06 | [RNA-seq Differential Expression](projects/06_rnaseq_differential_expression/) | Bulk RNA-seq, DESeq2, paired differential expression | 🟢 Completed |
-| 07 | [WES Variant Analysis](projects/07_wes_variant_analysis/) | WES, tumor/normal somatic variants, nf-core/sarek | 🟢 Completed — HCC1395/HCC1395BL tumor-normal run with samplesheet validation |
-| 08 | [Single-Cell RNA-seq Analysis](projects/08_single_cell_rnaseq/) | PBMC 3k, Scanpy, QC, PCA, UMAP, Leiden clustering, marker annotation | 🟢 Completed — cloud run and outputs verified |
+| 01 | [16S rRNA Gut Microbiome Profiling](projects/01_16s_microbiome/) | 16S rRNA, QIIME 2, SRA, microbiome profiling | 🟢 Completed |
+| 02 | [IBS Microbiome Analysis and Machine Learning](projects/02_ibs_microbiome/) | 16S, diversity analysis, machine learning | 🟢 Completed |
+| 03 | [Shotgun Metagenomic Profiling and Classifier Comparison](projects/03_shotgun_metagenomics/) | WGS, Kraken2, Centrifuge, taxonomic profiling | 🟢 Completed |
+| 04 | [Reproducible RNA-seq Pipeline with nf-core and Nextflow](projects/04_nfcore_pipeline/) | Nextflow, nf-core, Docker, workflow engineering | 🟢 Completed |
+| 05 | [Transcriptomics Classification with Machine Learning](projects/05_bioinformatics_ml/) | Transcriptomics, feature selection, scikit-learn | 🟢 Completed |
+| 06 | [Paired RNA-seq Differential Expression Analysis](projects/06_rnaseq_differential_expression/) | Bulk RNA-seq, DESeq2, paired differential expression | 🟢 Completed |
+| 07 | [Whole-Exome Sequencing Variant Analysis](projects/07_wes_variant_analysis/) | WES, tumor/normal somatic variants, nf-core/sarek | 🟢 Completed — HCC1395/HCC1395BL tumor-normal run with samplesheet validation |
+| 08 | [Single-Cell RNA-seq Analysis of PBMCs](projects/08_single_cell_rnaseq/) | PBMC 3k, Scanpy, QC, PCA, UMAP, Leiden clustering, marker annotation | 🟢 Completed — cloud run and outputs verified |
 
 ---
 
-## Project 01 — 16S Gut Microbiome Analysis
+## Project 01 — 16S rRNA Gut Microbiome Profiling
 
 End-to-end 16S rRNA amplicon analysis using a public human stool sample from NCBI SRA.
 
@@ -35,7 +35,7 @@ The project documents the complete workflow, software configuration, provenance,
 
 ---
 
-## Project 02 — IBS Microbiome Classification
+## Project 02 — IBS Microbiome Analysis and Machine Learning and Machine Learning
 
 A public cohort analysis using **PRJNA637763**, containing **85 IBS samples and 26 healthy controls**.
 
@@ -59,7 +59,7 @@ A public cohort analysis using **PRJNA637763**, containing **85 IBS samples and 
 
 ---
 
-## Project 03 — Shotgun Metagenomics
+## Project 03 — Shotgun Metagenomic Profiling and Classifier Comparison
 
 Shotgun metagenomic taxonomic profiling of a real public human infant fecal WGS sample.
 
@@ -82,7 +82,7 @@ This project deliberately treats the sample as a single-run analysis and does no
 
 ---
 
-## Project 04 — Nextflow / nf-core Workflow Engineering
+## Project 04 — Reproducible RNA-seq Pipeline with nf-core and Nextflow
 
 A production-style workflow engineering project built around **nf-core/rnaseq 3.27.0**.
 
@@ -101,7 +101,7 @@ The focus is on building and validating a reproducible computational workflow ra
 
 ---
 
-## Project 05 — Bioinformatics + Machine Learning
+## Project 05 — Transcriptomics Classification with Machine Learning
 
 Machine-learning analysis of public breast cancer transcriptomics data from **NCBI GEO GSE42568**.
 
@@ -135,7 +135,7 @@ The results demonstrate classification performance within this public dataset. T
 
 ---
 
-## Project 06 — RNA-seq Differential Expression
+## Project 06 — Paired Paired RNA-seq Differential Expression Analysis Analysis
 
 Paired bulk RNA-seq analysis of human CD4 T-cell samples from oral mucosa and blood using public GEO dataset **GSE116139**.
 
@@ -157,7 +157,7 @@ Paired bulk RNA-seq analysis of human CD4 T-cell samples from oral mucosa and bl
 
 ---
 
-## Project 07 — WES Variant Analysis
+## Project 07 — Whole-Exome Sequencing Variant Analysis with nf-core/sarek
 
 Whole-exome sequencing workflow for the completed matched tumor/normal pair:
 
@@ -172,7 +172,7 @@ The project uses **nf-core/sarek 3.10.0, Nextflow, Docker, Python, Bash, GitHub 
 
 [Open Project 07 →](projects/07_wes_variant_analysis/)
 
-## Project 08 — Single-Cell RNA-seq Analysis
+## Project 08 — Single-Cell RNA-seq Analysis of PBMCs of PBMCs
 
 Single-cell RNA-seq analysis of the public **10x Genomics PBMC 3k healthy-donor dataset** using Python, Scanpy and AnnData.
 
@@ -242,12 +242,12 @@ Diversity analysis • differential expression • statistical testing • Logis
 | Project | Main tools and technologies |
 |---|---|
 | 01 — 16S Gut Microbiome | NCBI SRA Toolkit, FastQC, MultiQC, nf-core/ampliseq, QIIME 2, SILVA |
-| 02 — IBS Microbiome Classification | QIIME 2, Deblur, SILVA, Python, Pandas, scikit-learn, Logistic Regression, Random Forest |
-| 03 — Shotgun Metagenomics | Fastp, Kraken2, Centrifuge, Python, taxonomic profiling and classifier-comparison scripts |
+| 02 — IBS Microbiome Analysis and Machine Learning and Machine Learning | QIIME 2, Deblur, SILVA, Python, Pandas, scikit-learn, Logistic Regression, Random Forest |
+| 03 — Shotgun Metagenomic Profiling and Classifier Comparison | Fastp, Kraken2, Centrifuge, Python, taxonomic profiling and classifier-comparison scripts |
 | 04 — Nextflow / nf-core Engineering | Nextflow, nf-core/rnaseq, Docker, GitHub Actions |
-| 05 — Bioinformatics + Machine Learning | Python, Pandas, NumPy, scikit-learn, Logistic Regression, Random Forest, ROC-AUC and average-precision evaluation |
-| 06 — RNA-seq Differential Expression | R, DESeq2, paired design, multiple-testing correction, PCA and differential-expression visualization |
-| 07 — WES Variant Analysis | nf-core/sarek 3.10.0, Nextflow, Docker, FastQC, MultiQC, Fastp, BWA-MEM2, SAMtools, GATK/Mutect2, VEP, Python, Bash, Git/GitHub, GitHub Actions, AWS S3/EC2/IAM |
+| 05 — Transcriptomics Classification with Machine Learning | Python, Pandas, NumPy, scikit-learn, Logistic Regression, Random Forest, ROC-AUC and average-precision evaluation |
+| 06 — Paired RNA-seq Differential Expression Analysis | R, DESeq2, paired design, multiple-testing correction, PCA and differential-expression visualization |
+| 07 — Whole-Exome Sequencing Variant Analysis | nf-core/sarek 3.10.0, Nextflow, Docker, FastQC, MultiQC, Fastp, BWA-MEM2, SAMtools, GATK/Mutect2, VEP, Python, Bash, Git/GitHub, GitHub Actions, AWS S3/EC2/IAM |
 | 08 — Single-Cell RNA-seq | Python, Scanpy, AnnData, Pandas, SciPy, PCA, UMAP, Leiden, GitHub Actions |
 
 Tools listed describe each project's documented workflow; a tool's presence in a workflow does not by itself imply that every optional stage or cloud deployment has been executed.
