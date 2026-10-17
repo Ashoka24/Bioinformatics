@@ -1,5 +1,8 @@
 # Project 08 — Single-Cell RNA-seq Analysis
 
+## Overview figure
+
+![Single-cell RNA-seq results overview](figures/03_overview.svg)
 I used the public 10x Genomics PBMC 3k dataset to explore gene-expression patterns in peripheral blood mononuclear cells. The analysis was run in GitHub Actions, so it did not depend on my local machine.
 
 ## What I did
