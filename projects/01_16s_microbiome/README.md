@@ -1,5 +1,11 @@
 # 01 — Public NCBI 16S Gut Microbiome Analysis
 
+## Read-processing evidence
+
+The figure below summarizes the committed QIIME 2 Deblur statistics for the single public run. It is a data-derived summary, not a FastQC report.
+
+![Read-processing evidence](results/figures/03_read_processing_evidence.svg)
+
 ## Overview figure
 
 ![16S workflow and dataset overview](figures/03_overview.svg)
