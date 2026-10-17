@@ -1,4 +1,4 @@
-# 03 — Public Shotgun Metagenomics Taxonomic Profiling
+# Project 03 — Shotgun Metagenomic Profiling and Classifier Comparison
 
 ## Overview figure
 
