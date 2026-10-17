@@ -1,5 +1,8 @@
 # Project 04 — Production-style Nextflow / nf-core RNA-seq Pipeline
 
+## Overview figure
+
+![nf-core RNA-seq validation overview](figures/03_overview.svg)
 A workflow-engineering project focused on reproducibility, containerization, parameterization, resource awareness and automated validation using Nextflow and nf-core.
 
 ## Objective
