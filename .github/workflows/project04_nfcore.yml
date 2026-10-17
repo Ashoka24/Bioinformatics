@@ -3,7 +3,7 @@ name: Project 04 — nf-core/rnaseq validation
 on:
   push:
     paths:
-      - "projects/04_nfcore_pipeline/**"
+      - "nfcore-rnaseq-pipeline/**"
       - ".github/workflows/project04_nfcore.yml"
   workflow_dispatch:
 
