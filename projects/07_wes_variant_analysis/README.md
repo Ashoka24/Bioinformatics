@@ -2,6 +2,10 @@
 
 A matched tumor/normal whole-exome sequencing workflow using **Illumina WES and nf-core/sarek 3.10.0**. The primary samplesheet uses the actual pair analyzed for this project: **HCC1395 tumor** and **HCC1395BL normal**.
 
+## MultiQC report evidence
+
+The repository contains the MultiQC HTML report generated for the HCC1395 tumor/normal Sarek run. Open the [MultiQC report](results/hcc1395_sarek/multiqc/multiqc_report.html) to inspect the report sections directly. This links to the generated report rather than using a recreated screenshot.
+
 ## Primary sample pair
 
 | Patient | Sample ID | Role | Sarek status |
