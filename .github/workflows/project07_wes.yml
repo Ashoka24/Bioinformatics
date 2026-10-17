@@ -3,7 +3,7 @@ name: Project 07 WES
 on:
   push:
     paths:
-      - "projects/07_wes_variant_analysis/**"
+      - "wes-variant-analysis/**"
       - ".github/workflows/project07_wes.yml"
     branches: [main]
   workflow_dispatch:
@@ -15,21 +15,21 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate WES project structure
         run: |
-          test -f projects/07_wes_variant_analysis/workflow/main.nf
-          test -f projects/07_wes_variant_analysis/config/samplesheet.csv
-          test -f projects/07_wes_variant_analysis/scripts/summarize_variants.py
-          test -f projects/07_wes_variant_analysis/scripts/validate_samplesheet.py
-          test -f projects/07_wes_variant_analysis/scripts/run_sarek.sh
+          test -f wes-variant-analysis/workflow/main.nf
+          test -f wes-variant-analysis/config/samplesheet.csv
+          test -f wes-variant-analysis/scripts/summarize_variants.py
+          test -f wes-variant-analysis/scripts/validate_samplesheet.py
+          test -f wes-variant-analysis/scripts/run_sarek.sh
           test -f cloud/aws/run_project07_wes_ec2.sh
       - name: Validate shell syntax
         run: |
-          bash -n projects/07_wes_variant_analysis/scripts/run_sarek.sh
+          bash -n wes-variant-analysis/scripts/run_sarek.sh
           bash -n cloud/aws/run_project07_wes_ec2.sh
       - name: Validate Python syntax
         run: |
-          python -m py_compile projects/07_wes_variant_analysis/scripts/summarize_variants.py
-          python -m py_compile projects/07_wes_variant_analysis/scripts/validate_samplesheet.py
+          python -m py_compile wes-variant-analysis/scripts/summarize_variants.py
+          python -m py_compile wes-variant-analysis/scripts/validate_samplesheet.py
       - name: Validate tumor-normal samplesheet
-        run: python projects/07_wes_variant_analysis/scripts/validate_samplesheet.py --samplesheet projects/07_wes_variant_analysis/config/samplesheet.csv
+        run: python wes-variant-analysis/scripts/validate_samplesheet.py --samplesheet wes-variant-analysis/config/samplesheet.csv
       - name: Report validation
         run: echo "Project 07 structure, scripts, HCC1395 tumor-normal metadata and samplesheet validation passed."
