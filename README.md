@@ -1,259 +1,39 @@
 # Bioinformatics Portfolio
 
-A practical bioinformatics portfolio focused on **genomics, microbiome analysis, metagenomics, transcriptomics, and machine learning** using public biological datasets.
+Bioinformatics and computational biology projects covering microbiome profiling, metagenomics, transcriptomics, machine learning, and variant analysis. Each project includes its own workflow, documented methods, results, and supporting evidence.
 
-The projects are designed to demonstrate real-world analysis skills, reproducible workflows, biological interpretation, and data-driven problem solving.
+## Featured analysis projects
 
-## Projects
+| Project | What it covers | Main tools |
+|---|---|---|
+| [16S rRNA Gut Microbiome Profiling](16s-gut-microbiome/) | Public SRA data, read QC, amplicon processing, taxonomy and microbiome profiling | FastQC, MultiQC, nf-core/ampliseq, QIIME 2, SILVA |
+| [IBS Microbiome Analysis and Machine Learning](ibs-microbiome-ml/) | IBS and healthy-control cohort, genus-level features, diversity and model evaluation | QIIME 2, Deblur, Python, scikit-learn |
+| [Shotgun Metagenomic Profiling](shotgun-metagenomics/) | Public WGS read classification and comparison of taxonomic classifiers | fastp, Kraken2, Centrifuge |
+| [Reproducible RNA-seq Pipeline](nfcore-rnaseq-pipeline/) | Containerized workflow execution and CI validation | Nextflow, nf-core/rnaseq, Docker, GitHub Actions |
+| [Transcriptomics Classification with Machine Learning](transcriptomics-machine-learning/) | Breast cancer expression dataset, leakage-aware feature selection and classification evaluation | Python, Pandas, scikit-learn |
+| [Paired RNA-seq Differential Expression](rnaseq-differential-expression/) | Matched tissue analysis, DESeq2 and multiple-testing correction | R, DESeq2 |
+| [Whole-Exome Sequencing Variant Analysis](wes-variant-analysis/) | Matched tumor/normal variant-calling workflow and annotation | nf-core/sarek, Mutect2, VEP, Nextflow |
+| [Single-Cell RNA-seq Analysis of PBMCs](single-cell-rnaseq-pbmcs/) | Cell QC, filtering, normalization, PCA, UMAP, clustering and marker ranking | Python, Scanpy, AnnData |
 
-[Complete technical project documentation →](docs/PROJECT_DOCUMENTATION.md)
+## Evidence and reproducibility
 
-| # | Project | Focus | Status |
-|---|---|---|---|
-| 01 | [16S rRNA Gut Microbiome Profiling](projects/01_16s_microbiome/) | 16S rRNA, QIIME 2, SRA, microbiome profiling | 🟢 Completed |
-| 02 | [IBS Microbiome Analysis and Machine Learning](projects/02_ibs_microbiome/) | 16S, diversity analysis, machine learning | 🟢 Completed |
-| 03 | [Shotgun Metagenomic Profiling and Classifier Comparison](projects/03_shotgun_metagenomics/) | WGS, Kraken2, Centrifuge, taxonomic profiling | 🟢 Completed |
-| 04 | [Reproducible RNA-seq Pipeline with nf-core and Nextflow](projects/04_nfcore_pipeline/) | Nextflow, nf-core, Docker, workflow engineering | 🟢 Completed |
-| 05 | [Transcriptomics Classification with Machine Learning](projects/05_bioinformatics_ml/) | Transcriptomics, feature selection, scikit-learn | 🟢 Completed |
-| 06 | [Paired RNA-seq Differential Expression Analysis](projects/06_rnaseq_differential_expression/) | Bulk RNA-seq, DESeq2, paired differential expression | 🟢 Completed |
-| 07 | [Whole-Exome Sequencing Variant Analysis](projects/07_wes_variant_analysis/) | WES, tumor/normal somatic variants, nf-core/sarek | 🟢 Completed — HCC1395/HCC1395BL tumor-normal run with samplesheet validation |
-| 08 | [Single-Cell RNA-seq Analysis of PBMCs](projects/08_single_cell_rnaseq/) | PBMC 3k, Scanpy, QC, PCA, UMAP, Leiden clustering, marker annotation | 🟢 Completed — cloud run and outputs verified |
+Project READMEs include the relevant workflow, data source, analysis steps, and available result summaries or QC evidence. Figures labelled as summaries are generated from recorded analysis outputs; they are not presented as original FastQC/MultiQC screenshots.
 
----
+- [Technical project documentation](docs/PROJECT_DOCUMENTATION.md)
+- [AWS omics architecture](docs/AWS_OMICS_ARCHITECTURE.md)
+- [Cloud and AWS resources](cloud/aws/)
 
-## Project 01 — 16S rRNA Gut Microbiome Profiling
+## Skills demonstrated
 
-End-to-end 16S rRNA amplicon analysis using a public human stool sample from NCBI SRA.
+**Bioinformatics:** 16S rRNA analysis, microbiome profiling, shotgun metagenomics, bulk RNA-seq, single-cell RNA-seq, WES variant analysis.
 
-**Dataset:** SRR26534086 • BioSample SAMN37943185 • BioProject PRJNA1031545 • Illumina MiSeq • paired-end • V3–V4.
+**Programming and statistics:** Python, R, SQL, Bash, data processing, statistical testing, feature engineering, machine learning, data visualization.
 
-**Workflow:** SRA → FASTQ validation → FastQC/MultiQC → nf-core/ampliseq → QIIME 2 → SILVA taxonomy → downstream analysis.
+**Workflow engineering:** Linux, Nextflow, nf-core, Docker, Git/GitHub, GitHub Actions, reproducible pipelines and QC reporting.
 
-The project documents the complete workflow, software configuration, provenance, troubleshooting and interpretation.
+## Notes
 
-[Open Project 01 →](projects/01_16s_microbiome/) · [Overview figure](projects/01_16s_microbiome/figures/03_overview.svg)
+- Dataset accessions, software versions, and key parameters are documented in the individual project folders.
+- Large raw datasets and intermediate files are kept out of Git when appropriate.
+- Results are reported within the limits of the underlying dataset; single-sample analyses are not presented as cohort-level conclusions.
 
----
-
-## Project 02 — IBS Microbiome Analysis and Machine Learning
-
-A public cohort analysis using **PRJNA637763**, containing **85 IBS samples and 26 healthy controls**.
-
-**Analysis**
-- 16S V1–V2 Illumina MiSeq data
-- QIIME 2 Deblur
-- SILVA 138 99% taxonomy
-- Genus-level feature engineering
-- Diversity analysis
-- Logistic Regression and Random Forest
-- Stratified 5-fold cross-validation
-
-**Results**
-- 111 samples
-- 131 genus-level features after prevalence filtering
-- Mean Shannon diversity: IBS **3.9586**; healthy controls **4.2491**
-- Logistic Regression ROC-AUC: **0.9186**
-- Random Forest ROC-AUC: **0.8604**
-
-[Open Project 02 →](projects/02_ibs_microbiome/) · [Overview figure](projects/02_ibs_microbiome/figures/03_overview.svg)
-
----
-
-## Project 03 — Shotgun Metagenomic Profiling and Classifier Comparison
-
-Shotgun metagenomic taxonomic profiling of a real public human infant fecal WGS sample.
-
-**Dataset:** PRJNA273761 • SRR1779146 • SAMN03295851 • SRX858749 • Illumina HiSeq 2000 • paired-end WGS.
-
-**Workflow**
-
-WGS reads → FASTP → Kraken2 → Centrifuge → classifier comparison → taxonomic profiling and QC.
-
-**Results**
-- 7,954,717 fragments analyzed
-- Kraken2 classified **87.25%** of fragments
-- Leading Kraken2 species: **Enterobacter roggenkampii (17.06%)**
-- Top-10 classifier overlap: **7/10**
-- Top-10 Jaccard similarity: **0.5385**
-
-This project deliberately treats the sample as a single-run analysis and does not make cohort-level NEC, biomarker or causality claims.
-
-[Open Project 03 →](projects/03_shotgun_metagenomics/) · [Overview figure](projects/03_shotgun_metagenomics/figures/03_overview.svg)
-
----
-
-## Project 04 — Reproducible RNA-seq Pipeline with nf-core and Nextflow
-
-A production-style workflow engineering project built around **nf-core/rnaseq 3.27.0**.
-
-The project demonstrates:
-
-- Nextflow workflow execution
-- nf-core pipeline usage
-- Docker-based reproducibility
-- Parameterized execution
-- Test-data validation
-- Structured workflow outputs
-
-The focus is on building and validating a reproducible computational workflow rather than making biological claims from the test dataset.
-
-[Open Project 04 →](projects/04_nfcore_pipeline/) · [Overview figure](projects/04_nfcore_pipeline/figures/03_overview.svg)
-
----
-
-## Project 05 — Transcriptomics Classification with Machine Learning
-
-Machine-learning analysis of public breast cancer transcriptomics data from **NCBI GEO GSE42568**.
-
-**Dataset**
-- 121 samples
-- 104 breast cancer
-- 17 normal breast tissue
-- Affymetrix GPL570
-- 54,579 non-constant probes
-
-**Approach**
-- Expression-matrix processing
-- Variance filtering
-- Leakage-safe feature selection
-- Logistic Regression
-- Random Forest
-- Stratified 5-fold cross-validation
-- ROC-AUC and average-precision evaluation
-- Exploratory feature ranking
-
-**Results**
-
-| Model | ROC-AUC | Average Precision |
-|---|---:|---:|
-| Logistic Regression | **0.9802** | **0.9964** |
-| Random Forest | **0.9740** | **0.9953** |
-
-The results demonstrate classification performance within this public dataset. They are not presented as clinical diagnostic validation or independently validated biomarkers.
-
-[Open Project 05 →](projects/05_bioinformatics_ml/) · [Overview figure](projects/05_bioinformatics_ml/figures/03_overview.svg)
-
----
-
-## Project 06 — Paired RNA-seq Differential Expression Analysis
-
-Paired bulk RNA-seq analysis of human CD4 T-cell samples from oral mucosa and blood using public GEO dataset **GSE116139**.
-
-**Analysis**
-- 18 matched CD69− samples from 9 subjects
-- Paired DESeq2 design: `~ subject + tissue`
-- Low-count filtering
-- Benjamini–Hochberg correction
-- PCA and differential-expression visualization
-
-**Results**
-- 11,696 genes after filtering
-- **519 significant genes**
-- **294 upregulated / 225 downregulated**
-- Threshold: adjusted p-value < 0.05 and |log2FC| ≥ 1
-
-[Open Project 06 →](projects/06_rnaseq_differential_expression/) · [Overview figure](projects/06_rnaseq_differential_expression/figures/03_overview.svg)
-
-
----
-
-## Project 07 — Whole-Exome Sequencing Variant Analysis with nf-core/sarek
-
-Whole-exome sequencing workflow for the completed matched tumor/normal pair:
-
-- **Normal:** `HCC1395BL` (`status=0`)
-- **Tumor:** `HCC1395` (`status=1`)
-- **Pair label:** `HCC1395_vs_HCC1395BL`; the annotated VCF contains 5,289 records.
-- **Input validation:** a project validator checks samplesheet columns, tumor/normal pairing, FASTQ file existence and gzip integrity before execution.
-
-**Workflow:** paired FASTQ → QC → alignment → BAM processing → BQSR → Mutect2 tumor/normal calling → filtering → VEP annotation → VCF/QC report.
-
-The project uses **nf-core/sarek 3.10.0, Nextflow, Docker, Python, Bash, GitHub Actions and an AWS-ready runner**. Raw sequencing data and large results are kept outside the repository.
-
-[Open Project 07 →](projects/07_wes_variant_analysis/)
-
-## Project 08 — Single-Cell RNA-seq Analysis of PBMCs
-
-Single-cell RNA-seq analysis of the public **10x Genomics PBMC 3k healthy-donor dataset** using Python, Scanpy and AnnData.
-
-**Dataset:** 10x Genomics PBMC 3k • filtered gene-barcode matrix • hg19 reference.
-
-**Workflow**
-- Download and validate the public matrix
-- Load the data into AnnData and calculate cell/gene quality-control metrics
-- Filter low-quality cells and low-detection genes
-- Normalize counts, log-transform expression and identify highly variable genes
-- Run scaling, PCA, nearest-neighbour graph construction and UMAP
-- Cluster cells with Leiden and rank cluster marker genes
-- Export QC metrics, marker tables, provisional cluster annotations and plots
-
-**Core run results**
-- Input: 2,700 cells and 32,738 genes
-- After filtering: 2,699 cells and 13,714 genes
-- Highly variable genes: 2,000
-- Marker table: 123,426 records
-
-**Verified cloud run:** GitHub Actions run [38929166318](https://github.com/Ashoka24/Bioinformatics/actions/runs/38929166318) completed successfully on the merged `main` commit. Both the static/unit-check job and the full cloud-analysis job passed, and the run uploaded the `project-08-scrnaseq-results` artifact. The artifact was inspected and contains `cluster_annotations.csv`, `figures/dotplot_canonical_markers.png`, QC/UMAP plots, `qc_metrics.csv`, `highly_variable_genes.csv`, `marker_genes.csv`, `pbmc3k_processed.h5ad` and `run_metadata.json`. The metadata confirms 2,700 input cells / 32,738 genes, 2,699 cells / 13,714 genes after filtering, and 2,000 highly variable genes. The marker table contains 123,426 records.\n\nCluster labels remain provisional and should be reviewed against canonical markers. This is a single-donor dataset, so cells are not independent biological replicates and cell-level statistical results should not be interpreted as population-level evidence.
-
-The GitHub Actions workflow runs static/unit checks on pull requests and runs the full analysis on pushes to the main branch. Generated outputs are uploaded as a workflow artifact rather than committed with the raw data.
-
-[Open Project 08 →](projects/08_single_cell_rnaseq/) · [Overview figure](projects/08_single_cell_rnaseq/figures/03_overview.svg)
-
-## Cloud Execution
-
-The omics projects share a common AWS-ready execution pattern:
-
-**S3 → EC2/HPC compute → Docker → Nextflow → analysis → S3**
-
-Shared cloud documentation and the EC2 runner are maintained under [cloud/aws](cloud/aws/) and [AWS Omics Architecture](docs/AWS_OMICS_ARCHITECTURE.md).
-
-This pattern can be reused for future miRNA-seq and methylation projects.
-
-*Project 07 core deliverable is complete for the HCC1395/HCC1395BL local run. AWS execution remains an optional deployment path; the completed local run did not use AWS.
-
-## Reproducibility
-
-The portfolio follows a consistent approach:
-
-- Public datasets and accession numbers are recorded.
-- Raw data and large intermediate files are kept outside the repository.
-- Software versions and important parameters are documented.
-- Quality control is performed before downstream analysis.
-- Results are reported only after the corresponding analysis has been executed.
-- Single-sample analyses are not presented as cohort-level findings.
-- Observed results are separated from biological interpretation.
-
-## Skills Demonstrated
-
-**Bioinformatics:**  
-16S rRNA analysis • microbiome analysis • shotgun metagenomics • taxonomic profiling • bulk RNA-seq • differential expression • WES • matched tumor/normal somatic variant analysis
-
-**Programming & Data:**  
-Python • R • SQL • Linux • Bash • Pandas • NumPy • scikit-learn • data cleaning • feature engineering • data visualization
-
-**Workflow & Reproducibility:**  
-Nextflow • nf-core • Docker • workflow automation • parameterized pipelines • Git/GitHub • GitHub Actions • QC reporting • reproducible research
-
-**Statistics & Machine Learning:**  
-Diversity analysis • differential expression • statistical testing • Logistic Regression • Random Forest • cross-validation • ROC-AUC • average precision
-
-### Tools Used by Project
-
-| Project | Main tools and technologies |
-|---|---|
-| 01 — 16S rRNA Gut Microbiome Profiling | NCBI SRA Toolkit, FastQC, MultiQC, nf-core/ampliseq, QIIME 2, SILVA |
-| 02 — IBS Microbiome Analysis and Machine Learning | QIIME 2, Deblur, SILVA, Python, Pandas, scikit-learn, Logistic Regression, Random Forest |
-| 03 — Shotgun Metagenomic Profiling and Classifier Comparison | Fastp, Kraken2, Centrifuge, Python, taxonomic profiling and classifier-comparison scripts |
-| 04 — Reproducible RNA-seq Pipeline | Nextflow, nf-core/rnaseq, Docker, GitHub Actions |
-| 05 — Transcriptomics Classification with Machine Learning | Python, Pandas, NumPy, scikit-learn, Logistic Regression, Random Forest, ROC-AUC and average-precision evaluation |
-| 06 — Paired RNA-seq Differential Expression Analysis | R, DESeq2, paired design, multiple-testing correction, PCA and differential-expression visualization |
-| 07 — Whole-Exome Sequencing Variant Analysis | nf-core/sarek 3.10.0, Nextflow, Docker, FastQC, MultiQC, Fastp, BWA-MEM2, SAMtools, GATK/Mutect2, VEP, Python, Bash, Git/GitHub, GitHub Actions, AWS S3/EC2/IAM |
-| 08 — Single-Cell RNA-seq Analysis of PBMCs | Python, Scanpy, AnnData, Pandas, SciPy, PCA, UMAP, Leiden, GitHub Actions |
-
-Tools listed describe each project's documented workflow; a tool's presence in a workflow does not by itself imply that every optional stage or cloud deployment has been executed.
-
-## Author
-
-**Ashoka B**
-
-Bioinformatics • Computational Biology • Data Analysis • Machine Learning
