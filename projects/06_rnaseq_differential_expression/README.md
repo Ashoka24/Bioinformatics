@@ -67,6 +67,12 @@ PCA + differential-expression results
 ↓  
 Verified summary and output tables
 
+## Differential-expression evidence
+
+The summary below uses the committed analysis metrics and documents the paired DESeq2 analysis outcomes.
+
+![Differential-expression evidence](results/figures/03_differential_expression_evidence.svg)
+
 ## Results
 
 The verified analysis summary contains:
