@@ -67,6 +67,12 @@ The workflow:
 7. Generates top-taxa and classifier-comparison tables.
 8. Commits only compact derived results; raw FASTQ, databases and per-read Centrifuge classifications are not committed.
 
+## Read-classification evidence
+
+This summary is based on the recorded Kraken2 report and classifier-comparison outputs. It is not a FastQC/MultiQC screenshot.
+
+![Shotgun classification evidence](results/figures/03_classification_evidence.svg)
+
 ## Results
 
 The workflow creates:
