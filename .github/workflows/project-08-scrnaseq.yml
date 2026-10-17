@@ -3,11 +3,11 @@ name: Project 08 scRNA-seq checks
 on:
   push:
     paths:
-      - "projects/08_single_cell_rnaseq/**"
+      - "single-cell-rnaseq-pbmcs/**"
       - ".github/workflows/project-08-scrnaseq.yml"
   pull_request:
     paths:
-      - "projects/08_single_cell_rnaseq/**"
+      - "single-cell-rnaseq-pbmcs/**"
       - ".github/workflows/project-08-scrnaseq.yml"
   workflow_dispatch:
 
@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: projects/08_single_cell_rnaseq
+        working-directory: single-cell-rnaseq-pbmcs
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -39,14 +39,14 @@ jobs:
     timeout-minutes: 45
     defaults:
       run:
-        working-directory: projects/08_single_cell_rnaseq
+        working-directory: single-cell-rnaseq-pbmcs
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: pip
-          cache-dependency-path: projects/08_single_cell_rnaseq/requirements.txt
+          cache-dependency-path: single-cell-rnaseq-pbmcs/requirements.txt
       - name: Install analysis dependencies
         run: |
           python -m pip install --upgrade pip
@@ -62,6 +62,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: project-08-scrnaseq-results
-          path: projects/08_single_cell_rnaseq/results/
+          path: single-cell-rnaseq-pbmcs/results/
           if-no-files-found: warn
           retention-days: 14
