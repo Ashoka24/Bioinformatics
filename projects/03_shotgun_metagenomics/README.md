@@ -1,5 +1,8 @@
 # 03 — Public Shotgun Metagenomics Taxonomic Profiling
 
+## Overview figure
+
+![Shotgun metagenomics results overview](figures/03_overview.svg)
 End-to-end shotgun metagenomics workflow using a real public human infant fecal WGS sample.
 
 ## Dataset
