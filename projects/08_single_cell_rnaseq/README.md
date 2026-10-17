@@ -1,4 +1,4 @@
-# Project 08 — Single-Cell RNA-seq Analysis
+# Project 08 — Single-Cell RNA-seq Analysis of PBMCs
 
 ## Overview figure
 
