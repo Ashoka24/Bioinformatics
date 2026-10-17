@@ -31,7 +31,7 @@ End-to-end 16S rRNA amplicon analysis using a public human stool sample from NCB
 
 The project documents the complete workflow, software configuration, provenance, troubleshooting and interpretation.
 
-[Open Project 01 →](projects/01_16s_microbiome/)
+[Open Project 01 →](projects/01_16s_microbiome/) · [Overview figure](projects/01_16s_microbiome/figures/03_overview.svg)
 
 ---
 
@@ -55,7 +55,7 @@ A public cohort analysis using **PRJNA637763**, containing **85 IBS samples and 
 - Logistic Regression ROC-AUC: **0.9186**
 - Random Forest ROC-AUC: **0.8604**
 
-[Open Project 02 →](projects/02_ibs_microbiome/)
+[Open Project 02 →](projects/02_ibs_microbiome/) · [Overview figure](projects/02_ibs_microbiome/figures/03_overview.svg)
 
 ---
 
@@ -78,7 +78,7 @@ WGS reads → FASTP → Kraken2 → Centrifuge → classifier comparison → tax
 
 This project deliberately treats the sample as a single-run analysis and does not make cohort-level NEC, biomarker or causality claims.
 
-[Open Project 03 →](projects/03_shotgun_metagenomics/)
+[Open Project 03 →](projects/03_shotgun_metagenomics/) · [Overview figure](projects/03_shotgun_metagenomics/figures/03_overview.svg)
 
 ---
 
@@ -97,7 +97,7 @@ The project demonstrates:
 
 The focus is on building and validating a reproducible computational workflow rather than making biological claims from the test dataset.
 
-[Open Project 04 →](projects/04_nfcore_pipeline/)
+[Open Project 04 →](projects/04_nfcore_pipeline/) · [Overview figure](projects/04_nfcore_pipeline/figures/03_overview.svg)
 
 ---
 
@@ -131,7 +131,7 @@ Machine-learning analysis of public breast cancer transcriptomics data from **NC
 
 The results demonstrate classification performance within this public dataset. They are not presented as clinical diagnostic validation or independently validated biomarkers.
 
-[Open Project 05 →](projects/05_bioinformatics_ml/)
+[Open Project 05 →](projects/05_bioinformatics_ml/) · [Overview figure](projects/05_bioinformatics_ml/figures/03_overview.svg)
 
 ---
 
@@ -152,7 +152,7 @@ Paired bulk RNA-seq analysis of human CD4 T-cell samples from oral mucosa and bl
 - **294 upregulated / 225 downregulated**
 - Threshold: adjusted p-value < 0.05 and |log2FC| ≥ 1
 
-[Open Project 06 →](projects/06_rnaseq_differential_expression/)
+[Open Project 06 →](projects/06_rnaseq_differential_expression/) · [Overview figure](projects/06_rnaseq_differential_expression/figures/03_overview.svg)
 
 
 ---
@@ -197,7 +197,7 @@ Single-cell RNA-seq analysis of the public **10x Genomics PBMC 3k healthy-donor 
 
 The GitHub Actions workflow runs static/unit checks on pull requests and runs the full analysis on pushes to the main branch. Generated outputs are uploaded as a workflow artifact rather than committed with the raw data.
 
-[Open Project 08 →](projects/08_single_cell_rnaseq/)
+[Open Project 08 →](projects/08_single_cell_rnaseq/) · [Overview figure](projects/08_single_cell_rnaseq/figures/03_overview.svg)
 
 ## Cloud Execution
 
