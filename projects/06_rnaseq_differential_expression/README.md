@@ -1,5 +1,8 @@
 # Project 06 — RNA-seq Differential Expression
 
+## Overview figure
+
+![RNA-seq differential-expression results overview](figures/03_overview.svg)
 Differential-expression analysis of paired human CD4 T-cell bulk RNA-seq samples from oral mucosa and blood.
 
 ## What this project does
