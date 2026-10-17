@@ -3,7 +3,7 @@ name: Project 05 - Bioinformatics ML
 on:
   push:
     paths:
-      - 'projects/05_bioinformatics_ml/**'
+      - 'transcriptomics-machine-learning/**'
       - '.github/workflows/project05_ml.yml'
   workflow_dispatch:
 
@@ -27,27 +27,27 @@ jobs:
 
       - name: Download GEO processed matrix
         run: |
-          mkdir -p projects/05_bioinformatics_ml/data
-          curl -L --fail --retry 3             'https://ftp.ncbi.nlm.nih.gov/geo/series/GSE42nnn/GSE42568/matrix/GSE42568_series_matrix.txt.gz'             -o projects/05_bioinformatics_ml/data/GSE42568_series_matrix.txt.gz
-          gzip -t projects/05_bioinformatics_ml/data/GSE42568_series_matrix.txt.gz
+          mkdir -p transcriptomics-machine-learning/data
+          curl -L --fail --retry 3             'https://ftp.ncbi.nlm.nih.gov/geo/series/GSE42nnn/GSE42568/matrix/GSE42568_series_matrix.txt.gz'             -o transcriptomics-machine-learning/data/GSE42568_series_matrix.txt.gz
+          gzip -t transcriptomics-machine-learning/data/GSE42568_series_matrix.txt.gz
 
       - name: Run machine-learning analysis
         run: |
-          python projects/05_bioinformatics_ml/scripts/run_ml.py
+          python transcriptomics-machine-learning/scripts/run_ml.py
 
       - name: Verify required outputs
         run: |
-          test -s projects/05_bioinformatics_ml/results/REPORT.md
-          test -s projects/05_bioinformatics_ml/results/metrics.tsv
-          test -s projects/05_bioinformatics_ml/results/feature_ranking.tsv
-          test -s projects/05_bioinformatics_ml/results/figures/model_performance.png
-          test -s projects/05_bioinformatics_ml/results/figures/roc_curves.png
+          test -s transcriptomics-machine-learning/results/REPORT.md
+          test -s transcriptomics-machine-learning/results/metrics.tsv
+          test -s transcriptomics-machine-learning/results/feature_ranking.tsv
+          test -s transcriptomics-machine-learning/results/figures/model_performance.png
+          test -s transcriptomics-machine-learning/results/figures/roc_curves.png
 
       - name: Upload Project 05 results
         uses: actions/upload-artifact@v4
         with:
           name: project05-ml-results
           path: |
-            projects/05_bioinformatics_ml/results/
-            projects/05_bioinformatics_ml/data/GSE42568_series_matrix.txt.gz
+            transcriptomics-machine-learning/results/
+            transcriptomics-machine-learning/data/GSE42568_series_matrix.txt.gz
           retention-days: 90
