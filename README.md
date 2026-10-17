@@ -31,6 +31,10 @@ Project READMEs include the relevant workflow, data source, analysis steps, and 
 
 **Workflow engineering:** Linux, Nextflow, nf-core, Docker, Git/GitHub, GitHub Actions, reproducible pipelines and QC reporting.
 
+## License
+
+The code and accompanying documentation in this repository are released under the [MIT License](LICENSE), unless a project file states otherwise. Third-party datasets, reference databases, software, and externally sourced materials remain subject to their own licences and terms; please check the relevant source before reuse.
+
 ## Notes
 
 - Dataset accessions, software versions, and key parameters are documented in the individual project folders.
