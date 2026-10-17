@@ -1,4 +1,4 @@
-# Project 01 — 16S rRNA Gut Microbiome Profiling
+# 16S rRNA Gut Microbiome Profiling
 
 ## Read-processing evidence
 
