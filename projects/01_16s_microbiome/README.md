@@ -1,4 +1,4 @@
-# 01 — Public NCBI 16S Gut Microbiome Analysis
+# Project 01 — 16S rRNA Gut Microbiome Profiling
 
 ## Read-processing evidence
 
