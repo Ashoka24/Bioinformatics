@@ -3,11 +3,20 @@ name: Project 06 RNA-seq
 on:
   push:
     paths:
-      - "rnaseq-differential-expression/**"
+      - "rnaseq-differential-expression/scripts/**"
+      - "rnaseq-differential-expression/metadata/**"
+      - "rnaseq-differential-expression/README.md"
       - ".github/workflows/project06_rnaseq.yml"
     branches:
       - main
   workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: project06-rnaseq-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   rnaseq:
@@ -29,6 +38,18 @@ jobs:
       - name: Run RNA-seq analysis
         working-directory: rnaseq-differential-expression
         run: Rscript scripts/run_deseq2.R
+
+      - name: Commit compact summary outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add rnaseq-differential-expression/results/REPORT.md rnaseq-differential-expression/results/metrics.tsv
+          if git diff --cached --quiet; then
+            echo "No summary changes to commit"
+          else
+            git commit -m "results: refresh paired RNA-seq summary"
+            git push origin HEAD:main
+          fi
 
       - name: Upload results
         uses: actions/upload-artifact@v4

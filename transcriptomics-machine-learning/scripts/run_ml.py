@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.feature_selection import SelectKBest, f_classif
+from sklearn.feature_selection import SelectKBest, VarianceThreshold, f_classif
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
     accuracy_score,
@@ -120,16 +120,15 @@ def main():
     y = make_labels(titles)
     X = expression.T
 
-    # Remove features that are constant across all samples.
-    nonzero_var = X.var(axis=0) > 0
-    X = X.loc[:, nonzero_var]
-
+    # Keep the full matrix intact; variance filtering is learned inside each CV fold.
+    nonzero_var_count = int((X.var(axis=0) > 0).sum())
     k = min(100, X.shape[1])
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
     models = {
         "Logistic Regression": Pipeline(
             [
+                ("variance", VarianceThreshold(threshold=0)),
                 ("select", SelectKBest(score_func=f_classif, k=k)),
                 ("scale", StandardScaler()),
                 ("model", LogisticRegression(max_iter=5000, random_state=42)),
@@ -137,6 +136,7 @@ def main():
         ),
         "Random Forest": Pipeline(
             [
+                ("variance", VarianceThreshold(threshold=0)),
                 ("select", SelectKBest(score_func=f_classif, k=k)),
                 ("model", RandomForestClassifier(
                     n_estimators=500,
@@ -170,9 +170,11 @@ def main():
     feature_rows = []
     for name, model in models.items():
         model.fit(X, y)
+        variance = model.named_steps["variance"]
+        nonconstant_features = X.columns[variance.get_support()]
         selected = model.named_steps["select"]
         mask = selected.get_support()
-        features = X.columns[mask]
+        features = nonconstant_features[mask]
 
         if name == "Logistic Regression":
             importance = np.abs(model.named_steps["model"].coef_[0])
@@ -206,6 +208,7 @@ def main():
     ax.legend(loc="lower right")
     plt.tight_layout()
     plt.savefig(FIGURES / "model_performance.png", dpi=160)
+    plt.savefig(FIGURES / "model_performance.svg")
     plt.close()
 
     # ROC curves from out-of-fold predictions.
@@ -228,9 +231,9 @@ def main():
 - Samples: {len(y)}
 - Normal: {int((y == 0).sum())}
 - Breast cancer: {int((y == 1).sum())}
-- Features after zero-variance filtering: {X.shape[1]}
+- Non-constant probes in the full matrix: {nonzero_var_count}
 - Cross-validation: stratified 5-fold, shuffle=True, random_state=42
-- Feature selection: top {k} ANOVA F-score features, learned within each training fold
+- Variance filtering and top-{k} ANOVA F-score selection are fitted within each training fold
 
 ## Cross-validated performance
 

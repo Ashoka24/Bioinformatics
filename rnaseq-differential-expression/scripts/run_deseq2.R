@@ -62,6 +62,9 @@ libraries <- c(
 if (length(gsm) != 28 || length(libraries) != 28) {
   stop("Expected 28 GEO samples and 28 count-matrix library columns")
 }
+if (anyDuplicated(gsm) || anyDuplicated(libraries)) {
+  stop("GEO sample and count-matrix library mapping must be one-to-one")
+}
 if (!all(libraries %in% raw_names)) {
   stop("Validated library mapping contains IDs absent from the count matrix")
 }
@@ -78,7 +81,7 @@ if (is.na(gene_col)) gene_col <- raw_names[1]
 
 library_idx <- match(meta$library_id, raw_names)
 if (anyNA(library_idx)) stop("One or more mapped libraries are absent from the count matrix")
-counts <- raw[, c(1, library_idx), drop = FALSE]
+counts <- raw[, c(match(gene_col, raw_names), library_idx), drop = FALSE]
 colnames(counts)[1] <- "gene_id"
 colnames(counts)[-1] <- meta$sample
 counts$gene_id <- as.character(counts$gene_id)
@@ -86,8 +89,11 @@ counts <- counts[counts$gene_id != "" & !duplicated(counts$gene_id), , drop = FA
 rownames(counts) <- counts$gene_id
 counts$gene_id <- NULL
 
-counts[] <- lapply(counts, function(x) as.numeric(as.character(x)))
-counts[is.na(counts)] <- 0
+counts[] <- lapply(counts, function(x) suppressWarnings(as.numeric(as.character(x))))
+if (anyNA(as.matrix(counts))) {
+  stop("Count matrix contains missing or non-numeric values; refusing to replace them with zero")
+}
+if (any(as.matrix(counts) < 0)) stop("Count matrix contains negative values")
 counts <- round(as.matrix(counts))
 
 meta <- meta[colnames(counts), , drop = FALSE]
@@ -125,14 +131,50 @@ p <- ggplot(res_plot, aes(x = log2FoldChange, y = -log10(padj), color = signific
   theme(legend.title = element_blank())
 ggsave("results/figures/02_volcano_plot.svg", p, width = 7, height = 5)
 
+up_count <- sum(sig$log2FoldChange > 0)
+down_count <- sum(sig$log2FoldChange < 0)
+
+metrics <- data.frame(
+  metric = c("samples", "subjects", "genes_after_filtering", "significant_genes",
+             "significant_up", "significant_down"),
+  value = c(nrow(meta), length(unique(meta$subject)), nrow(counts),
+            nrow(sig), up_count, down_count)
+)
+write.table(metrics, "results/metrics.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
+
+top_sig <- head(sig[order(sig$padj), c("gene_id", "log2FoldChange", "pvalue", "padj")], 15)
+top_lines <- c(
+  "| Gene | log2 fold change | p-value | adjusted p-value |",
+  "|---|---:|---:|---:|",
+  vapply(seq_len(nrow(top_sig)), function(i) {
+    sprintf("| %s | %.4f | %.4e | %.4e |",
+            top_sig$gene_id[i], top_sig$log2FoldChange[i],
+            top_sig$pvalue[i], top_sig$padj[i])
+  }, character(1))
+)
+
 report <- c(
-  "# Verified Run", "",
+  "# Project 06 — Paired RNA-seq differential expression", "",
+  "## Analysis",
+  "- Dataset: NCBI GEO GSE116139",
   paste0("- Input samples: ", nrow(meta)),
   paste0("- Subjects: ", length(unique(meta$subject))),
+  "- Comparison: oral mucosa vs blood",
+  "- Design: ~ subject + tissue",
+  "- Low-count filter: at least 10 counts in at least 9 samples",
   paste0("- Genes after low-count filtering: ", nrow(counts)),
-  paste0("- Significant genes (padj < 0.05, |log2FC| >= 1): ", nrow(sig)),
-  "", "## Top genes", "",
-  capture.output(print(head(res[, c("gene_id","log2FoldChange","pvalue","padj")], 15),
-                        row.names = FALSE))
+  "- Significance threshold: adjusted p-value < 0.05 and |log2FC| >= 1",
+  "",
+  "## Results",
+  paste0("- Significant genes: ", nrow(sig)),
+  paste0("- Upregulated in mucosa: ", up_count),
+  paste0("- Downregulated in mucosa: ", down_count),
+  "",
+  "## Most significant genes meeting the project cutoff",
+  "",
+  top_lines,
+  "",
+  "Positive log2 fold change indicates higher expression in mucosa than blood.",
+  "These are research results from the selected public dataset, not clinical biomarkers."
 )
 writeLines(report, "results/REPORT.md")

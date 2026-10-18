@@ -3,9 +3,18 @@ name: Project 05 - Bioinformatics ML
 on:
   push:
     paths:
-      - 'transcriptomics-machine-learning/**'
+      - 'transcriptomics-machine-learning/scripts/**'
+      - 'transcriptomics-machine-learning/metadata/**'
+      - 'transcriptomics-machine-learning/README.md'
       - '.github/workflows/project05_ml.yml'
   workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: project05-ml-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   transcriptomics-ml:
@@ -41,7 +50,20 @@ jobs:
           test -s transcriptomics-machine-learning/results/metrics.tsv
           test -s transcriptomics-machine-learning/results/feature_ranking.tsv
           test -s transcriptomics-machine-learning/results/figures/model_performance.png
+          test -s transcriptomics-machine-learning/results/figures/model_performance.svg
           test -s transcriptomics-machine-learning/results/figures/roc_curves.png
+
+      - name: Commit current summary outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add transcriptomics-machine-learning/results/REPORT.md transcriptomics-machine-learning/results/metrics.tsv transcriptomics-machine-learning/results/feature_ranking.tsv transcriptomics-machine-learning/results/figures/model_performance.svg
+          if git diff --cached --quiet; then
+            echo "No summary changes to commit"
+          else
+            git commit -m "results: refresh transcriptomics classification"
+            git push origin HEAD:main
+          fi
 
       - name: Upload Project 05 results
         uses: actions/upload-artifact@v4
