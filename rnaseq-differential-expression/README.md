@@ -105,7 +105,7 @@ The workflow also generates the complete differential-expression table, normaliz
 ## Repository structure
 
 ```text
-06_rnaseq_differential_expression/
+rnaseq-differential-expression/
 ├── README.md
 ├── metadata/
 │   └── DATASET.md
