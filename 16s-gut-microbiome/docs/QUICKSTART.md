@@ -1,4 +1,4 @@
-# Quickstart — Project 01
+# Quickstart — 16S Gut Microbiome
 
 This guide runs the public NCBI 16S workflow from a WSL terminal. It is intentionally written as an execution checklist so the repository can be followed from a clean environment.
 
@@ -6,7 +6,7 @@ This guide runs the public NCBI 16S workflow from a WSL terminal. It is intentio
 
 ```bash
 git clone https://github.com/Ashoka24/Bioinformatics.git
-cd Bioinformatics/projects/01_16s_microbiome
+cd Bioinformatics/16s-gut-microbiome
 ```
 
 ## 2. Check the environment
@@ -36,7 +36,7 @@ The script:
 Raw files are written outside Git under:
 
 ```text
-/mnt/c/Users/ashok/OneDrive/Desktop/Ashoka/data/16s_ncbi_gut/
+$DATA_ROOT/16s_ncbi_gut/
 ```
 
 To use another local data root:
