@@ -1,4 +1,4 @@
-	functools.partial(<function _simpsons_dominance at 0x7f8935fe3010>)
+	functools.partial(<function _simpsons_dominance at 0x7f5910d23010>)
 IBS-50-CYK2020	0.9302601610494889
 IBS-79-CYK2020	0.9638292139833881
 IBS-27-CYK2020	0.9671012747269627
