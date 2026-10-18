@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DATA_ROOT="${DATA_ROOT:-/mnt/c/Users/ashok/OneDrive/Desktop/Ashoka/data}"
+DATA_ROOT="${DATA_ROOT:-$HOME/bioinformatics-data}"
 PROJECT_DIR="${PROJECT_DIR:-$DATA_ROOT/16s_ncbi_gut}"
 PARAMS_FILE="${PARAMS_FILE:-$(cd "$(dirname "$0")/.." && pwd)/params/ampliseq_params.json}"
 WORK_DIR="$PROJECT_DIR/work_dir/ampliseq"
@@ -12,7 +12,7 @@ LOG_FILE="$LOG_DIR/ampliseq.log"
 mkdir -p "$WORK_DIR" "$LOG_DIR"
 
 # Keep the tracked parameter file readable, but rewrite its local data root at runtime.
-sed "s#/mnt/c/Users/ashok/OneDrive/Desktop/Ashoka/data/16s_ncbi_gut#$PROJECT_DIR#g"     "$PARAMS_FILE" > "$RUNTIME_PARAMS"
+sed "s#$HOME/bioinformatics-data/16s_ncbi_gut#$PROJECT_DIR#g"     "$PARAMS_FILE" > "$RUNTIME_PARAMS"
 
 nextflow run nf-core/ampliseq \
     -r 2.11.0 \
