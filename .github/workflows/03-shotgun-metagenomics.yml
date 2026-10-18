@@ -4,8 +4,13 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - "shotgun-metagenomics/**"
-      - ".github/workflows/03-shotgun-metagenomics.yml"
+      - "shotgun-metagenomics/scripts/**"
+      - "shotgun-metagenomics/README.md"
+      - "shotgun-metagenomics/metadata/DATASET.md"
+
+concurrency:
+  group: project03-shotgun-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: write

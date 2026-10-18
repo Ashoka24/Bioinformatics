@@ -3,9 +3,16 @@ name: Project 02 IBS microbiome
 on:
   push:
     paths:
-      - '.github/workflows/02-ibs-microbiome.yml'
-      - 'ibs-microbiome-ml/**'
+      - 'ibs-microbiome-ml/scripts/**'
+      - 'ibs-microbiome-ml/config/**'
+      - 'ibs-microbiome-ml/docs/**'
+      - 'ibs-microbiome-ml/README.md'
+      - 'ibs-microbiome-ml/metadata/DATASET.md'
   workflow_dispatch: {}
+
+concurrency:
+  group: project02-ibs-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -27,7 +34,7 @@ jobs:
           cp -R results_actual/. ibs-microbiome-ml/results/
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add ibs-microbiome-ml/results ibs-microbiome-ml/metadata/sample-metadata.tsv
+          git add ibs-microbiome-ml/results/REPORT.md ibs-microbiome-ml/results/tables ibs-microbiome-ml/results/ml ibs-microbiome-ml/results/figures ibs-microbiome-ml/results/qc/deblur-stats/stats.csv ibs-microbiome-ml/metadata/sample-metadata.tsv
           git diff --cached --quiet && exit 0
           git commit -m 'results: add actual IBS microbiome outcomes'
           for attempt in 1 2 3; do

@@ -4,9 +4,15 @@ name: Project 01 actual 16S outcome
 on:
   push:
     paths:
-      - '.github/workflows/16s-actual-outcome.yml'
       - '16s-gut-microbiome/scripts/**'
+      - '16s-gut-microbiome/params/**'
+      - '16s-gut-microbiome/docs/**'
+      - '16s-gut-microbiome/README.md'
   workflow_dispatch: {}
+
+concurrency:
+  group: project01-16s-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -28,7 +34,7 @@ jobs:
           cp -R results_actual/. 16s-gut-microbiome/results/
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add 16s-gut-microbiome/results
+          git add 16s-gut-microbiome/results/REPORT.md 16s-gut-microbiome/results/tables 16s-gut-microbiome/results/figures 16s-gut-microbiome/results/qc/deblur-stats/stats.csv 16s-gut-microbiome/results/qc/taxonomy/taxonomy.tsv
           git diff --cached --quiet && exit 0
           git commit -m 'results: add actual SRR26534086 16S outcomes'
           for attempt in 1 2 3; do
