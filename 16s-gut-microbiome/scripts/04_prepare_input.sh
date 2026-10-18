@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-DATA_ROOT="${DATA_ROOT:-/mnt/c/Users/ashok/OneDrive/Desktop/Ashoka/data}"
+DATA_ROOT="${DATA_ROOT:-$HOME/bioinformatics-data}"
 PROJECT_DIR="${PROJECT_DIR:-$DATA_ROOT/16s_ncbi_gut}"
 FASTQ_DIR="$PROJECT_DIR/RawData/SRR26534086/fastq"
 INPUT_DIR="$PROJECT_DIR/RawData/SRR26534086/input"
