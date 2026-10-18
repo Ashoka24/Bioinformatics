@@ -38,7 +38,7 @@ Raw files are written outside the repository under `16s_ncbi_gut/` inside the di
 To use another local data root:
 
 ```bash
-DATA_ROOT=/path/to/data bash scripts/01_download_ncbi.sh
+export DATA_ROOT=/path/to/data
 ```
 
 ## 4. Run read-level QC
