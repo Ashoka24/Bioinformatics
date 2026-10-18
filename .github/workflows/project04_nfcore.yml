@@ -7,9 +7,14 @@ on:
       - ".github/workflows/project04_nfcore.yml"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   nfcore-test:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     timeout-minutes: 45
 
     steps:
