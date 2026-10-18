@@ -31,9 +31,9 @@ for row in rows:
     }
     sample_text = " ".join(fields.values()).upper()
     is_control = bool(
-        re.search(r"\bHEALTHY\b|\bCONTROL(?:S)?\b|\bHC\b", sample_text)
+        re.search(r"\bHEALTHY\b|\bCONTROL(?:S)?\b|\bHC(?:[_ -]?\d+)?\b", sample_text)
     )
-    is_ibs = bool(re.search(r"\bIBS\b|IRRITABLE\s+BOWEL", sample_text))
+    is_ibs = bool(re.search(r"\bIBS(?:[_ -]?\d+)?\b|IRRITABLE\s+BOWEL", sample_text))
 
     if is_control and is_ibs:
         ambiguous.append((run, sample, sample_text))
@@ -42,14 +42,14 @@ for row in rows:
         label = "HC"
         label_source = next(
             (key for key, value in fields.items()
-             if re.search(r"\bHEALTHY\b|\bCONTROL(?:S)?\b|\bHC\b", value.upper())),
+             if re.search(r"\bHEALTHY\b|\bCONTROL(?:S)?\b|\bHC(?:[_ -]?\d+)?\b", value.upper())),
             "sample-level metadata",
         )
     elif is_ibs:
         label = "IBS"
         label_source = next(
             (key for key, value in fields.items()
-             if re.search(r"\bIBS\b|IRRITABLE\s+BOWEL", value.upper())),
+             if re.search(r"\bIBS(?:[_ -]?\d+)?\b|IRRITABLE\s+BOWEL", value.upper())),
             "sample-level metadata",
         )
     else:
