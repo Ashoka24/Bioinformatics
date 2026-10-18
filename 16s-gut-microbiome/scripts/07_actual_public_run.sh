@@ -19,4 +19,4 @@ for pair in "deblur-stats deblur-stats" "table table" "rep-seqs rep-seqs" "taxon
 docker run --rm -v "$PWD:/data" "$IMAGE" biom convert -i /data/results_actual/qc/table/feature-table.biom -o /data/results_actual/tables/feature-table.tsv --to-tsv
 cp results_actual/qc/taxonomy/taxonomy.tsv results_actual/tables/taxonomy.tsv
 for metric in observed_features shannon simpson; do docker run --rm -v "$PWD:/data" "$IMAGE" qiime diversity alpha --i-table /data/work/q2/table.qza --p-metric "$metric" --o-alpha-diversity "/data/work/q2/$metric.qza"; docker run --rm -v "$PWD:/data" "$IMAGE" qiime tools export --input-path "/data/work/q2/$metric.qza" --output-path "/data/results_actual/tables/$metric"; done
-python3 projects/01_16s_microbiome/scripts/08_build_actual_results.py
+python3 16s-gut-microbiome/scripts/08_build_actual_results.py
