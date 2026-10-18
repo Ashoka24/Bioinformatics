@@ -2,11 +2,12 @@
 # Curate lightweight WES deliverables for GitHub. This script does NOT commit or push.
 set -euo pipefail
 
-ROOT="$(git rev-parse --show-toplevel)"
-cd "$ROOT"
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$PROJECT_DIR"
 
 RESULTS="results/hcc1395_sarek"
-[[ -d "$RESULTS" ]] || { echo "ERROR: $RESULTS not found. Run this inside projects/07_wes_variant_analysis."; exit 1; }
+[[ -d "$RESULTS" ]] || { echo "ERROR: $RESULTS not found. Run the Sarek workflow before curating results."; exit 1; }
 
 files=()
 
