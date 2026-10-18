@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-DATA_ROOT="${DATA_ROOT:-/mnt/c/Users/ashok/OneDrive/Desktop/Ashoka/data}"
+DATA_ROOT="${DATA_ROOT:-$HOME/bioinformatics-data}"
 PROJECT_DIR="${PROJECT_DIR:-$DATA_ROOT/16s_ncbi_gut}"
 AMPLISEQ_DIR="$PROJECT_DIR/Analysis/ampliseq"
 OUTDIR="$PROJECT_DIR/Analysis/qiime2_downstream"
