@@ -1,8 +1,8 @@
 {
-  "input_folder": "/mnt/c/Users/ashok/OneDrive/Desktop/Ashoka/data/16s_ncbi_gut/RawData/SRR26534086/input/",
+  "input_folder": "data/input/",
   "FW_primer": "CCTACGGGNGGCWGCAG",
   "RV_primer": "GACTACHVGGGTATCTAATCC",
-  "outdir": "/mnt/c/Users/ashok/OneDrive/Desktop/Ashoka/data/16s_ncbi_gut/Analysis/ampliseq/",
+  "outdir": "results/ampliseq/",
   "trunclenf": 280,
   "trunclenr": 260,
   "sample_inference": "pseudo",
