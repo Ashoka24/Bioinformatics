@@ -30,13 +30,7 @@ NCBI SRA → download → vdb-validate → FASTQ → FastQC → MultiQC → pair
 
 ## Local data
 
-Windows folder:
-C:\Users\ashok\OneDrive\Desktop\Ashoka\data
-
-WSL path:
-/mnt/c/Users/ashok/OneDrive/Desktop/Ashoka/data
-
-The scripts use DATA_ROOT and never require company/IOM storage.
+Keep downloaded reads and intermediate files in a local data directory outside the repository. Set `DATA_ROOT` to that directory before running the scripts; the workflow should not depend on a machine-specific path or on company storage.
 
 ## Run order
 
