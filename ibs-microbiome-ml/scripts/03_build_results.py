@@ -74,7 +74,7 @@ genus_values = defaultdict(lambda: np.zeros(len(samples), dtype=float))
 for feature_id in relative.index:
     genus_values[genus_name(taxonomy_map.get(feature_id, ""))] += relative.loc[feature_id].to_numpy()
 
-genus_relative = pd.DataFrame(genus_values, index=samples).T.T
+genus_relative = pd.DataFrame(genus_values, index=samples)
 if genus_relative.empty:
     raise SystemExit("No genus-level features could be built from the taxonomy table.")
 
