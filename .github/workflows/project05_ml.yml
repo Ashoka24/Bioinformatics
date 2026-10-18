@@ -62,7 +62,17 @@ jobs:
             echo "No summary changes to commit"
           else
             git commit -m "results: refresh transcriptomics classification"
-            git push origin HEAD:main
+            for attempt in 1 2 3; do
+              if git push origin HEAD:main; then
+                exit 0
+              fi
+              if [ "$attempt" -lt 3 ]; then
+                git fetch origin main
+                git rebase origin/main
+              fi
+            done
+            echo "Could not push transcriptomics results after three attempts." >&2
+            exit 1
           fi
 
       - name: Upload Project 05 results
