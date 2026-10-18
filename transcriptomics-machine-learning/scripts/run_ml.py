@@ -202,7 +202,7 @@ def main():
     ax = plot.plot(kind="bar", figsize=(7, 5))
     ax.set_ylim(0, 1.05)
     ax.set_ylabel("Score")
-    ax.set_title("Project 05 — Cross-validated classification")
+    ax.set_title("Cross-validated classification performance")
     ax.legend(loc="lower right")
     plt.tight_layout()
     plt.savefig(FIGURES / "model_performance.png", dpi=160)
@@ -215,12 +215,12 @@ def main():
         RocCurveDisplay.from_predictions(
             y, result["probabilities"], name=f"{name} (AUC={result['roc_auc']:.3f})", ax=ax
         )
-    ax.set_title("Project 05 — Out-of-fold ROC curves")
+    ax.set_title("Out-of-fold ROC curves")
     plt.tight_layout()
     plt.savefig(FIGURES / "roc_curves.png", dpi=160)
     plt.close()
 
-    report = f"""# Project 05 Results
+    report = f"""# Transcriptomics Classification Results
 
 ## Dataset
 
