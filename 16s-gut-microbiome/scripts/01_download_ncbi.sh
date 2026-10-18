@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Windows:
-# C:\Users\ashok\OneDrive\Desktop\Ashoka\data
-#
-# WSL:
-# /mnt/c/Users/ashok/OneDrive/Desktop/Ashoka/data
-DATA_ROOT="${DATA_ROOT:-/mnt/c/Users/ashok/OneDrive/Desktop/Ashoka/data}"
+# Set DATA_ROOT to a local directory with enough space for sequencing data.
+# Example: DATA_ROOT="$HOME/bioinformatics-data"
+DATA_ROOT="${DATA_ROOT:-$HOME/bioinformatics-data}"
 PROJECT_DIR="${PROJECT_DIR:-$DATA_ROOT/16s_ncbi_gut}"
 ACCESSION="${ACCESSION:-SRR26534086}"
 
