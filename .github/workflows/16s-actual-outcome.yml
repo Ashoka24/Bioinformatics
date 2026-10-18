@@ -8,6 +8,7 @@ on:
       - '16s-gut-microbiome/params/**'
       - '16s-gut-microbiome/docs/**'
       - '16s-gut-microbiome/README.md'
+      - '.github/workflows/16s-actual-outcome.yml'
   workflow_dispatch: {}
 
 concurrency:
