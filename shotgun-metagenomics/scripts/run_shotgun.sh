@@ -26,15 +26,15 @@ curl -fL --retry 8 --retry-all-errors --retry-delay 3 "$R2_URL" -o "$WORK/raw_R2
 curl -fsSL --retry 5 \
   "https://www.ebi.ac.uk/ena/portal/api/filereport?accession=$RUN_ACCESSION&result=read_run&fields=run_accession,fastq_md5&format=tsv" \
   -o "$WORK/ena_checksums.tsv"
-MD5_FIELD="$(awk -F '\\t' 'NR == 2 {print $2}' "$WORK/ena_checksums.tsv")"
+MD5_FIELD="$(awk -F '\t' 'NR == 2 {print $2}' "$WORK/ena_checksums.tsv")"
 IFS=';' read -r -a MD5S <<< "$MD5_FIELD"
 if [[ ${#MD5S[@]} -ne 2 ]]; then
   echo "ERROR: expected two ENA MD5 checksums for $RUN_ACCESSION." >&2
   cat "$WORK/ena_checksums.tsv" >&2
   exit 1
 fi
-printf '%s  %s\\n' "${MD5S[0]}" "$WORK/raw_R1.fastq.gz" | md5sum -c -
-printf '%s  %s\\n' "${MD5S[1]}" "$WORK/raw_R2.fastq.gz" | md5sum -c -
+printf '%s  %s\n' "${MD5S[0]}" "$WORK/raw_R1.fastq.gz" | md5sum -c -
+printf '%s  %s\n' "${MD5S[1]}" "$WORK/raw_R2.fastq.gz" | md5sum -c -
 
 fastp \
   --in1 "$WORK/raw_R1.fastq.gz" \
