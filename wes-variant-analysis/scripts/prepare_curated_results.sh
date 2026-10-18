@@ -2,7 +2,7 @@
 # Curate lightweight WES deliverables for GitHub. This script does NOT commit or push.
 set -euo pipefail
 
-REPO_ROOT="$(git rev-parse --show-toplevel)"
+git rev-parse --show-toplevel >/dev/null
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$PROJECT_DIR"
 
