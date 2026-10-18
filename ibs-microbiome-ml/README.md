@@ -44,3 +44,13 @@ This is an independent re-analysis of public data, not a reproduction of the ori
 - results/qc/
 
 Raw FASTQ and intermediate QIIME artifacts are intentionally not committed.
+
+## Run the analysis
+
+From the repository root, run:
+
+```bash
+bash ibs-microbiome-ml/scripts/02_run_ibs_analysis.sh
+```
+
+The script downloads the public reads and runs the QIIME 2 steps in Docker. Temporary files are written to `work/`, `metadata/` and `results_actual/` at the repository root. The GitHub Actions workflow copies the compact results into this project folder after a successful run.
