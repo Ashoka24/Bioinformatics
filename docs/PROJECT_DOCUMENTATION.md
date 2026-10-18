@@ -174,7 +174,7 @@ The project extends beyond a basic microbiome workflow by combining:
 - alpha-diversity analysis
 - genus-level feature engineering
 - supervised machine learning
-- leakage-safe cross-validation
+- stratified cross-validation
 - model evaluation
 
 ## 2. Dataset
@@ -280,11 +280,9 @@ Verified performance:
 - Precision: 0.7830
 - Sensitivity: 0.9765
 
-## 8. Why cross-validation matters
+## 8. Validation note
 
-The classifier is evaluated with stratified folds so that IBS and healthy-control representation is preserved across training and evaluation splits.
-
-The purpose is to estimate classification performance without evaluating the model on the same samples used to train it.
+The models use stratified 5-fold cross-validation, keeping the IBS/control proportions similar across folds. However, genus prevalence filtering is performed on the full cohort before the folds are created. The reported scores are therefore exploratory and should not be described as a fully nested, leakage-free estimate. A stricter evaluation would repeat prevalence filtering inside each training fold.
 
 ## 9. Interpretation
 
