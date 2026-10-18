@@ -18,11 +18,11 @@ Public-data-only cohort analysis using PRJNA637763, a human gut 16S rRNA dataset
 ![Output file map](figures/02_output_file_map.svg)
 
 ## Objectives
-1. Build a reproducible 16S feature table from public SRA/ENA FASTQ files.
-2. Quantify alpha diversity and taxonomic composition.
-3. Test IBS vs healthy-control community differences.
-4. Build a leakage-safe microbiome classifier using genus-level abundance.
-5. Report real cross-validation metrics and ranked microbial features.
+1. Build a 16S feature table from public SRA/ENA reads.
+2. Summarize alpha diversity and taxonomic composition.
+3. Compare IBS and healthy-control samples descriptively.
+4. Evaluate genus-level classifiers with stratified cross-validation.
+5. Record the model metrics and ranked genera.
 
 ## Analysis
 - Public source: NCBI BioProject PRJNA637763
@@ -34,7 +34,7 @@ Public-data-only cohort analysis using PRJNA637763, a human gut 16S rRNA dataset
 - Taxonomy: SILVA 138 99% classifier
 - ML: scikit-learn logistic regression and random forest with stratified cross-validation
 
-This is an independent public-data re-analysis, not a reproduction of the original paper's exact private preprocessing or model.
+This is an independent re-analysis of public data, not a reproduction of the original paper's exact preprocessing or model. Genus prevalence filtering is currently done before cross-validation, so the reported scores should be treated as exploratory rather than as a fully nested validation estimate.
 
 ## Outputs
 - results/REPORT.md
