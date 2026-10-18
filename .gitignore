@@ -31,3 +31,6 @@ logs/*.runtime.json
 # Temporary outputs created by repository-root analysis runners
 /metadata/
 /results_actual/
+
+# nf-core test outputs are generated locally and kept as workflow artifacts
+nfcore-rnaseq-pipeline/results/

@@ -246,11 +246,11 @@ The earlier summary table was generated before correcting feature-table parsing.
 
 ## 7. Machine-learning models
 
-The project evaluates L1-regularized Logistic Regression and Random Forest using stratified five-fold cross-validation. The earlier scores were produced before prevalence filtering and log-ratio transformation were moved inside each training fold. They are retained only in the historical result snapshot and should not be quoted as the current leakage-aware model performance. The current results report is refreshed by the analysis workflow.
+The project evaluates L1-regularized Logistic Regression and Random Forest using stratified five-fold cross-validation. Genus prevalence filtering, log-ratio transformation, and standardization are fitted within each training fold. The full-cohort L1 genus ranking is a separate exploratory fit and is not used to estimate cross-validation performance.
 
 ## 8. Validation note
 
-The revised pipeline fits the genus-prevalence filter, log-ratio transformation, and standardization inside each training fold. The L1 genus ranking is fitted separately on the full cohort for exploration and is not used to estimate cross-validation performance. Updated scores should be read from the current results report after the corrected workflow succeeds.
+The current Project 02 report and metrics are refreshed by the analysis workflow. These are cross-validation estimates from one public cohort, not evidence of a clinically validated IBS diagnostic test.
 
 ## 9. Interpretation
 
@@ -642,9 +642,16 @@ Metrics:
 
 Evaluation uses stratified 5-fold cross-validation.
 
-## 8. Results
+## 8. Verified results
 
-The latest report and metrics table are maintained in the Project 05 folder. The variance filter is now fitted inside each cross-validation training fold, so the earlier score snapshot should be treated as historical until the updated workflow has completed.
+The latest workflow run regenerated the results after moving variance filtering inside each training fold.
+
+| Model | ROC-AUC | Average Precision | Accuracy | Balanced Accuracy |
+|---|---:|---:|---:|---:|
+| Logistic Regression | 0.9802 | 0.9964 | 0.9752 | 0.9118 |
+| Random Forest | 0.9740 | 0.9953 | 0.9669 | 0.9070 |
+
+These are out-of-fold metrics from GSE42568. The cohort contains 121 samples (104 breast cancer and 17 normal); external validation is required before making diagnostic or biomarker claims.
 
 ## 9. Feature ranking
 
@@ -866,6 +873,8 @@ Large generated matrices and raw sequencing files should remain outside the repo
 | 04 | RNA-seq test data | Workflow engineering |
 | 05 | Microarray transcriptomics | Machine learning |
 | 06 | Bulk RNA-seq | Differential expression |
+| 07 | Whole-exome sequencing | Matched tumor-normal variant analysis |
+| 08 | Single-cell RNA-seq | Scanpy QC, clustering, and marker review |
 
 ## Main tools demonstrated
 
@@ -925,7 +934,7 @@ Across the portfolio:
 
 ## Portfolio progression
 
-The six projects intentionally increase in analytical complexity:
+The eight projects cover complementary parts of a practical bioinformatics portfolio:
 
 ```text
 Project 01
@@ -945,6 +954,12 @@ Transcriptomics + leakage-safe machine learning
         ↓
 Project 06
 Paired bulk RNA-seq + differential expression
+        ↓
+Project 07
+Matched tumor-normal WES
+        ↓
+Project 08
+Single-cell RNA-seq exploration
 ```
 
 This progression demonstrates practical capability across sequencing technologies, computational workflows, statistical analysis, machine learning and reproducible bioinformatics.
