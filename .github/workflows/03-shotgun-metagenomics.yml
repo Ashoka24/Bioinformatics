@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   shotgun:
@@ -44,24 +44,10 @@ jobs:
           test -s shotgun-metagenomics/results/REPORT.md
           test ! -e shotgun-metagenomics/results/centrifuge.classification.tsv
 
-      - name: Commit verified results
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add shotgun-metagenomics/results
-          if git diff --cached --quiet; then
-            echo "No result changes to commit"
-          else
-            git commit -m "results: add verified shotgun metagenomics analysis"
-            for attempt in 1 2 3; do
-              if git push origin HEAD:main; then
-                exit 0
-              fi
-              if [ "$attempt" -lt 3 ]; then
-                git fetch origin main
-                git rebase origin/main
-              fi
-            done
-            echo "Could not push the shotgun results after three attempts." >&2
-            exit 1
-          fi
+      - name: Upload verified results
+        uses: actions/upload-artifact@v4
+        with:
+          name: project03-shotgun-results
+          path: shotgun-metagenomics/results/
+          if-no-files-found: error
+          retention-days: 90
