@@ -1,4 +1,4 @@
-# Project 05 Results
+# Transcriptomics Classification Results
 
 ## Dataset
 
@@ -6,9 +6,9 @@
 - Samples: 121
 - Normal: 17
 - Breast cancer: 104
-- Features after zero-variance filtering: 54,579
+- Non-constant probes in the full matrix: 54579
 - Cross-validation: stratified 5-fold, shuffle=True, random_state=42
-- Feature selection: top 100 ANOVA F-score features, learned within each training fold
+- Variance filtering and top-100 ANOVA F-score selection are fitted within each training fold
 
 ## Cross-validated performance
 
@@ -19,7 +19,7 @@
 
 ## Interpretation
 
-The reported metrics are out-of-fold predictions and are therefore not based on predictions from models trained on the corresponding test folds.
+The reported metrics are out-of-fold predictions and therefore are not based on predictions from models trained on the corresponding test folds.
 
 The feature ranking is exploratory because the final ranking models are fit on all samples after cross-validation. It should not be interpreted as an independently validated biomarker list.
 
