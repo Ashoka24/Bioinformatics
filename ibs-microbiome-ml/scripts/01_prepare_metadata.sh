@@ -83,5 +83,13 @@ with open("metadata/sample-metadata.tsv", "w", encoding="utf-8", newline="") as 
         )
 
 counts = {label: sum(item[2] == label for item in keep) for label in ("IBS", "HC")}
+if len(keep) != 111 or counts != {"IBS": 85, "HC": 26}:
+    raise SystemExit(f"Expected 111 samples (85 IBS, 26 HC); found {len(keep)}: {counts}")
+
+project_metadata = Path("ibs-microbiome-ml/metadata/sample-metadata.tsv")
+project_metadata.write_text(
+    Path("metadata/sample-metadata.tsv").read_text(encoding="utf-8"),
+    encoding="utf-8",
+)
 print(f"Wrote {len(keep)} samples; IBS={counts['IBS']}, HC={counts['HC']}")
 PY
