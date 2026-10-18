@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: project05-ml-${{ github.ref }}
@@ -52,28 +52,6 @@ jobs:
           test -s transcriptomics-machine-learning/results/figures/model_performance.png
           test -s transcriptomics-machine-learning/results/figures/model_performance.svg
           test -s transcriptomics-machine-learning/results/figures/roc_curves.png
-
-      - name: Commit current summary outputs
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add transcriptomics-machine-learning/results/REPORT.md transcriptomics-machine-learning/results/metrics.tsv transcriptomics-machine-learning/results/feature_ranking.tsv transcriptomics-machine-learning/results/figures/model_performance.svg
-          if git diff --cached --quiet; then
-            echo "No summary changes to commit"
-          else
-            git commit -m "results: refresh transcriptomics classification"
-            for attempt in 1 2 3; do
-              if git push origin HEAD:main; then
-                exit 0
-              fi
-              if [ "$attempt" -lt 3 ]; then
-                git fetch origin main
-                git rebase origin/main
-              fi
-            done
-            echo "Could not push transcriptomics results after three attempts." >&2
-            exit 1
-          fi
 
       - name: Upload Project 05 results
         uses: actions/upload-artifact@v4
