@@ -1,16 +1,29 @@
 # Actual outcome — shotgun metagenomics
 
-Public paired-end WGS run PRJNA273761 / SRR1779146 / SAMN03295851 / SRX858749 (Illumina).
+Public paired-end WGS analysis.
+
+## Provenance
+- Run: SRR1779146
+- BioProject: PRJNA273761
+- BioSample: SAMN03295851
+- Experiment: SRX858749
+- Study: SRP052967
+- Platform: ILLUMINA
+- Strategy: WGS
+- Layout: PAIRED
 
 ## Kraken2
 - Database: Standard-8 June 2026
-- Total fragments: 7,954,717
-- Classified: 6,940,503 (87.25%)
-- Unclassified: 1,014,214 (12.75%)
-- Leading species: Enterobacter roggenkampii (17.06% of total fragments)
+- Classified: 6,940,503 fragments (87.25%)
+- Unclassified: 1,014,214 fragments
 
-## Centrifuge and comparison
-Both classifiers analyzed the same fastp-cleaned reads. Top-10 species overlap: 7/10; Jaccard: 0.5385. See CLASSIFIER_COMPARISON.md and classifier_comparison.tsv. Classifier percentages and abundance estimates are not directly equivalent.
+## Top species
+- Leading species: Enterobacter roggenkampii (17.06% of total fragments)
+- See top_taxa.tsv
+
+## Comparison
+- See CLASSIFIER_COMPARISON.md and classifier_comparison.tsv
+- Kraken2 percentages and Centrifuge abundance estimates are not directly interchangeable.
 
 ## Interpretation
-One infant fecal sample cannot establish NEC-associated taxa, biomarkers, causality, prevalence or cohort-level differences.
+One public sample cannot establish NEC-associated taxa, biomarkers, causality, prevalence, or cohort-level differences.
