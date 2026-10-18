@@ -42,7 +42,7 @@ Execution is delegated to nf-core/sarek 3.10.0.
 ## Project structure
 
 ```text
-07_wes_variant_analysis/
+wes-variant-analysis/
 ├── config/
 │   ├── samplesheet.csv
 │   └── samplesheet.hcc1395.example.csv
