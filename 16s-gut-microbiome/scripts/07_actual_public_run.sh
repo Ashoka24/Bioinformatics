@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
 RUN=SRR26534086
 IMAGE=quay.io/qiime2/amplicon:2024.10
 mkdir -p work/raw work/q2 results_actual/qc results_actual/tables
