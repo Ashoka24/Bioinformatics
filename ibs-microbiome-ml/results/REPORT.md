@@ -1,5 +1,7 @@
 # Actual outcome — IBS microbiome cohort
 
+> **Result status:** The metrics below are from the earlier analysis and are retained as a historical snapshot. The pipeline has since been corrected so feature filtering and transformations are fitted inside each training fold. Do not present the AUC, accuracy, or diversity values below as the verified output of the corrected pipeline. The updated run is publishing its outputs as a GitHub Actions artifact.
+
 Public-data-only re-analysis of PRJNA637763.
 
 ## Cohort
