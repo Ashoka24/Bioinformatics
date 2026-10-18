@@ -32,7 +32,7 @@ The VCF index file was present, but index-query validation was not independently
 
 ## Reproducibility notes
 
-The local run used a low-memory Nextflow configuration at `/home/ashoka/sarek-config/lowmem.config` and a parameters file at `config/sarek_params.json`. The absolute path is specific to the execution machine; do not rely on it for another installation. Use a portable, documented configuration when reproducing the run.
+The local run used a low-memory Nextflow configuration specific to the execution machine; that local configuration is not included in this repository. The exact absolute path is intentionally omitted. Use a portable, documented configuration when reproducing the run.
 
 Raw FASTQ/SRA data, reference assets, Nextflow work directories, Docker storage, and temporary files should remain outside GitHub. Keep only code, reusable configuration templates, concise reports, and small non-sensitive QC summaries in version control. Do not commit credentials or machine-specific paths.
 

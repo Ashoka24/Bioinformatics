@@ -35,7 +35,7 @@ The run completed successfully in [GitHub Actions](https://github.com/Ashoka24/B
 
 ## How to run it again
 
-The workflow can be run through GitHub Actions, or locally with Python 3.10 or 3.11:
+The workflow can be run through GitHub Actions, or locally with Python 3.11.4 or newer (the downloader uses the safe tar extraction filter API):
 
 ```bash
 python -m venv .venv

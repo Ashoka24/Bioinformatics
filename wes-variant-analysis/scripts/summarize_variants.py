@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
-"""Create a lightweight variant summary from a VCF."""
-
+"""Create a lightweight variant summary from a plain-text or gzipped VCF."""
 import csv
+import gzip
 import sys
+from pathlib import Path
 
-vcf_path = sys.argv[1]
-output_path = sys.argv[2]
+vcf_path = Path(sys.argv[1])
+output_path = Path(sys.argv[2])
+opener = gzip.open if vcf_path.suffix == ".gz" else open
 
 total = 0
 passing = 0
-
-with open(vcf_path, encoding="utf-8") as handle:
+with opener(vcf_path, "rt", encoding="utf-8") as handle:
     for line in handle:
         if line.startswith("#"):
             continue
@@ -21,7 +22,8 @@ with open(vcf_path, encoding="utf-8") as handle:
         if fields[6] == "PASS":
             passing += 1
 
-with open(output_path, "w", newline="", encoding="utf-8") as handle:
+output_path.parent.mkdir(parents=True, exist_ok=True)
+with output_path.open("w", newline="", encoding="utf-8") as handle:
     writer = csv.writer(handle, delimiter="\t")
     writer.writerow(["metric", "value"])
     writer.writerow(["variants_total", total])

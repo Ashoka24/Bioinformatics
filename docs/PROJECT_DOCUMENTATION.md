@@ -228,7 +228,7 @@ The analysis uses:
 - Deblur on forward reads
 - SILVA 138 99% classifier
 - genus-level abundance features
-- prevalence filtering before machine-learning analysis
+- genus-prevalence filtering fitted within each cross-validation training fold
 
 ## 5. Cohort composition
 
@@ -242,47 +242,15 @@ After prevalence filtering:
 
 ## 6. Diversity results
 
-Mean observed features:
-
-| Group | Mean observed features |
-|---|---:|
-| IBS | 275.38 |
-| Healthy control | 301.96 |
-
-Mean Shannon diversity:
-
-| Group | Mean Shannon |
-|---|---:|
-| IBS | 3.9586 |
-| Healthy control | 4.2491 |
-
-These are descriptive cohort results from this public dataset.
+The earlier summary table was generated before correcting feature-table parsing. The analysis script now retains every feature row; use the current project results report after the corrected workflow completes rather than relying on the older means reproduced in previous documentation.
 
 ## 7. Machine-learning models
 
-### Logistic Regression
-
-Evaluation used stratified 5-fold cross-validation.
-
-Verified performance:
-
-- ROC-AUC: 0.9186
-- Accuracy: 0.8288
-- Precision: 0.9342
-- Sensitivity: 0.8353
-
-### Random Forest
-
-Verified performance:
-
-- ROC-AUC: 0.8604
-- Accuracy: 0.7748
-- Precision: 0.7830
-- Sensitivity: 0.9765
+The project evaluates L1-regularized Logistic Regression and Random Forest using stratified five-fold cross-validation. The earlier scores were produced before prevalence filtering and log-ratio transformation were moved inside each training fold. They are retained only in the historical result snapshot and should not be quoted as the current leakage-aware model performance. The current results report is refreshed by the analysis workflow.
 
 ## 8. Validation note
 
-The models use stratified 5-fold cross-validation, keeping the IBS/control proportions similar across folds. However, genus prevalence filtering is performed on the full cohort before the folds are created. The reported scores are therefore exploratory and should not be described as a fully nested, leakage-free estimate. A stricter evaluation would repeat prevalence filtering inside each training fold.
+The revised pipeline fits the genus-prevalence filter, log-ratio transformation, and standardization inside each training fold. The L1 genus ranking is fitted separately on the full cohort for exploration and is not used to estimate cross-validation performance. Updated scores should be read from the current results report after the corrected workflow succeeds.
 
 ## 9. Interpretation
 
@@ -674,32 +642,9 @@ Metrics:
 
 Evaluation uses stratified 5-fold cross-validation.
 
-## 8. Verified results
+## 8. Results
 
-Dataset:
-
-- 121 samples
-- 104 breast cancer
-- 17 normal
-- 54,579 non-constant probes
-
-### Logistic Regression
-
-| Metric | Value |
-|---|---:|
-| ROC-AUC | 0.9802 |
-| Average Precision | 0.9964 |
-| Accuracy | 0.9752 |
-| Balanced Accuracy | 0.9118 |
-
-### Random Forest
-
-| Metric | Value |
-|---|---:|
-| ROC-AUC | 0.9740 |
-| Average Precision | 0.9953 |
-| Accuracy | 0.9669 |
-| Balanced Accuracy | 0.9070 |
+The latest report and metrics table are maintained in the Project 05 folder. The variance filter is now fitted inside each cross-validation training fold, so the earlier score snapshot should be treated as historical until the updated workflow has completed.
 
 ## 9. Feature ranking
 
