@@ -101,7 +101,7 @@ bash scripts/run_shotgun.sh
 ## Repository structure
 
 ~~~text
-03_shotgun_metagenomics/
+shotgun-metagenomics/
 ├── README.md
 ├── metadata/DATASET.md
 ├── scripts/
