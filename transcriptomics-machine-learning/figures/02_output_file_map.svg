@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1100" height="470" viewBox="0 0 1100 470">
 <rect width="1100" height="470" fill="#fff"/>
-<text x="55" y="50" font-family="Arial" font-size="30" font-weight="700">Project 05 — Output File Map</text>
+<text x="55" y="50" font-family="Arial" font-size="30" font-weight="700">Transcriptomics ML — Output Files</text>
 <text x="55" y="80" font-family="Arial" font-size="16">Compact derived outputs are committed; raw GEO data stays outside Git</text>
 <g font-family="Arial">
 <rect x="55" y="120" width="250" height="260" rx="12" fill="#f5f5f5" stroke="#222"/>
-<text x="80" y="155" font-size="18" font-weight="700">projects/05_bioinformatics_ml/</text>
+<text x="80" y="155" font-size="18" font-weight="700">transcriptomics-machine-learning/</text>
 <text x="80" y="195" font-size="16">README.md</text>
 <text x="80" y="225" font-size="16">metadata/DATASET.md</text>
 <text x="80" y="255" font-size="16">scripts/run_ml.py</text>
