@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Project 07: pinned nf-core/sarek WES tumor-normal execution.
-# Run from projects/07_wes_variant_analysis or pass paths explicitly.
+# Run the pinned nf-core/sarek WES tumor-normal workflow.
+# Run this script from any directory; paths are resolved from this file.
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$PROJECT_DIR"
