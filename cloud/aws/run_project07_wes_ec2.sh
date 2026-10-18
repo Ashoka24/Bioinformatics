@@ -7,7 +7,7 @@ set -euo pipefail
 
 S3_INPUT="${1:?Usage: $0 <s3-input-prefix> <s3-output-prefix>}"
 S3_OUTPUT="${2:?Missing S3 output prefix}"
-PROJECT_DIR="${PROJECT_DIR:-/workspace/Bioinformatics/projects/07_wes_variant_analysis}"
+PROJECT_DIR="${PROJECT_DIR:-/workspace/Bioinformatics/wes-variant-analysis}"
 FASTQ_DIR="$PROJECT_DIR/work/fastq/hcc1395"
 
 mkdir -p "$FASTQ_DIR" "$PROJECT_DIR/results"
