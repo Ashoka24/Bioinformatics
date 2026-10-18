@@ -101,15 +101,11 @@ The repository's execution and troubleshooting documentation should be consulted
 
 ## 6. Local data handling
 
-Example local data root:
+Set `DATA_ROOT` to a local directory with enough space for raw reads and intermediate files. For example, on Linux or WSL:
 
-`C:\Users\ashok\OneDrive\Desktop\Ashoka\data`
+`export DATA_ROOT="$HOME/bioinformatics-data"`
 
-WSL equivalent:
-
-`/mnt/c/Users/ashok/OneDrive/Desktop/Ashoka/data`
-
-Scripts use a configurable data root rather than company-specific storage.
+The scripts use a configurable data root rather than a machine-specific path or company storage.
 
 ## 7. Execution order
 
