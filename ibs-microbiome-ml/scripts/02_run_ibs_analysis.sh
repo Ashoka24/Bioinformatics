@@ -5,7 +5,7 @@ IMAGE=quay.io/qiime2/amplicon:2024.10
 mkdir -p work/raw work/q2 results_actual/qc results_actual/tables results_actual/ml
 rm -rf results_actual/qc/* results_actual/tables/* results_actual/ml/*
 
-bash projects/02_ibs_microbiome/scripts/01_prepare_metadata.sh
+bash ibs-microbiome-ml/scripts/01_prepare_metadata.sh
 
 python3 - <<'PY'
 import csv,subprocess
@@ -75,4 +75,4 @@ for metric in observed_features shannon simpson; do
   docker run --rm -v "$PWD:/data" "$IMAGE" qiime tools export --input-path "/data/work/q2/$metric.qza" --output-path "/data/results_actual/tables/$metric"
 done
 
-docker run --rm -v "$PWD:/data" "$IMAGE" python /data/projects/02_ibs_microbiome/scripts/03_build_results.py
+docker run --rm -v "$PWD:/data" "$IMAGE" python /data/ibs-microbiome-ml/scripts/03_build_results.py
