@@ -34,7 +34,7 @@ Public-data-only cohort analysis using PRJNA637763, a human gut 16S rRNA dataset
 - Taxonomy: SILVA 138 99% classifier
 - ML: scikit-learn logistic regression and random forest with stratified cross-validation
 
-This is an independent re-analysis of public data, not a reproduction of the original paper's exact preprocessing or model. Genus prevalence filtering is currently done before cross-validation, so the reported scores should be treated as exploratory rather than as a fully nested validation estimate.
+This is an independent re-analysis of public data, not a reproduction of the original paper's exact preprocessing or model. The genus-prevalence filter, log-ratio transform and standardization are fitted within each training fold. The separately reported L1 genus ranking is fitted on the full cohort and is exploratory; it is not used to estimate cross-validation performance.
 
 ## Outputs
 - results/REPORT.md
