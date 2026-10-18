@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   analyze:
@@ -27,24 +27,10 @@ jobs:
         run: docker pull quay.io/qiime2/amplicon:2024.10
       - name: Run public IBS analysis
         run: bash ibs-microbiome-ml/scripts/02_run_ibs_analysis.sh
-      - name: Commit verified results
-        run: |
-          set -euo pipefail
-          mkdir -p ibs-microbiome-ml/results
-          cp -R results_actual/. ibs-microbiome-ml/results/
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add ibs-microbiome-ml/results/REPORT.md ibs-microbiome-ml/results/tables ibs-microbiome-ml/results/ml ibs-microbiome-ml/results/figures ibs-microbiome-ml/results/qc/deblur-stats/stats.csv ibs-microbiome-ml/metadata/sample-metadata.tsv
-          git diff --cached --quiet && exit 0
-          git commit -m 'results: add actual IBS microbiome outcomes'
-          for attempt in 1 2 3; do
-            if git push origin HEAD:main; then
-              exit 0
-            fi
-            if [ "$attempt" -lt 3 ]; then
-              git fetch origin main
-              git rebase origin/main
-            fi
-          done
-          echo "Could not push the IBS results after three attempts." >&2
-          exit 1
+      - name: Upload verified results
+        uses: actions/upload-artifact@v4
+        with:
+          name: project02-ibs-results
+          path: results_actual/
+          if-no-files-found: error
+          retention-days: 90
