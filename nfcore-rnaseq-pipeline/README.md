@@ -3,11 +3,11 @@
 ## Overview figure
 
 ![nf-core RNA-seq validation overview](figures/03_overview.svg)
-A workflow-engineering project focused on reproducibility, containerization, parameterization, resource awareness and automated validation using Nextflow and nf-core.
+I use the nf-core/rnaseq test profile to check that Nextflow, Docker and the pipeline work together in a repeatable run. This is a pipeline test, not a biological analysis of a study cohort.
 
-## Objective
+## What I tested
 
-Validate a complete RNA-seq workflow reproducibly in Docker using the maintained nf-core/rnaseq test profile and GitHub Actions.
+Run the nf-core/rnaseq test profile in Docker and verify the run through GitHub Actions.
 
 This repository focuses on running and validating the nf-core workflow. The separate RNA-seq differential-expression analysis covers the biological comparison.
 
