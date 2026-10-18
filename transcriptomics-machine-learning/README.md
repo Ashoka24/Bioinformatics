@@ -88,7 +88,7 @@ Figures + reproducibility report
 ## Repository structure
 
 ```text
-05_bioinformatics_ml/
+transcriptomics-machine-learning/
 ├── README.md
 ├── metadata/
 │   └── DATASET.md
