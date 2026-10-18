@@ -27,6 +27,7 @@ fastqc/
 # Generated logs and runtime parameter files
 logs/*.log
 logs/*.runtime.json
+
 # Temporary outputs created by repository-root analysis runners
 /metadata/
 /results_actual/
