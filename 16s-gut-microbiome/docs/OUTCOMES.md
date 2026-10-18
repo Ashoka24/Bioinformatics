@@ -73,11 +73,13 @@ Potential outputs include:
 
 ## 3. Current status
 
-**Workflow status:** repository and execution framework prepared.
+**Single-run workflow status:** a public run, SRR26534086, has been processed with the QIIME 2 Cutadapt + Deblur route. The committed `results/REPORT.md` records the settings and descriptive outputs from that run.
 
-**Biological-results status:** pending actual execution on the public NCBI data.
+**Read-level QC and local nf-core/ampliseq route:** these remain separate workflow steps. Their outputs should be added only after those steps have been run and reviewed.
 
-This distinction is intentional. The portfolio must not contain fabricated abundance tables, diversity values, p-values, or biological conclusions.
+**Cohort-level biology:** not established. One sample cannot support disease-group comparisons, differential abundance, PERMANOVA, or population-level conclusions.
+
+Keep the evidence tied to the workflow that produced it. Do not mix outputs from the Deblur demonstration run with outputs from the separate nf-core/ampliseq route or report unrun steps as completed.
 
 ## 4. File layout after execution
 
