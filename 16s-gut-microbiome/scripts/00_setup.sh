@@ -37,6 +37,5 @@ for tool in prefetch fasterq-dump vdb-validate fastqc multiqc nextflow docker qi
 done
 
 echo
-echo "Default data directory:"
-echo "$HOME/bioinformatics-data"
-echo "Override with DATA_ROOT=/your/local/data before running the workflow."
+echo "Data directory (uses this default when DATA_ROOT is unset):"
+echo "${DATA_ROOT:-$HOME/bioinformatics-data}"
