@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-DATA_ROOT="${DATA_ROOT:-/mnt/c/Users/ashok/OneDrive/Desktop/Ashoka/data}"
+DATA_ROOT="${DATA_ROOT:-$HOME/bioinformatics-data}"
 PROJECT_DIR="${PROJECT_DIR:-$DATA_ROOT/16s_ncbi_gut}"
 BIOPROJECT="${BIOPROJECT:-PRJNA1031545}"
 OUTFILE="$PROJECT_DIR/metadata/${BIOPROJECT}_runinfo.csv"
