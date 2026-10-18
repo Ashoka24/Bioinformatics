@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: project06-rnaseq-${{ github.ref }}
@@ -38,29 +38,6 @@ jobs:
       - name: Run RNA-seq analysis
         working-directory: rnaseq-differential-expression
         run: Rscript scripts/run_deseq2.R
-
-      - name: Commit compact summary outputs
-        working-directory: ${{ github.workspace }}
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add rnaseq-differential-expression/results/REPORT.md rnaseq-differential-expression/results/metrics.tsv
-          if git diff --cached --quiet; then
-            echo "No summary changes to commit"
-          else
-            git commit -m "results: refresh paired RNA-seq summary"
-            for attempt in 1 2 3; do
-              if git push origin HEAD:main; then
-                exit 0
-              fi
-              if [ "$attempt" -lt 3 ]; then
-                git fetch origin main
-                git rebase origin/main
-              fi
-            done
-            echo "Could not push paired RNA-seq summary after three attempts." >&2
-            exit 1
-          fi
 
       - name: Upload results
         uses: actions/upload-artifact@v4
