@@ -33,11 +33,7 @@ The script:
 4. compresses the FASTQ files;
 5. writes SHA-256 checksums.
 
-Raw files are written outside Git under:
-
-```text
-$DATA_ROOT/16s_ncbi_gut/
-```
+Raw files are written outside the repository under `16s_ncbi_gut/` inside the directory configured by `DATA_ROOT`. If you do not set it, the download script uses `$HOME/bioinformatics-data`.
 
 To use another local data root:
 
