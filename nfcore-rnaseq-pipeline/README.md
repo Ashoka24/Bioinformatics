@@ -36,11 +36,9 @@ The figure summarizes the successful GitHub Actions run recorded below. It is an
 
 ## CI verification
 
-**Status: 🟢 Completed**
+The GitHub Actions test run completed successfully on 6 October 2026.
 
-GitHub Actions run #2 completed successfully on 2026-10-06.
-
-- Workflow run: 37505789353
+- Workflow run: [#37505789353](https://github.com/Ashoka24/Bioinformatics/actions/runs/37505789353)
 - Commit: ce80a170070b3fda3ce377dea07b4aae443e3488
 - Job: nfcore-test
 - Job conclusion: success
