@@ -2,6 +2,7 @@
 """Build descriptive IBS microbiome results and leakage-aware CV metrics."""
 from collections import defaultdict
 from pathlib import Path
+import html
 import math
 
 import matplotlib
@@ -201,6 +202,42 @@ plt.savefig(FIGURES / "genus_relative_abundance.png", dpi=180)
 plt.close()
 
 full_prevalence_count = int(((genus_relative > 0).mean(axis=0) > 0.10).sum())
+
+# Regenerate the evidence graphic from this run so it cannot silently display
+# metrics from an older model implementation.
+metric_values = {row[0]: row[1] for row in results}
+cards = [
+    ("Samples", str(len(samples))),
+    ("IBS", str(int((labels == 1).sum()))),
+    ("Healthy controls", str(int((labels == 0).sum()))),
+    ("Genera present in >10% of samples", str(full_prevalence_count)),
+    ("L1 logistic ROC-AUC", f"{metric_values['l1_logistic']:.4f}"),
+    ("Random forest ROC-AUC", f"{metric_values['random_forest']:.4f}"),
+]
+svg = [
+    '<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="390" viewBox="0 0 1100 390" role="img">',
+    '<rect width="1100" height="390" rx="18" fill="#ffffff" stroke="#d7e0e8"/>',
+    '<rect width="1100" height="88" rx="18" fill="#17324d"/>',
+    '<rect y="68" width="1100" height="20" fill="#17324d"/>',
+    '<text x="30" y="38" font-family="Arial,Helvetica,sans-serif" font-size="25" font-weight="700" fill="#ffffff">IBS cohort analysis evidence</text>',
+    '<text x="30" y="65" font-family="Arial,Helvetica,sans-serif" font-size="15" fill="#d8e5ef">Public 16S re-analysis · five-fold stratified cross-validation</text>',
+]
+for index, (label, value) in enumerate(cards):
+    column = index % 3
+    row = index // 3
+    x = 28 + column * 354
+    y = 112 + row * 126
+    svg.extend([
+        f'<rect x="{x}" y="{y}" width="330" height="104" rx="12" fill="#f4f7fb" stroke="#d8e0ea"/>',
+        f'<text x="{x + 18}" y="{y + 42}" font-family="Arial,Helvetica,sans-serif" font-size="27" font-weight="700" fill="#17324d">{html.escape(value)}</text>',
+        f'<text x="{x + 18}" y="{y + 73}" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#526477">{html.escape(label)}</text>',
+    ])
+svg.extend([
+    '<text x="1070" y="375" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#718096">Generated from this run’s outputs · not a FastQC screenshot</text>',
+    '</svg>',
+])
+(FIGURES / "03_read_processing_evidence.svg").write_text("\\n".join(svg) + "\\n", encoding="utf-8")
+
 report = [
     "# Actual outcome — IBS microbiome cohort",
     "",
