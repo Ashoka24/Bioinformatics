@@ -37,8 +37,6 @@ for tool in prefetch fasterq-dump vdb-validate fastqc multiqc nextflow docker qi
 done
 
 echo
-echo "Windows data folder:"
-echo "C:\\Users\\ashok\\OneDrive\\Desktop\\Ashoka\\data"
-echo
-echo "WSL equivalent:"
-echo "/mnt/c/Users/ashok/OneDrive/Desktop/Ashoka/data"
+echo "Default data directory:"
+echo "$HOME/bioinformatics-data"
+echo "Override with DATA_ROOT=/your/local/data before running the workflow."
