@@ -9,7 +9,7 @@ A workflow-engineering project focused on reproducibility, containerization, par
 
 Validate a complete RNA-seq workflow reproducibly in Docker using the maintained nf-core/rnaseq test profile and GitHub Actions.
 
-This project is intentionally different from Project 06: Project 04 focuses on workflow engineering and execution reliability; Project 06 will focus on biological transcriptomics analysis and differential expression.
+This repository focuses on running and validating the nf-core workflow. The separate RNA-seq differential-expression analysis covers the biological comparison.
 
 ## Workflow figure
 
@@ -66,7 +66,7 @@ For repeated execution, Nextflow supports -resume so completed processes can be 
 
 ## Repository layout
 
-    04_nfcore_pipeline/
+    nfcore-rnaseq-pipeline/
     ├── README.md
     ├── params/
     │   └── test.yml
