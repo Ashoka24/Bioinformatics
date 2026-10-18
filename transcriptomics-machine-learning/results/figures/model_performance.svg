@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
 <rect width="900" height="520" fill="white"/>
-<text x="55" y="55" font-family="Arial" font-size="28" font-weight="700">Project 05 — Cross-validated model performance</text>
+<text x="55" y="55" font-family="Arial" font-size="28" font-weight="700">Cross-validated model performance</text>
 <text x="55" y="84" font-family="Arial" font-size="15">GSE42568 • stratified 5-fold out-of-fold evaluation</text>
 <g font-family="Arial" font-size="15">
 <text x="190" y="150" font-weight="700">ROC-AUC</text>
