@@ -8,6 +8,7 @@ on:
       - 'ibs-microbiome-ml/docs/**'
       - 'ibs-microbiome-ml/README.md'
       - 'ibs-microbiome-ml/metadata/DATASET.md'
+      - '.github/workflows/02-ibs-microbiome.yml'
   workflow_dispatch: {}
 
 concurrency:
