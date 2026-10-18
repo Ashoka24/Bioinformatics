@@ -236,7 +236,7 @@ svg.extend([
     '<text x="1070" y="375" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#718096">Generated from this run’s outputs · not a FastQC screenshot</text>',
     '</svg>',
 ])
-(FIGURES / "03_read_processing_evidence.svg").write_text("\\n".join(svg) + "\\n", encoding="utf-8")
+(FIGURES / "03_read_processing_evidence.svg").write_text("\n".join(svg) + "\n", encoding="utf-8")
 
 report = [
     "# Actual outcome — IBS microbiome cohort",
