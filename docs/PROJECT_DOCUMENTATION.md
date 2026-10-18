@@ -1,8 +1,6 @@
-# Bioinformatics Portfolio — Complete Project Documentation
+# Bioinformatics Portfolio — Detailed Project Notes
 
-This document provides the detailed technical record for Projects 01–06 in this repository.
-
-It is intended as the detailed companion to the main portfolio README. The main README is intentionally concise; this document preserves the technical depth of the individual projects.
+This document collects the technical notes for the six core projects currently documented here. The main README links to all eight projects; use each project's own README for its current workflow, outputs and limitations.
 
 ---
 
