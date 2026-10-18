@@ -1,6 +1,6 @@
 # Quickstart — 16S Gut Microbiome
 
-This guide runs the public NCBI 16S workflow from a WSL terminal. It is intentionally written as an execution checklist so the repository can be followed from a clean environment.
+Use this guide to run the public NCBI 16S workflow from a WSL terminal.
 
 ## 1. Clone and enter the repository
 
