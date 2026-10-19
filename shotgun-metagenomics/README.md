@@ -65,7 +65,7 @@ The workflow:
 5. Removes the large Kraken2 database before downloading the Centrifuge index.
 6. Runs Centrifuge on the same cleaned reads.
 7. Generates top-taxa and classifier-comparison tables.
-8. Commits only compact derived results; raw FASTQ, databases and per-read Centrifuge classifications are not committed.
+8. Uploads compact derived results as a GitHub Actions artifact; raw FASTQ, databases and per-read Centrifuge classifications are not committed.
 
 ## Read-classification evidence
 
@@ -86,7 +86,7 @@ The workflow creates:
 - classifier_comparison.tsv
 - CLASSIFIER_COMPARISON.md
 
-**Verified GitHub Actions run #15:** both classifiers completed and derived files were committed. Kraken2 classified **6,940,503 / 7,954,717 fragments (87.25%)**. The leading Kraken2 species was **Enterobacter roggenkampii (17.06% of total fragments)**. The top-10 classifier species overlap was **7/10 (Jaccard 0.5385)**. See results/REPORT.md and results/CLASSIFIER_COMPARISON.md.
+The checked-in `results/` directory is a compact report snapshot. It records Kraken2 classification of **6,940,503 / 7,954,717 fragments (87.25%)**, with **Enterobacter roggenkampii (17.06% of total fragments)** as the leading species and top-10 classifier overlap of **7/10 (Jaccard 0.5385)**. The latest successful [GitHub Actions run](https://github.com/Ashoka24/Bioinformatics/actions/runs/39116793043) regenerated and verified the derived files, then uploaded them as `project03-shotgun-results`. The current workflow does not commit generated results; use the run artifact for fresh outputs.
 
 ## Interpretation boundary
 

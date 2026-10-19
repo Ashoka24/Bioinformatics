@@ -1,6 +1,6 @@
 # Bioinformatics Portfolio — Detailed Project Notes
 
-This document collects the technical notes for the six core projects currently documented here. The main README links to all eight projects; use each project's own README for its current workflow, outputs and limitations.
+This document collects technical notes for all eight portfolio projects. Each project README remains the primary guide to its commands, current outputs and interpretation limits.
 
 ---
 
@@ -858,6 +858,58 @@ The project records:
 - output structure
 
 Large generated matrices and raw sequencing files should remain outside the repository when they are too large for practical GitHub storage.
+
+---
+
+# Project 07 — Whole-Exome Sequencing Variant Analysis
+
+## Objective and dataset
+
+Run a matched tumor/normal Illumina whole-exome sequencing workflow with nf-core/sarek 3.10.0, using the HCC1395 tumor and HCC1395BL normal pair. Both samples share the same patient identifier in the samplesheet.
+
+## Workflow
+
+```text
+Paired FASTQ files
+  ↓
+Read QC and alignment
+  ↓
+BAM processing and duplicate marking
+  ↓
+Mutect2 tumor/normal variant calling
+  ↓
+Variant filtering
+  ↓
+VEP annotation
+  ↓
+VCF validation and QC reporting
+```
+
+The wrapper validates samplesheet structure and FASTQ integrity before running Sarek. The repository documents the run configuration and report; raw reads and large intermediate files are not stored in Git.
+
+## Recorded evidence and limits
+
+The documented local run report records 5,289 VCF records, a VEP `CSQ` header, a passing gzip integrity check, and a present Tabix index. The index was not independently query-tested in those checks. These are workflow and file-integrity observations, not a pathogenic-variant count or a clinical interpretation. Any clinical use would require additional validation and expert review.
+
+See [the Project 07 README](../wes-variant-analysis/README.md) for commands, sample-sheet validation, and output preparation.
+
+---
+
+# Project 08 — Single-Cell RNA-seq Analysis of PBMCs
+
+## Objective and dataset
+
+Explore the public 10x Genomics PBMC 3k healthy-donor dataset using Scanpy and AnnData. The analysis covers cell/gene QC, filtering, normalization, highly variable genes, PCA, a neighbour graph, UMAP, Leiden clustering, and cluster marker ranking.
+
+## Recorded workflow output
+
+The successful cloud run started with 2,700 cells and 32,738 genes. After filtering, 2,699 cells and 13,714 genes remained; 2,000 highly variable genes were selected, and the marker table contained 123,426 records. Processed AnnData, tables, run metadata, and plots are uploaded as a GitHub Actions artifact rather than committed as large generated files.
+
+## Interpretation limits
+
+This is an exploratory analysis of cells from one healthy donor. Cluster labels require marker-based review; UMAP separation does not prove distinct biological populations, and individual cells are not independent biological replicates for population-level inference.
+
+See [the Project 08 README](../single-cell-rnaseq-pbmcs/README.md) for the data source, commands, and artifact contents.
 
 ---
 

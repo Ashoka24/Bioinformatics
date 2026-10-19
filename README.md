@@ -2,6 +2,12 @@
 
 Bioinformatics and computational biology projects covering microbiome profiling, metagenomics, transcriptomics, machine learning, and variant analysis. Each project includes its own workflow, documented methods, results, and supporting evidence.
 
+## Workflow status
+
+[![Project 01 — 16S](https://github.com/Ashoka24/Bioinformatics/actions/workflows/16s-actual-outcome.yml/badge.svg)](https://github.com/Ashoka24/Bioinformatics/actions/workflows/16s-actual-outcome.yml) [![Project 02 — IBS](https://github.com/Ashoka24/Bioinformatics/actions/workflows/02-ibs-microbiome.yml/badge.svg)](https://github.com/Ashoka24/Bioinformatics/actions/workflows/02-ibs-microbiome.yml) [![Project 03 — Shotgun](https://github.com/Ashoka24/Bioinformatics/actions/workflows/03-shotgun-metagenomics.yml/badge.svg)](https://github.com/Ashoka24/Bioinformatics/actions/workflows/03-shotgun-metagenomics.yml) [![Project 04 — nf-core RNA-seq](https://github.com/Ashoka24/Bioinformatics/actions/workflows/project04_nfcore.yml/badge.svg)](https://github.com/Ashoka24/Bioinformatics/actions/workflows/project04_nfcore.yml)
+
+[![Project 05 — ML](https://github.com/Ashoka24/Bioinformatics/actions/workflows/project05_ml.yml/badge.svg)](https://github.com/Ashoka24/Bioinformatics/actions/workflows/project05_ml.yml) [![Project 06 — RNA-seq](https://github.com/Ashoka24/Bioinformatics/actions/workflows/project06_rnaseq.yml/badge.svg)](https://github.com/Ashoka24/Bioinformatics/actions/workflows/project06_rnaseq.yml) [![Project 07 — WES](https://github.com/Ashoka24/Bioinformatics/actions/workflows/project07_wes.yml/badge.svg)](https://github.com/Ashoka24/Bioinformatics/actions/workflows/project07_wes.yml) [![Project 08 — scRNA-seq](https://github.com/Ashoka24/Bioinformatics/actions/workflows/project-08-scrnaseq.yml/badge.svg)](https://github.com/Ashoka24/Bioinformatics/actions/workflows/project-08-scrnaseq.yml)
+
 ## Featured analysis projects
 
 | Project | What it covers | Main tools |

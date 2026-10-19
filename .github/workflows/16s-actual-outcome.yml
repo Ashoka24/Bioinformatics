@@ -1,5 +1,5 @@
 name: Project 01 actual 16S outcome
-# Results are intentionally committed; raw data and QIIME artifacts remain ignored.
+# Fresh generated results are uploaded as a workflow artifact; raw data and QIIME artifacts remain ignored.
 
 on:
   push:
