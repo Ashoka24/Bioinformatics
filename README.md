@@ -8,12 +8,12 @@ I work across microbiome analysis, sequencing workflows, transcriptomics and mac
 |---|---|---|
 | [16S rRNA Gut Microbiome Profiling](https://github.com/Ashoka24/16s-gut-microbiome-analysis) | Processing public amplicon data, read quality checks, taxonomy and microbial community profiling | FastQC, MultiQC, nf-core/ampliseq, QIIME 2, SILVA |
 | [IBS Microbiome Analysis and Machine Learning](https://github.com/Ashoka24/ibs-microbiome-ml) | Public gut microbiome analysis, diversity summaries and leakage-aware cross-validation for IBS-related data | QIIME 2, Deblur, SILVA, Python, scikit-learn |
-| [Shotgun Metagenomic Profiling](shotgun-metagenomics/) | Taxonomic classification of public sequencing reads and comparison of classifiers | fastp, Kraken 2, Centrifuge |
-| [Reproducible RNA-seq Pipeline](nfcore-rnaseq-pipeline/) | Running a containerized bulk RNA-seq workflow | Nextflow, nf-core/rnaseq, Docker |
-| [Transcriptomics Classification with Machine Learning](transcriptomics-machine-learning/) | Gene-expression data preparation, feature selection and classification evaluation | Python, Pandas, scikit-learn |
+| [Shotgun Metagenomic Profiling](https://github.com/Ashoka24/Shotgun-Metagenomic-Profiling) | Taxonomic classification of public sequencing reads and comparison of classifiers | fastp, Kraken 2, Centrifuge |
+| [Reproducible RNA-seq Pipeline](https://github.com/Ashoka24/Reproducible-nf-core-RNAseq-Pipeline) | Running a containerized bulk RNA-seq workflow | Nextflow, nf-core/rnaseq, Docker |
+| [Transcriptomics Classification with Machine Learning](https://github.com/Ashoka24/Transcriptomics-and-MachineLearning) | Gene-expression data preparation, feature selection and classification evaluation | Python, Pandas, scikit-learn |
 | [Paired RNA-seq Differential Expression](https://github.com/Ashoka24/rnaseq-differential-expression) | Matched-tissue differential expression and multiple-testing correction | R, DESeq2 |
-| [Whole-Exome Sequencing Variant Analysis](wes-variant-analysis/) | Tumor/normal variant analysis and annotation | nf-core/sarek, Mutect2, VEP, Nextflow |
-| [Single-Cell RNA-seq Analysis of PBMCs](single-cell-rnaseq-pbmcs/) | Cell quality control, normalization, dimensionality reduction, clustering and marker analysis | Python, Scanpy, AnnData |
+| [Whole-Exome Sequencing Variant Analysis](https://github.com/Ashoka24/Whole-Exome-Sequencing-Variant-Analysis) | Tumor/normal variant analysis and annotation | nf-core/sarek, Mutect2, VEP, Nextflow |
+| [Single-Cell RNA-seq Analysis of PBMCs](https://github.com/Ashoka24/Single-Cell-RNA-seq-Analysis-of-PBMCs) | Cell quality control, normalization, dimensionality reduction, clustering and marker analysis | Python, Scanpy, AnnData |
 
 ## How the projects are documented
 
