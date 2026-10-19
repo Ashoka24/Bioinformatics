@@ -6,7 +6,7 @@ I work across microbiome analysis, sequencing workflows, transcriptomics and mac
 
 | Project | Focus | Tools |
 |---|---|---|
-| [16S rRNA Gut Microbiome Profiling](16s-gut-microbiome/) | Processing public amplicon data, read quality checks, taxonomy and microbial community profiling | FastQC, MultiQC, nf-core/ampliseq, QIIME 2, SILVA |
+| [16S rRNA Gut Microbiome Profiling](https://github.com/Ashoka24/16s-gut-microbiome-analysis) | Processing public amplicon data, read quality checks, taxonomy and microbial community profiling | FastQC, MultiQC, nf-core/ampliseq, QIIME 2, SILVA |
 | [IBS Microbiome Analysis and Machine Learning](ibs-microbiome-ml/) | Microbiome features, diversity analysis and exploratory model evaluation for IBS-related data | QIIME 2, Deblur, Python, scikit-learn |
 | [Shotgun Metagenomic Profiling](shotgun-metagenomics/) | Taxonomic classification of public sequencing reads and comparison of classifiers | fastp, Kraken 2, Centrifuge |
 | [Reproducible RNA-seq Pipeline](nfcore-rnaseq-pipeline/) | Running a containerized bulk RNA-seq workflow | Nextflow, nf-core/rnaseq, Docker |
