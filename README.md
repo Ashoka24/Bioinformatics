@@ -11,7 +11,7 @@ I work across microbiome analysis, sequencing workflows, transcriptomics and mac
 | [Shotgun Metagenomic Profiling](shotgun-metagenomics/) | Taxonomic classification of public sequencing reads and comparison of classifiers | fastp, Kraken 2, Centrifuge |
 | [Reproducible RNA-seq Pipeline](nfcore-rnaseq-pipeline/) | Running a containerized bulk RNA-seq workflow | Nextflow, nf-core/rnaseq, Docker |
 | [Transcriptomics Classification with Machine Learning](transcriptomics-machine-learning/) | Gene-expression data preparation, feature selection and classification evaluation | Python, Pandas, scikit-learn |
-| [Paired RNA-seq Differential Expression](rnaseq-differential-expression/) | Matched-tissue differential expression and multiple-testing correction | R, DESeq2 |
+| [Paired RNA-seq Differential Expression](https://github.com/Ashoka24/rnaseq-differential-expression) | Matched-tissue differential expression and multiple-testing correction | R, DESeq2 |
 | [Whole-Exome Sequencing Variant Analysis](wes-variant-analysis/) | Tumor/normal variant analysis and annotation | nf-core/sarek, Mutect2, VEP, Nextflow |
 | [Single-Cell RNA-seq Analysis of PBMCs](single-cell-rnaseq-pbmcs/) | Cell quality control, normalization, dimensionality reduction, clustering and marker analysis | Python, Scanpy, AnnData |
 
