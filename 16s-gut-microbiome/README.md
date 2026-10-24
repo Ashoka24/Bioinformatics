@@ -32,6 +32,23 @@ NCBI reports 49,964 spots, 22.5M bases and about 13.1 MB for this run. The paren
 
 NCBI SRA → download → vdb-validate → FASTQ → FastQC → MultiQC → paired-read validation → nf-core/ampliseq + Docker → DADA2/QIIME 2/SILVA → downstream diversity → interpretation.
 
+## Results from the committed single-run analysis
+
+The committed result tables and `results/REPORT.md` record the following for SRR26534086:
+
+| Measure | Result |
+|---|---:|
+| Features in exported table | 184 |
+| Reads represented in feature table | 23,370 |
+| Shannon diversity (natural log) | 4.0817 |
+| Simpson diversity (1 − sum of squared proportions) | 0.9665 |
+| Pielou evenness | 0.7827 |
+
+These are descriptive values for one sample. They are not a disease comparison, and they should not be mixed with outputs from the separate nf-core/ampliseq run. The report explains the distinction between the natural-log Shannon value and QIIME 2's base-2 entropy.
+
+[Read the full analysis report](results/REPORT.md) · [Read the output and evidence rules](docs/OUTCOMES.md)
+
+
 ## Local data
 
 Keep downloaded reads and intermediate files in a local data directory outside the repository. Set `DATA_ROOT` to that directory before running the scripts; the workflow should not depend on a machine-specific path or on company storage.
